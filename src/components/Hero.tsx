@@ -147,7 +147,7 @@ export default function Hero() {
         transition={{ delay: 1.6 }}
         className="glass absolute bottom-14 right-10 z-[5] hidden items-center gap-3 rounded-full py-2 pl-5 pr-2 text-sm font-semibold md:flex"
       >
-        Explore journeys
+        Learn More
         <span className="grid size-8 place-items-center rounded-full bg-white/15">
           <motion.span animate={{ y: [0, 4, 0] }} transition={{ repeat: Infinity, duration: 1.6 }}>
             <ArrowDown className="size-4" />
