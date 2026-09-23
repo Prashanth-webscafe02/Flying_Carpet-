@@ -134,6 +134,28 @@ export const testimonials = [
     quote:
       "From Lisbon's trams to wine tastings in the Douro, every detail was handled. The destination guides help me sell with confidence, and my repeat bookings have grown steadily since we joined.",
   },
+  {
+    name: "Sophie Laurent",
+    role: "Director, Horizon Voyages",
+    location: "Paris, France",
+    avatar: u("photo-1438761681033-6461ffad8d80", 400),
+    trip: "India",
+    tripImg: "/location/india.webp",
+    rating: 5,
+    quote:
+      "Rajasthan's palaces, Varanasi at dawn and a houseboat in Kerala — all in one seamless itinerary. The local guides were exceptional, and my clients called it the trip of a lifetime.",
+  },
+  {
+    name: "James Carter",
+    role: "Travel Advisor, Carter & Co.",
+    location: "London, UK",
+    avatar: u("photo-1500648767791-00dcc994a43e", 400),
+    trip: "Romania",
+    tripImg: "/location/romania.webp",
+    rating: 5,
+    quote:
+      "Transylvania was a hard sell until I had Flying Carpet's catalogue. Castles, mountain lodges and private drivers, all bookable in minutes — it has become one of my best-selling trips.",
+  },
 ];
 
 export const testimonialStats = [

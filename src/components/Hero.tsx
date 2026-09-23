@@ -29,7 +29,10 @@ function useHeroFit(ref: RefObject<HTMLElement | null>) {
       const fg = mq.matches ? FG.mobile : FG.desktop
       const fgH = w * FG_BLEED * fg.aspect
       const ridgeY = h - fgH * (1 - fg.ridge)
-      const top = h * (w < 768 ? 0.16 : 0.09)
+      // Position comes only from measured sizes (not font metrics or viewport units), so every browser
+      // places it identically; it also always clears the fixed header.
+      const headerH = document.querySelector('header')?.offsetHeight ?? 0
+      const top = Math.max(h * (w < 768 ? 0.2 : 0.15), headerH + 8)
       const ideal = Math.min(w * 0.22, h * 0.32, 240)
       const drop = Math.min(Math.max(0, top + ideal * VISIBLE - ridgeY), fgH * 0.3)
       const font = Math.max(MIN_FONT, Math.min(ideal, (ridgeY + drop - top) / VISIBLE))
@@ -85,7 +88,7 @@ export default function Hero() {
             src="/banner-bottom.webp"
             alt=""
             initial={{ scale: 1.2, filter: 'blur(20px)' }}
-            animate={{ scale: 1, filter: 'blur(0px)' }}
+            animate={{ scale: 1, filter: 'blur(0px)', transitionEnd: { filter: 'none' } }}
             transition={{ duration: 2, ease }}
             className="h-full w-full object-cover"
           />
@@ -130,7 +133,7 @@ export default function Hero() {
       {/* Glass info card */}
       <motion.div
         initial={{ opacity: 0, y: 40, filter: 'blur(12px)' }}
-        animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+        animate={{ opacity: 1, y: 0, filter: 'blur(0px)', transitionEnd: { filter: 'none' } }}
         transition={{ duration: 1.2, delay: 1, ease }}
         className="glass-strong absolute bottom-8 left-4 right-4 z-[5] rounded-[2rem] p-6 md:bottom-14 md:left-10 md:right-auto md:max-w-md md:p-7"
       >

@@ -1,192 +1,45 @@
-import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowLeft, ArrowRight, ChevronDown, MapPin, Plane, Quote, Star } from 'lucide-react'
-import { useEffect, useState, type ReactNode } from 'react'
+import { MapPin, Plane, Quote, Star } from 'lucide-react'
+import { useState } from 'react'
 import { testimonialStats, testimonials } from '../content'
-import { Eyebrow, Reveal, SplitHeading, ease } from '../effects/motion'
+import { Eyebrow, Reveal, SplitHeading } from '../effects/motion'
 
-const AUTOPLAY_MS = 7000
+type T = (typeof testimonials)[number]
 
-// Customer testimonial carousel: destination photo + review, with swipe, arrows and avatar tabs.
+// Static staggered wall of testimonial cards; hovering (or tapping) a card reveals its review.
 export default function Testimonials() {
-  const [[index, dir], setState] = useState<[number, number]>([0, 1])
-  const [hovered, setHovered] = useState(false)
-  const [expanded, setExpanded] = useState(false)
-  const paused = hovered || expanded
-  const t = testimonials[index]
-  // Collapsed view shows the opening sentence; "Read more" reveals the rest.
-  const [lead, rest] = splitQuote(t.quote)
-
-  const go = (next: number, d = next > index ? 1 : -1) => {
-    setExpanded(false)
-    setState([(next + testimonials.length) % testimonials.length, d])
-  }
-  const step = (d: number) => go(index + d, d)
-
-  useEffect(() => {
-    if (paused || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const id = setTimeout(() => step(1), AUTOPLAY_MS)
-    return () => clearTimeout(id)
-  })
+  const [open, setOpen] = useState<string | null>(null)
 
   return (
     <section id="testimonials" className="relative px-4 py-28 md:px-8 md:py-40">
       <div className="mx-auto max-w-7xl">
-        <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-          <div className="max-w-3xl">
+        <div className="grid gap-8 md:grid-cols-2 md:items-end">
+          <div>
             <Reveal><Eyebrow>Testimonials</Eyebrow></Reveal>
             <SplitHeading
               text="Loved by agents, remembered by travellers"
               className="text-[clamp(2.2rem,5.2vw,4.75rem)] font-semibold leading-[1.02] tracking-[-0.05em]"
             />
-            <Reveal delay={0.15}>
-              <p className="mt-5 max-w-xl text-lg leading-relaxed text-white/75">
-                Travel partners around the world use Flying Carpet to design journeys their clients never stop talking about.
-              </p>
-            </Reveal>
           </div>
-          <Reveal delay={0.2} className="hidden gap-3 md:flex">
-            <NavButton label="Previous testimonial" onClick={() => step(-1)}><ArrowLeft className="size-5" /></NavButton>
-            <NavButton label="Next testimonial" onClick={() => step(1)}><ArrowRight className="size-5" /></NavButton>
+          <Reveal delay={0.15}>
+            <p className="max-w-md text-lg leading-relaxed text-white/75 md:ml-auto">
+              Travel partners around the world use Flying Carpet to design journeys their clients never stop talking about. Hover a card to read their story.
+            </p>
           </Reveal>
         </div>
 
-        <Reveal delay={0.1} className="mt-14">
-          <div
-            className="glass-strong relative overflow-hidden rounded-[2rem] md:rounded-[2.5rem]"
-            onPointerEnter={() => setHovered(true)}
-            onPointerLeave={() => setHovered(false)}
-            aria-roledescription="carousel"
-            aria-label="Customer testimonials"
-          >
-            <AnimatePresence mode="popLayout" initial={false} custom={dir}>
-              <motion.article
-                key={t.name}
-                custom={dir}
-                variants={{
-                  enter: (d: number) => ({ opacity: 0, x: d * 80 }),
-                  center: { opacity: 1, x: 0 },
-                  exit: (d: number) => ({ opacity: 0, x: d * -80 }),
-                }}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ duration: 0.7, ease }}
-                drag="x"
-                dragConstraints={{ left: 0, right: 0 }}
-                dragElastic={0.2}
-                onDragEnd={(_, info) => {
-                  if (info.offset.x < -60) step(1)
-                  else if (info.offset.x > 60) step(-1)
-                }}
-                className="grid cursor-grab touch-pan-y active:cursor-grabbing md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]"
-                aria-roledescription="slide"
-                aria-label={`${index + 1} of ${testimonials.length}`}
-              >
-                <div className="relative aspect-[16/10] overflow-hidden md:aspect-auto md:min-h-[520px]">
-                  <motion.img
-                    src={t.tripImg}
-                    alt={`${t.trip} trip`}
-                    draggable={false}
-                    initial={{ scale: 1.15 }}
-                    animate={{ scale: 1 }}
-                    transition={{ duration: 1.4, ease }}
-                    className="absolute inset-0 h-full w-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-brand/80 via-brand/10 to-transparent" />
-                  <span className="glass absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-semibold">
-                    <Plane className="size-3.5 text-accent" /> Trip to {t.trip}
-                  </span>
-                  <p className="absolute bottom-3 left-5 text-[clamp(3rem,7vw,5.5rem)] font-semibold leading-none tracking-[-0.06em] text-white/90">
-                    {t.trip}
-                  </p>
-                </div>
-
-                <div className="flex flex-col justify-between gap-8 p-6 md:gap-10 md:p-12 lg:p-14">
-                  <div>
-                    <div className="flex items-center justify-between">
-                      <div className="flex gap-1" aria-label={`${t.rating} out of 5 stars`}>
-                        {Array.from({ length: 5 }, (_, i) => (
-                          <Star key={i} className={`size-5 ${i < t.rating ? 'fill-accent text-accent' : 'text-white/30'}`} strokeWidth={1.5} />
-                        ))}
-                      </div>
-                      <Quote className="size-10 fill-white/15 text-white/15 md:size-14" strokeWidth={0} />
-                    </div>
-                    <blockquote className="mt-6 text-[clamp(1.1rem,2vw,1.6rem)] font-medium leading-snug tracking-[-0.02em] text-white/90">
-                      <p>“{lead}{rest && !expanded ? '…' : '”'}</p>
-                      <AnimatePresence initial={false}>
-                        {rest && expanded && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0, filter: 'blur(8px)' }}
-                            animate={{ height: 'auto', opacity: 1, filter: 'blur(0px)' }}
-                            exit={{ height: 0, opacity: 0, filter: 'blur(8px)' }}
-                            transition={{ duration: 0.6, ease }}
-                            className="overflow-hidden"
-                          >
-                            <p className="pt-3 text-white/75">{rest}”</p>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </blockquote>
-                    {rest && (
-                      <button
-                        onClick={() => setExpanded((e) => !e)}
-                        aria-expanded={expanded}
-                        className="group mt-5 inline-flex items-center gap-2 rounded-full text-sm font-semibold text-accent transition-colors hover:text-orange-300"
-                      >
-                        {expanded ? 'Show less' : 'Read more'}
-                        <ChevronDown className={`size-4 transition-transform duration-500 ${expanded ? 'rotate-180' : ''}`} />
-                      </button>
-                    )}
-                  </div>
-
-                  <div className="flex items-center gap-4 border-t border-white/15 pt-6">
-                    <img src={t.avatar} alt="" draggable={false} className="size-14 shrink-0 rounded-full object-cover ring-2 ring-accent/70" />
-                    <div className="min-w-0">
-                      <p className="text-lg font-semibold tracking-tight md:text-xl">{t.name}</p>
-                      <p className="text-white/70">{t.role}</p>
-                      <p className="mt-0.5 inline-flex items-center gap-1 text-sm text-white/55">
-                        <MapPin className="size-3.5" /> {t.location}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </motion.article>
-            </AnimatePresence>
-          </div>
-        </Reveal>
-
-        {/* Avatar tabs double as pagination; the bar under the active one tracks autoplay. */}
-        <div className="mt-6 flex items-center justify-between gap-4">
-          <div className="flex gap-2 sm:gap-3" role="tablist" aria-label="Choose a testimonial">
-            {testimonials.map((x, i) => (
-              <button
-                key={x.name}
-                role="tab"
-                aria-selected={i === index}
-                aria-label={x.name}
-                onClick={() => go(i)}
-                className={`glass relative flex items-center gap-2 overflow-hidden rounded-full p-1 transition-all duration-500 ${i === index ? 'ring-2 ring-accent sm:pr-4' : 'opacity-60 hover:opacity-100'}`}
-              >
-                <img src={x.avatar} alt="" className="size-9 rounded-full object-cover sm:size-10" />
-                {i === index && (
-                  <>
-                    <span className="hidden whitespace-nowrap text-sm font-semibold sm:inline">{x.name.split(' ')[0]}</span>
-                    <motion.span
-                      key={`${index}-${paused}`}
-                      className="absolute inset-x-0 bottom-0 h-[2px] origin-left bg-accent"
-                      initial={{ scaleX: 0 }}
-                      animate={{ scaleX: paused ? 0 : 1 }}
-                      transition={{ duration: paused ? 0 : AUTOPLAY_MS / 1000, ease: 'linear' }}
-                    />
-                  </>
-                )}
-              </button>
-            ))}
-          </div>
-          <div className="flex gap-2 md:hidden">
-            <NavButton label="Previous testimonial" onClick={() => step(-1)}><ArrowLeft className="size-4" /></NavButton>
-            <NavButton label="Next testimonial" onClick={() => step(1)}><ArrowRight className="size-4" /></NavButton>
-          </div>
+        {/* CSS columns give a masonry layout (filled top-to-bottom); the tall/wide pattern gives each
+            desktop column one of each, so the columns end level. */}
+        <div className="mt-14 columns-1 gap-4 md:columns-2 md:gap-6 lg:columns-3">
+          {testimonials.map((t, i) => (
+            <Reveal key={t.name} delay={(i % 3) * 0.1} className="mb-4 break-inside-avoid md:mb-6">
+              <Card
+                t={t}
+                tall={i % 4 === 0 || i % 4 === 3}
+                open={open === t.name}
+                onToggle={() => setOpen(open === t.name ? null : t.name)}
+              />
+            </Reveal>
+          ))}
         </div>
 
         <div className="mt-16 grid gap-4 sm:grid-cols-3 md:gap-6">
@@ -204,19 +57,64 @@ export default function Testimonials() {
   )
 }
 
-function splitQuote(quote: string): [string, string] {
-  const m = quote.match(/^.+?[.!?](?=\s)/)
-  return m ? [m[0], quote.slice(m[0].length).trim()] : [quote, '']
+function Card({ t, tall, open, onToggle }: { t: T; tall: boolean; open: boolean; onToggle: () => void }) {
+  return (
+    <article
+      tabIndex={0}
+      onClick={onToggle}
+      className={`group relative cursor-pointer overflow-hidden rounded-[2rem] ring-1 ring-white/15 outline-none focus-visible:ring-2 focus-visible:ring-accent ${tall ? 'aspect-[4/5]' : 'aspect-[5/4]'}`}
+    >
+      <img
+        src={t.tripImg}
+        alt=""
+        loading="lazy"
+        draggable={false}
+        className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-110"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-brand/90 via-brand/20 to-transparent" />
+
+      <span className="glass absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-semibold">
+        <Plane className="size-3.5 text-accent" /> {t.trip}
+      </span>
+
+      {/* Resting state: who wrote it */}
+      <div className={`absolute inset-x-0 bottom-0 p-5 transition-all duration-500 group-hover:translate-y-4 group-hover:opacity-0 group-focus-visible:opacity-0 ${open ? 'translate-y-4 opacity-0' : ''}`}>
+        <Stars rating={t.rating} />
+        <div className="mt-3 flex items-center gap-3">
+          <img src={t.avatar} alt="" className="size-11 shrink-0 rounded-full object-cover ring-2 ring-accent/70" />
+          <div className="min-w-0">
+            <p className="truncate font-semibold tracking-tight">{t.name}</p>
+            <p className="truncate text-sm text-white/70">{t.role}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Revealed on hover / keyboard focus / tap: the review */}
+      <div
+        className={`glass-strong absolute inset-2 flex flex-col justify-between rounded-[1.6rem] p-5 transition-all duration-500 ease-out group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 md:p-6 ${open ? 'translate-y-0 opacity-100' : 'translate-y-[105%] opacity-0'}`}
+      >
+        <div className="min-h-0 overflow-y-auto">
+          <Quote className="size-8 fill-accent text-accent" strokeWidth={0} />
+          <blockquote className="mt-3 text-[0.95rem] leading-relaxed text-white/90 md:text-base">“{t.quote}”</blockquote>
+        </div>
+        <div className="mt-4 flex items-center gap-3 border-t border-white/15 pt-4">
+          <img src={t.avatar} alt="" className="size-10 shrink-0 rounded-full object-cover" />
+          <div className="min-w-0">
+            <p className="truncate font-semibold tracking-tight">{t.name}</p>
+            <p className="inline-flex items-center gap-1 truncate text-sm text-white/60"><MapPin className="size-3.5 shrink-0" /> {t.location}</p>
+          </div>
+        </div>
+      </div>
+    </article>
+  )
 }
 
-function NavButton({ label, onClick, children }: { label: string; onClick: () => void; children: ReactNode }) {
+function Stars({ rating }: { rating: number }) {
   return (
-    <button
-      aria-label={label}
-      onClick={onClick}
-      className="glass grid size-11 place-items-center rounded-full transition-all duration-300 hover:scale-105 hover:bg-accent md:size-14"
-    >
-      {children}
-    </button>
+    <div className="flex gap-1" aria-label={`${rating} out of 5 stars`}>
+      {Array.from({ length: 5 }, (_, i) => (
+        <Star key={i} className={`size-4 ${i < rating ? 'fill-accent text-accent' : 'text-white/30'}`} strokeWidth={1.5} />
+      ))}
+    </div>
   )
 }

@@ -60,7 +60,7 @@ export default function Platform() {
                   {on && (
                     <motion.div
                       initial={{ opacity: 0, y: 30, filter: 'blur(10px)' }}
-                      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                      animate={{ opacity: 1, y: 0, filter: 'blur(0px)', transitionEnd: { filter: 'none' } }}
                       exit={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
                       transition={{ duration: 0.6, delay: 0.25, ease }}
                       className="glass-strong absolute inset-x-4 bottom-4 z-[2] rounded-3xl p-5 md:inset-x-6 md:bottom-6 md:max-w-md md:p-6"

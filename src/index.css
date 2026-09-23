@@ -10,7 +10,17 @@
 
 html { background: var(--color-brand); color-scheme: dark; }
 /* No body background: it would paint over the fixed fluid canvas (z-index -10). html carries the fallback colour. */
-body { color: #fff; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+body {
+  color: #fff; overflow-x: hidden;
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility;
+}
+
+/* Themed scrollbar: Safari/macOS hides it, but Chrome/Edge on Windows show a bright default bar. */
+html { scrollbar-width: thin; scrollbar-color: rgb(255 255 255 / 0.25) var(--color-brand); }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--color-brand); }
+::-webkit-scrollbar-thumb { background: rgb(255 255 255 / 0.22); border-radius: 999px; border: 2px solid var(--color-brand); }
+::-webkit-scrollbar-thumb:hover { background: var(--color-accent); }
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 
