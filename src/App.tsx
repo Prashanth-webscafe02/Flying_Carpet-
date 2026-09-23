@@ -7,7 +7,7 @@ import Destinations from './components/Destinations'
 import Footer from './components/Footer'
 import Header from './components/Header'
 import Hero from './components/Hero'
-import Hosts from './components/Hosts'
+import Testimonials from './components/Testimonials'
 import Offers from './components/Offers'
 import Platform from './components/Platform'
 import CursorGlow from './effects/CursorGlow'
@@ -39,7 +39,7 @@ export default function App() {
         <About />
         <Destinations />
         <Platform />
-        <Hosts />
+        <Testimonials />
         <Agents />
       </main>
       <Footer />

@@ -1,21 +1,26 @@
-import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
-import { Menu, X } from 'lucide-react'
-import { useState } from 'react'
-import { nav } from '../content'
-import { PillButton, ease } from '../effects/motion'
+import {
+  AnimatePresence,
+  motion,
+  useMotionValueEvent,
+  useScroll,
+} from "framer-motion";
+import { Menu, X } from "lucide-react";
+import { useState } from "react";
+import { nav } from "../content";
+import { PillButton, ease } from "../effects/motion";
 
 export default function Header() {
-  const { scrollY } = useScroll()
-  const [hidden, setHidden] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-  const [open, setOpen] = useState(false)
-  const [active, setActive] = useState<string | null>(null)
+  const { scrollY } = useScroll();
+  const [hidden, setHidden] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [active, setActive] = useState<string | null>(null);
 
-  useMotionValueEvent(scrollY, 'change', (y) => {
-    const prev = scrollY.getPrevious() ?? 0
-    setHidden(y > prev && y > 200 && !open)
-    setScrolled(y > 40)
-  })
+  useMotionValueEvent(scrollY, "change", (y) => {
+    const prev = scrollY.getPrevious() ?? 0;
+    setHidden(y > prev && y > 200 && !open);
+    setScrolled(y > 40);
+  });
 
   return (
     <motion.header
@@ -25,11 +30,17 @@ export default function Header() {
     >
       <div
         className={`mx-auto flex max-w-7xl items-center justify-between rounded-full px-4 py-2 transition-all duration-500 md:px-6 ${
-          scrolled ? 'glass-strong' : 'border border-transparent'
+          scrolled ? "glass-strong" : "border border-transparent"
         }`}
       >
         <a href="#top" className="shrink-0">
-          <img src="/brand/logo-white.png" alt="Flying Carpet Travel — For magical experiences" className="h-9 w-auto md:h-11" />
+          <img
+            src="/brand/logo-primary.webp"
+            alt="Flying Carpet Travel — For magical experiences"
+            width={1400}
+            height={416}
+            className={`w-auto transition-[height] duration-500 ${scrolled ? "h-10 sm:h-11 lg:h-14" : "h-12 sm:h-14 md:h-16 lg:h-20"}`}
+          />
         </a>
 
         <nav className="hidden md:block" onPointerLeave={() => setActive(null)}>
@@ -37,9 +48,17 @@ export default function Header() {
             {nav.map((n) => (
               <li key={n.href} className="relative">
                 {active === n.href && (
-                  <motion.span layoutId="nav-pill" className="glass absolute inset-0 rounded-full" transition={{ type: 'spring', stiffness: 380, damping: 30 }} />
+                  <motion.span
+                    layoutId="nav-pill"
+                    className="glass absolute inset-0 rounded-full"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
                 )}
-                <a href={n.href} onPointerEnter={() => setActive(n.href)} className="relative block px-4 py-2 text-sm font-semibold text-white/90 transition-colors hover:text-white">
+                <a
+                  href={n.href}
+                  onPointerEnter={() => setActive(n.href)}
+                  className="relative block px-4 py-2 text-sm font-semibold text-white/90 transition-colors hover:text-white"
+                >
                   {n.label}
                 </a>
               </li>
@@ -48,11 +67,11 @@ export default function Header() {
         </nav>
 
         <div className="hidden md:block">
-          <PillButton href="#journeys">Explore</PillButton>
+          <PillButton href="#journeys">Login</PillButton>
         </div>
 
         <button
-          aria-label={open ? 'Close menu' : 'Open menu'}
+          aria-label={open ? "Close menu" : "Open menu"}
           onClick={() => setOpen((o) => !o)}
           className="glass grid size-11 place-items-center rounded-full md:hidden"
         >
@@ -63,9 +82,9 @@ export default function Header() {
       <AnimatePresence>
         {open && (
           <motion.nav
-            initial={{ opacity: 0, y: -16, scale: 0.96, filter: 'blur(8px)' }}
-            animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
-            exit={{ opacity: 0, y: -16, scale: 0.96, filter: 'blur(8px)' }}
+            initial={{ opacity: 0, y: -16, scale: 0.96, filter: "blur(8px)" }}
+            animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+            exit={{ opacity: 0, y: -16, scale: 0.96, filter: "blur(8px)" }}
             transition={{ duration: 0.45, ease }}
             className="glass-strong mx-auto mt-3 max-w-7xl rounded-3xl p-3 md:hidden"
           >
@@ -86,5 +105,5 @@ export default function Header() {
         )}
       </AnimatePresence>
     </motion.header>
-  )
+  );
 }

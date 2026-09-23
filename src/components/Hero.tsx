@@ -1,12 +1,54 @@
 import { motion, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion'
 import { ArrowDown } from 'lucide-react'
-import { useRef } from 'react'
+import { useLayoutEffect, useRef, useState, type RefObject } from 'react'
 import { PillButton, ease } from '../effects/motion'
+
+// Portrait phones get the tall cut-out; everything else (incl. landscape phones) the wide one.
+const MOBILE_MQ = '(max-width: 767px) and (orientation: portrait)'
+
+// Foreground cut-out geometry: aspect ratio, and the highest point of its ridge under the headline
+// (as a fraction of the image height, measured from the alpha channel).
+const FG = {
+  desktop: { aspect: 1350 / 2899, ridge: 0.23 },
+  mobile: { aspect: 1026 / 750, ridge: 0.1 },
+}
+const FG_BLEED = 1.06 // foreground is inset -3% on each side
+const VISIBLE = 0.67 // headline top-to-cap-bottom (em) that must stay above the ridge
+const MIN_FONT = 56
+
+// Fit "Unlock" into the sky above the ridge: first sink the foreground (up to 30% of its height),
+// then shrink the headline, so wide-but-short screens never hide it behind the hills.
+function useHeroFit(ref: RefObject<HTMLElement | null>) {
+  const [fit, setFit] = useState({ font: 0, top: 0, drop: 0 })
+  useLayoutEffect(() => {
+    const mq = window.matchMedia(MOBILE_MQ)
+    const measure = () => {
+      const el = ref.current
+      if (!el) return
+      const { width: w, height: h } = el.getBoundingClientRect()
+      const fg = mq.matches ? FG.mobile : FG.desktop
+      const fgH = w * FG_BLEED * fg.aspect
+      const ridgeY = h - fgH * (1 - fg.ridge)
+      const top = h * (w < 768 ? 0.16 : 0.09)
+      const ideal = Math.min(w * 0.22, h * 0.32, 240)
+      const drop = Math.min(Math.max(0, top + ideal * VISIBLE - ridgeY), fgH * 0.3)
+      const font = Math.max(MIN_FONT, Math.min(ideal, (ridgeY + drop - top) / VISIBLE))
+      setFit({ font, top, drop })
+    }
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(ref.current!)
+    mq.addEventListener('change', measure)
+    return () => { ro.disconnect(); mq.removeEventListener('change', measure) }
+  }, [ref])
+  return fit
+}
 
 // Layered hero, like the original: sky layer → giant "Unlock" → foreground landscape cut-out.
 // Each layer moves at its own depth on scroll and pointer for a parallax, "window" feel.
 export default function Hero() {
   const ref = useRef<HTMLElement>(null)
+  const fit = useHeroFit(ref)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
 
   const mx = useMotionValue(0)
@@ -38,7 +80,7 @@ export default function Hero() {
       {/* Sky */}
       <motion.div style={{ y: bgY, scale: bgScale, x: bgX, translateY: bgMY }} className="absolute inset-0">
         <picture>
-          <source media="(max-width: 767px)" srcSet="/banner-bottom-mobile.webp" />
+          <source media={MOBILE_MQ} srcSet="/banner-bottom-mobile.webp" />
           <motion.img
             src="/banner-bottom.webp"
             alt=""
@@ -51,8 +93,8 @@ export default function Hero() {
       </motion.div>
 
       {/* Headline sits between sky and foreground */}
-      <motion.div style={{ y: textY, opacity: textOpacity, x: textX }} className="absolute inset-x-0 top-[16%] z-[2] flex justify-center md:top-[9%]">
-        <h1 className="flex overflow-hidden text-[clamp(4.5rem,min(22vw,32vh),15rem)] font-semibold leading-none tracking-[-0.07em] text-white drop-shadow-[0_6px_24px_rgba(0,0,0,0.28)]">
+      <motion.div style={{ y: textY, opacity: textOpacity, x: textX, top: fit.top }} className="absolute inset-x-0 z-[2] flex justify-center">
+        <h1 style={{ fontSize: fit.font || undefined }} className="flex overflow-hidden text-[clamp(3.5rem,min(22vw,32vh),15rem)] font-semibold leading-none tracking-[-0.07em] text-white drop-shadow-[0_6px_24px_rgba(0,0,0,0.28)]">
           {'Unlock'.split('').map((c, i) => (
             <motion.span
               key={i}
@@ -68,9 +110,9 @@ export default function Hero() {
       </motion.div>
 
       {/* Foreground landscape */}
-      <motion.div style={{ y: fgY, x: fgX }} className="pointer-events-none absolute inset-x-[-3%] bottom-0 z-[3]">
+      <motion.div style={{ y: fgY, x: fgX, bottom: -fit.drop }} className="pointer-events-none absolute inset-x-[-3%] bottom-0 z-[3]">
         <picture>
-          <source media="(max-width: 767px)" srcSet="/banner-top-mobile.webp" />
+          <source media={MOBILE_MQ} srcSet="/banner-top-mobile.webp" />
           <motion.img
             src="/banner-top.webp"
             alt="Yurt camp on golden grassland with a horse grazing, snow mountains beyond"

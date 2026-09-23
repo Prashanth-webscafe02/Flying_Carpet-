@@ -25,7 +25,7 @@ export default function Footer() {
         <Reveal className="glass-strong rounded-[2.5rem] p-7 md:p-12">
           <div className="grid gap-10 md:grid-cols-[1.2fr_1fr_1fr]">
             <div>
-              <a href="#top"><img src="/brand/logo-white.png" alt="Flying Carpet Travel — For magical experiences" className="h-14 w-auto" /></a>
+              <a href="#top"><img src="/brand/logo-primary.webp" alt="Flying Carpet Travel — For magical experiences" width={1400} height={416} loading="lazy" className="h-auto w-full max-w-[18rem] sm:max-w-[22rem] md:max-w-[26rem]" /></a>
               <p className="mt-4 text-white/70">For magical experiences</p>
             </div>
             <div className="flex flex-col gap-3 text-lg font-semibold">

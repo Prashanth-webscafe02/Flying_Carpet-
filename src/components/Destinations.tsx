@@ -11,21 +11,24 @@ function Card({ d, i, total, progress }: { d: D; i: number; total: number; progr
   const scale = useTransform(progress, [start, 1], [1, 1 - (total - i) * 0.035])
   const dim = useTransform(progress, [start, start + 1 / total], [0, i === total - 1 ? 0 : 0.45])
 
+  // Every card gets a fixed, viewport-bound height so the next card never slides over unread content.
+  const top = `calc(5.5rem + ${i * 14}px)`
+
   return (
-    <div className="sticky top-0 flex h-[100svh] items-center justify-center px-4 md:px-8" style={{ paddingTop: `calc(5.5rem + ${i * 14}px)` }}>
+    <div className="sticky top-0 flex h-[100svh] items-start justify-center px-4 md:px-8" style={{ paddingTop: top }}>
       <motion.article
-        style={{ scale }}
-        className="glass-strong relative grid w-full max-w-6xl origin-top overflow-hidden rounded-[2.5rem] md:grid-cols-2"
+        style={{ scale, height: `min(calc(100svh - ${top} - 1.5rem), 640px)` }}
+        className="glass-strong relative grid w-full max-w-6xl origin-top grid-rows-[auto_minmax(0,1fr)] overflow-hidden rounded-[2rem] md:grid-cols-2 md:grid-rows-1 md:rounded-[2.5rem]"
       >
-        <div className="relative z-[1] flex flex-col justify-between gap-6 p-7 md:p-12">
-          <div>
-            <p className="mb-3 text-sm font-semibold text-accent">0{i + 1} / 0{total}</p>
-            <h3 className="text-[clamp(2.6rem,6vw,5.5rem)] font-semibold leading-none tracking-[-0.06em]">{d.name}</h3>
-            <p className="mt-5 line-clamp-5 text-[0.95rem] leading-relaxed text-white/75 md:line-clamp-none md:text-base">{d.text}</p>
+        <div className="relative z-[1] flex min-h-0 flex-col justify-between gap-5 p-6 md:gap-6 md:p-12">
+          <div className="min-h-0">
+            <p className="mb-2 text-sm font-semibold text-accent md:mb-3">0{i + 1} / 0{total}</p>
+            <h3 className="text-[clamp(2.25rem,6vw,5.5rem)] font-semibold leading-none tracking-[-0.06em]">{d.name}</h3>
+            <p className="mt-4 line-clamp-4 text-[0.95rem] leading-relaxed text-white/75 md:mt-5 md:line-clamp-6 md:text-base lg:line-clamp-none">{d.text}</p>
           </div>
           <div><PillButton href="#journeys">Get Agency Access</PillButton></div>
         </div>
-        <div className="relative h-56 overflow-hidden md:h-auto md:min-h-[520px]">
+        <div className="relative min-h-0 overflow-hidden">
           <img src={d.img} alt={d.name} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-brand/40 to-transparent md:from-brand/30" />
         </div>
