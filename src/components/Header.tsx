@@ -9,6 +9,9 @@ import { useState } from "react";
 import { nav } from "../content";
 import { PillButton, ease } from "../effects/motion";
 
+// Section anchors only exist on the landing page; elsewhere they point back to it.
+const home = window.location.pathname === "/" ? "" : "/";
+
 export default function Header() {
   const { scrollY } = useScroll();
   const [hidden, setHidden] = useState(false);
@@ -33,7 +36,7 @@ export default function Header() {
           scrolled ? "glass-strong" : "border border-transparent"
         }`}
       >
-        <a href="#top" className="shrink-0">
+        <a href={`${home}#top`} className="shrink-0">
           <img
             src="/brand/logo-primary.webp"
             alt="Flying Carpet Travel — For magical experiences"
@@ -55,7 +58,7 @@ export default function Header() {
                   />
                 )}
                 <a
-                  href={n.href}
+                  href={home + n.href}
                   onPointerEnter={() => setActive(n.href)}
                   className="relative block px-4 py-2 text-sm font-semibold text-white/90 transition-colors hover:text-white"
                 >
@@ -67,7 +70,7 @@ export default function Header() {
         </nav>
 
         <div className="hidden md:block">
-          <PillButton href="#journeys">Login</PillButton>
+          <PillButton href={`${home}#journeys`}>Login</PillButton>
         </div>
 
         <button
@@ -91,7 +94,7 @@ export default function Header() {
             {nav.map((n, i) => (
               <motion.a
                 key={n.href}
-                href={n.href}
+                href={home + n.href}
                 onClick={() => setOpen(false)}
                 initial={{ opacity: 0, x: -12 }}
                 animate={{ opacity: 1, x: 0 }}

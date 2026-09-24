@@ -84,3 +84,9 @@ html.lenis, html.lenis body { height: auto; }
 @media (prefers-reduced-motion: reduce) {
   .blob, .marquee { animation: none; }
 }
+
+/* Choice list inside the get-started panel */
+.choice-scroll { scrollbar-width: thin; scrollbar-color: rgb(255 255 255 / 0.25) transparent; }
+.choice-scroll::-webkit-scrollbar { width: 6px; }
+.choice-scroll::-webkit-scrollbar-track { background: transparent; }
+.choice-scroll::-webkit-scrollbar-thumb { border: 0; }

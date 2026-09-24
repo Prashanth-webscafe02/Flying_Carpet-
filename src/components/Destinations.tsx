@@ -26,7 +26,7 @@ function Card({ d, i, total, progress }: { d: D; i: number; total: number; progr
             <h3 className="text-[clamp(2.25rem,6vw,5.5rem)] font-semibold leading-none tracking-[-0.06em]">{d.name}</h3>
             <p className="mt-4 line-clamp-4 text-[0.95rem] leading-relaxed text-white/75 md:mt-5 md:line-clamp-6 md:text-base lg:line-clamp-none">{d.text}</p>
           </div>
-          <div><PillButton href="#journeys">Get Agency Access</PillButton></div>
+          <div><PillButton href="/get-started/market">Get Agency Access</PillButton></div>
         </div>
         <div className="relative min-h-0 overflow-hidden">
           <img src={d.img} alt={d.name} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />

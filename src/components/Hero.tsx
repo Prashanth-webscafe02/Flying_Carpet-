@@ -140,7 +140,7 @@ export default function Hero() {
         <p className="mb-5 text-[clamp(1.125rem,1.65vw,1.6rem)] font-semibold leading-[1.3] tracking-[-0.03em]">
           Exclusive inventory, Higher commissions, and Seamless technology
         </p>
-        <PillButton href="#journeys">Get Agency Access</PillButton>
+        <PillButton href="/get-started/market">Get Agency Access</PillButton>
       </motion.div>
 
       <motion.a

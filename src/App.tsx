@@ -5,6 +5,7 @@ import About from './components/About'
 import Agents from './components/Agents'
 import Destinations from './components/Destinations'
 import Footer from './components/Footer'
+import GetStarted from './get-started/GetStarted'
 import Header from './components/Header'
 import Hero from './components/Hero'
 import Testimonials from './components/Testimonials'
@@ -12,6 +13,9 @@ import Offers from './components/Offers'
 import Platform from './components/Platform'
 import CursorGlow from './effects/CursorGlow'
 import FluidBackground from './effects/FluidBackground'
+
+// The agency onboarding flow lives under /get-started; everything else is the landing page.
+const isGetStarted = window.location.pathname.startsWith('/get-started')
 
 export default function App() {
   const { scrollYProgress } = useScroll()
@@ -26,6 +30,16 @@ export default function App() {
     raf = requestAnimationFrame(loop)
     return () => { cancelAnimationFrame(raf); lenis.destroy() }
   }, [])
+
+  if (isGetStarted) {
+    return (
+      <>
+        <FluidBackground />
+        <Header />
+        <GetStarted />
+      </>
+    )
+  }
 
   return (
     <>
