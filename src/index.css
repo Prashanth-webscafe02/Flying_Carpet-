@@ -9,9 +9,13 @@
 }
 
 html { background: var(--color-brand); color-scheme: dark; }
+/* Stop sideways scroll/wobble from tilted or off-canvas decorations. `clip` (unlike `hidden`) is
+   honoured on the page viewport by iOS Safari and doesn't create a scroll container; `hidden` is the fallback. */
+html, body { overflow-x: hidden; }
+@supports (overflow-x: clip) { html, body { overflow-x: clip; } }
 /* No body background: it would paint over the fixed fluid canvas (z-index -10). html carries the fallback colour. */
 body {
-  color: #fff; overflow-x: hidden;
+  color: #fff;
   -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility;
 }
 
@@ -25,19 +29,27 @@ html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 
 /* Glassmorphism primitives */
+/* Every glass surface carries a fixed navy tint, so it reads the same whatever sits behind it
+   (orange grass, dark sky, a photo) and on every device. */
 @utility glass {
-  background: linear-gradient(135deg, rgb(255 255 255 / 0.14), rgb(255 255 255 / 0.04));
-  backdrop-filter: blur(18px) saturate(160%);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  background: linear-gradient(135deg, rgb(255 255 255 / 0.14), rgb(255 255 255 / 0.04)), rgb(11 9 69 / 0.5);
+  backdrop-filter: blur(18px) saturate(115%);
+  -webkit-backdrop-filter: blur(18px) saturate(115%);
   border: 1px solid rgb(255 255 255 / 0.18);
   box-shadow: 0 8px 32px rgb(5 4 40 / 0.35), inset 0 1px 0 rgb(255 255 255 / 0.25);
 }
 @utility glass-strong {
-  background: linear-gradient(135deg, rgb(255 255 255 / 0.22), rgb(255 255 255 / 0.07));
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  background: linear-gradient(135deg, rgb(255 255 255 / 0.2), rgb(255 255 255 / 0.06)), rgb(11 9 69 / 0.6);
+  backdrop-filter: blur(28px) saturate(115%);
+  -webkit-backdrop-filter: blur(28px) saturate(115%);
   border: 1px solid rgb(255 255 255 / 0.25);
   box-shadow: 0 20px 60px rgb(5 4 40 / 0.45), inset 0 1px 0 rgb(255 255 255 / 0.35);
+}
+
+/* Browsers without backdrop-filter would show plain see-through panels: make them solid instead. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass { background-color: rgb(29 26 99 / 0.92); }
+  .glass-strong { background-color: rgb(29 26 99 / 0.95); }
 }
 
 /* Glass look on an opaque base: for stacked cards, where a see-through

@@ -36,9 +36,7 @@ function useHeroFit(ref: RefObject<HTMLElement | null>) {
       const ideal = Math.min(w * 0.22, h * 0.32, 240)
       const drop = Math.min(Math.max(0, top + ideal * VISIBLE - ridgeY), fgH * 0.4)
       const font = Math.max(MIN_FONT, Math.min(ideal, (ridgeY + drop - top) / VISIBLE))
-      // Then drop only the word a little further; its right end ("ck") may tuck behind the rising hill.
-      const lower = h * 0.02
-      setFit({ font, top: top + lower, drop })
+      setFit({ font, top, drop })
     }
     measure()
     const ro = new ResizeObserver(measure)
