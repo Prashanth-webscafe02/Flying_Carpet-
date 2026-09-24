@@ -23,14 +23,15 @@ export default function Footer() {
 
       <div className="relative mx-auto max-w-7xl px-4 pb-8 pt-48 md:px-8 md:pt-72">
         <Reveal className="glass-strong rounded-[2.5rem] p-7 md:p-12">
-          <div className="grid gap-10 md:grid-cols-[1.2fr_1fr_1fr]">
-            <div>
-              <a href="#top"><img src="/brand/logo-primary.webp" alt="Flying Carpet Travel — For magical experiences" width={1400} height={416} loading="lazy" className="h-auto w-full max-w-[18rem] sm:max-w-[22rem] md:max-w-[26rem]" /></a>
-              <p className="mt-4 text-white/70">For magical experiences</p>
-            </div>
-            <div className="flex flex-col gap-3 text-lg font-semibold">
-              <a href="#partners" className="transition-colors hover:text-accent">+ Partners</a>
-              <a href="#contact" className="transition-colors hover:text-accent">+ Contacts</a>
+          {/* Columns are vertically centred, and the links use the same row height and gap as the
+              contact pills, so "+ Partners" lines up with the phone row and "+ Contacts" with email. */}
+          <div className="grid items-center gap-8 md:grid-cols-[1.2fr_1fr_1fr] md:gap-10">
+            <a href="#top" className="block">
+              <img src="/brand/logo-primary.webp" alt="Flying Carpet Travel — For magical experiences" width={1400} height={416} loading="lazy" className="h-auto w-full max-w-[18rem] sm:max-w-[22rem] md:max-w-[26rem]" />
+            </a>
+            <div className="flex flex-col gap-3 text-lg font-semibold md:items-center">
+              <a href="#partners" className="flex h-11.5 items-center leading-6 transition-colors hover:text-accent">+ Partners</a>
+              <a href="#contact" className="flex h-11.5 items-center leading-6 transition-colors hover:text-accent">+ Contacts</a>
             </div>
             <div className="flex flex-col gap-3">
               <a href="tel:+1012345678" className="glass flex items-center gap-3 rounded-full px-4 py-2.5 transition-colors hover:bg-white/20">
