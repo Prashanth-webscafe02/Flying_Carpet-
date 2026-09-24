@@ -70,7 +70,7 @@ export default function Header() {
         </nav>
 
         <div className="hidden md:block">
-          <PillButton href={`${home}#journeys`}>Login</PillButton>
+          <PillButton href={`${home}#`}>Login</PillButton>
         </div>
 
         <button
@@ -86,7 +86,13 @@ export default function Header() {
         {open && (
           <motion.nav
             initial={{ opacity: 0, y: -16, scale: 0.96, filter: "blur(8px)" }}
-            animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } }}
+            animate={{
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              filter: "blur(0px)",
+              transitionEnd: { filter: "none" },
+            }}
             exit={{ opacity: 0, y: -16, scale: 0.96, filter: "blur(8px)" }}
             transition={{ duration: 0.45, ease }}
             className="glass-strong mx-auto mt-3 max-w-7xl rounded-3xl p-3 md:hidden"

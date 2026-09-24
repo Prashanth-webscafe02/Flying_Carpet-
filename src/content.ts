@@ -3,6 +3,7 @@ const u = (id: string, w = 1200) =>
 
 export const nav = [
   { label: "Partner With Us", href: "#journeys" },
+  { label: "About us", href: "#about" },
   { label: "Destinations", href: "#destinations" },
   { label: "Partners", href: "#partners" },
   { label: "Contacts", href: "#contact" },
