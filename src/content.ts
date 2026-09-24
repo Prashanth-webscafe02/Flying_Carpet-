@@ -3,7 +3,7 @@ const u = (id: string, w = 1200) =>
 
 export const nav = [
   { label: "Partner With Us", href: "#journeys" },
-  { label: "About us", href: "#about" },
+  { label: "About us", href: "#journeys" },
   { label: "Destinations", href: "#destinations" },
   { label: "Partners", href: "#partners" },
   { label: "Contacts", href: "#contact" },
@@ -97,7 +97,7 @@ export const testimonials = [
     location: "Mumbai, India",
     avatar: u("photo-1531123897727-8f129e1688ce", 400),
     trip: "Italy",
-    tripImg: "/location/italy.webp",
+    tripImg: "/location/italy.jpg",
     rating: 5,
     quote:
       "Flying Carpet turned a complicated three-city Italy itinerary into something my clients still talk about. Flights, boutique stays and transfers all in one place — I quoted in an hour instead of a week.",
@@ -108,7 +108,7 @@ export const testimonials = [
     location: "Toronto, Canada",
     avatar: u("photo-1507003211169-0a1dd7228f2d", 400),
     trip: "Morocco",
-    tripImg: "/location/morocco.webp",
+    tripImg: "/location/morocco.jpg",
     rating: 5,
     quote:
       "The Sahara camp and riad stays were exactly as promised. My honeymoon couple came back glowing, and the support team answered every question before my clients even thought to ask.",
@@ -119,7 +119,7 @@ export const testimonials = [
     location: "Dubai, UAE",
     avatar: u("photo-1524504388940-b1c1722653e1", 400),
     trip: "Bali",
-    tripImg: "/location/bali.webp",
+    tripImg: "/location/bali.jpg",
     rating: 5,
     quote:
       "Our group of 24 had a flawless week in Bali — villas in Ubud, a sunrise trek up Mount Batur and seamless transfers. Commission was paid on time, which says everything about the partnership.",
@@ -130,7 +130,7 @@ export const testimonials = [
     location: "Milan, Italy",
     avatar: u("photo-1506794778202-cad84cf45f1d", 400),
     trip: "Portugal",
-    tripImg: "/location/portugal.webp",
+    tripImg: "/location/portugal.jpg",
     rating: 5,
     quote:
       "From Lisbon's trams to wine tastings in the Douro, every detail was handled. The destination guides help me sell with confidence, and my repeat bookings have grown steadily since we joined.",
@@ -141,7 +141,7 @@ export const testimonials = [
     location: "Paris, France",
     avatar: u("photo-1438761681033-6461ffad8d80", 400),
     trip: "India",
-    tripImg: "/location/india.webp",
+    tripImg: "/location/india.jpg",
     rating: 5,
     quote:
       "Rajasthan's palaces, Varanasi at dawn and a houseboat in Kerala — all in one seamless itinerary. The local guides were exceptional, and my clients called it the trip of a lifetime.",
