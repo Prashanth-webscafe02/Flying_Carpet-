@@ -40,8 +40,8 @@ export default function ChoiceTile({ choice, selected, multi, index, onToggle }:
       </span>
 
       <span className="min-w-0 flex-1">
-        <span className="block truncate text-[0.975rem] font-semibold leading-snug tracking-tight">{choice.title}</span>
-        {choice.meta && <span className="block truncate text-xs text-white/55">{choice.meta}</span>}
+        <span className="block text-[0.975rem] font-semibold leading-snug tracking-tight">{choice.title}</span>
+        {choice.meta && <span className="block text-xs leading-snug text-white/55">{choice.meta}</span>}
         <span
           className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${
             selected

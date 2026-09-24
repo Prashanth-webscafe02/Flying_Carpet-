@@ -16,7 +16,7 @@ const FG_BLEED = 1.06 // foreground is inset -3% on each side
 const VISIBLE = 0.67 // headline top-to-cap-bottom (em) that must stay above the ridge
 const MIN_FONT = 56
 
-// Fit "Unlock" into the sky above the ridge: first sink the foreground (up to 30% of its height),
+// Fit "Unlock" into the sky above the ridge: first sink the foreground (up to 40% of its height),
 // then shrink the headline, so wide-but-short screens never hide it behind the hills.
 function useHeroFit(ref: RefObject<HTMLElement | null>) {
   const [fit, setFit] = useState({ font: 0, top: 0, drop: 0 })
@@ -32,11 +32,13 @@ function useHeroFit(ref: RefObject<HTMLElement | null>) {
       // Position comes only from measured sizes (not font metrics or viewport units), so every browser
       // places it identically; it also always clears the fixed header.
       const headerH = document.querySelector('header')?.offsetHeight ?? 0
-      const top = Math.max(h * (w < 768 ? 0.2 : 0.15), headerH + 8)
+      const top = Math.max(h * (w < 768 ? 0.36 : 0.32), headerH + 110)
       const ideal = Math.min(w * 0.22, h * 0.32, 240)
-      const drop = Math.min(Math.max(0, top + ideal * VISIBLE - ridgeY), fgH * 0.3)
+      const drop = Math.min(Math.max(0, top + ideal * VISIBLE - ridgeY), fgH * 0.4)
       const font = Math.max(MIN_FONT, Math.min(ideal, (ridgeY + drop - top) / VISIBLE))
-      setFit({ font, top, drop })
+      // Then drop only the word a little further; its right end ("ck") may tuck behind the rising hill.
+      const lower = h * 0.02
+      setFit({ font, top: top + lower, drop })
     }
     measure()
     const ro = new ResizeObserver(measure)

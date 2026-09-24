@@ -218,7 +218,7 @@ function ChoicePanel({ step, selected, onToggle }: { step: Step; selected: strin
         ref={scroller}
         data-lenis-prevent
         onScroll={updateFade}
-        className="choice-scroll max-h-[min(26rem,60svh)] overflow-y-auto overscroll-contain"
+        className="choice-scroll lg:max-h-[min(26rem,60svh)] lg:overflow-y-auto lg:overscroll-contain"
         style={fade ? { maskImage: 'linear-gradient(to bottom, #000 calc(100% - 2.5rem), transparent)', WebkitMaskImage: 'linear-gradient(to bottom, #000 calc(100% - 2.5rem), transparent)' } : undefined}
       >
         <div role={step.multi ? 'group' : 'radiogroup'} aria-label={step.title.join(' ')} className="grid gap-2 sm:grid-cols-2">
@@ -264,7 +264,7 @@ function Actions({ step, first, hasPicks, onBack, onNext }: {
 
 function Recap({ answers, onEdit, onRestart }: { answers: Answers; onEdit: (i: number) => void; onRestart: () => void }) {
   return (
-    <div className="mx-auto max-w-3xl">
+    <div className="mx-auto max-w-3xl pt-6 md:pt-10">
       <p className="mb-4 text-xs font-semibold uppercase tracking-[0.16em] text-accent">You're all set</p>
       <h1 className="text-[clamp(2.1rem,3.3vw,3.25rem)] font-bold leading-[1.06] tracking-[-0.045em]">
         Your journey,

@@ -90,7 +90,7 @@ export const steps: Step[] = [
     id: 'hotels',
     label: 'Hotel category',
     eyebrow: 'Almost there',
-    title: ['What hotel category', 'do you sell most?'],
+    title: ['Which hotels', 'do you sell most?'],
     intro: "Choose all that apply. We'll tailor your recommendations to the hotels your travellers love.",
     tagline: 'Every traveller finds their perfect stay.',
     multi: true,
