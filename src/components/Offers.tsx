@@ -24,7 +24,7 @@ export default function Offers() {
             >
               <Tilt className="rounded-[2rem]">
                 <a href="#journeys" className="group sheen relative block aspect-[4/5] overflow-hidden rounded-[2rem]">
-                  <img src={o.img} alt={o.title} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.4s] ease-out group-hover:scale-110" />
+                  <img src={o.img} alt={o.title} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.4s] ease-out group-hover:scale-110" />
                   <div className="absolute inset-0 bg-gradient-to-t from-brand/70 via-transparent to-transparent" />
                   <span className="glass absolute right-5 top-5 z-[2] grid size-11 place-items-center rounded-full transition-transform duration-500 group-hover:rotate-45 group-hover:bg-accent">
                     <ArrowUpRight className="size-5" />

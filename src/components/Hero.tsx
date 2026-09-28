@@ -1,6 +1,7 @@
 import { motion, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion'
 import { ArrowDown } from 'lucide-react'
 import { useLayoutEffect, useRef, useState, type RefObject } from 'react'
+import LucidLine from '../effects/LucidLine'
 import { PillButton, ease } from '../effects/motion'
 
 // Portrait phones get the tall cut-out; everything else (incl. landscape phones) the wide one.
@@ -51,6 +52,8 @@ function useHeroFit(ref: RefObject<HTMLElement | null>) {
 // Each layer moves at its own depth on scroll and pointer for a parallax, "window" feel.
 export default function Hero() {
   const ref = useRef<HTMLElement>(null)
+  const headlineRef = useRef<HTMLHeadingElement>(null)
+  const cardRef = useRef<HTMLDivElement>(null)
   const fit = useHeroFit(ref)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
 
@@ -64,6 +67,8 @@ export default function Hero() {
   const textY = useTransform(scrollYProgress, [0, 1], ['0%', '90%'])
   const textOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0])
   const fgY = useTransform(scrollYProgress, [0, 1], ['0%', '-6%'])
+  const lineY = useTransform(scrollYProgress, [0, 1], ['0%', '18%'])
+  const lineOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0])
 
   const bgX = useTransform(smx, (v) => v * -12)
   const bgMY = useTransform(smy, (v) => v * -8)
@@ -97,7 +102,7 @@ export default function Hero() {
 
       {/* Headline sits between sky and foreground */}
       <motion.div style={{ y: textY, opacity: textOpacity, x: textX, top: fit.top }} className="absolute inset-x-0 z-[2] flex justify-center">
-        <h1 style={{ fontSize: fit.font || undefined }} className="flex overflow-hidden text-[clamp(3.5rem,min(22vw,32vh),15rem)] font-semibold leading-none tracking-[-0.07em] text-white drop-shadow-[0_6px_24px_rgba(0,0,0,0.28)]">
+        <h1 ref={headlineRef} style={{ fontSize: fit.font || undefined }} className="flex overflow-hidden text-[clamp(3.5rem,min(22vw,32vh),15rem)] font-semibold leading-none tracking-[-0.07em] text-white drop-shadow-[0_6px_24px_rgba(0,0,0,0.28)]">
           {'Unlock'.split('').map((c, i) => (
             <motion.span
               key={i}
@@ -127,11 +132,18 @@ export default function Hero() {
         </picture>
       </motion.div>
 
+      {/* Lucid Line: routed between headline and card; shares the headline's pointer drift and fades
+          out quickly on scroll so the layers never cross. */}
+      <motion.div style={{ y: lineY, x: textX, opacity: lineOpacity }} className="pointer-events-none absolute inset-0 z-[3]">
+        <LucidLine headline={headlineRef} card={cardRef} />
+      </motion.div>
+
       {/* Bottom fade into the fluid page background */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[4] h-40 bg-gradient-to-t from-brand/80 to-transparent" />
 
       {/* Glass info card */}
       <motion.div
+        ref={cardRef}
         initial={{ opacity: 0, y: 40, filter: 'blur(12px)' }}
         animate={{ opacity: 1, y: 0, filter: 'blur(0px)', transitionEnd: { filter: 'none' } }}
         transition={{ duration: 1.2, delay: 1, ease }}

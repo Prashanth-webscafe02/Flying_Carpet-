@@ -13,6 +13,7 @@ import Offers from './components/Offers'
 import Platform from './components/Platform'
 import CursorGlow from './effects/CursorGlow'
 import FluidBackground from './effects/FluidBackground'
+import { LucidCorner, LucidWave } from './effects/LucidLine'
 
 // The agency onboarding flow lives under /get-started; everything else is the landing page.
 const isGetStarted = window.location.pathname.startsWith('/get-started')
@@ -35,6 +36,9 @@ export default function App() {
     return (
       <>
         <FluidBackground />
+        {/* Lucid Line fixed low in the viewport on desktop, behind the onboarding panel */}
+        <LucidWave shape="lift" draw="intro" className="fixed inset-x-0 bottom-0 -z-1 hidden h-[40vh] supports-[height:1svh]:h-[40svh] lg:block" />
+        <LucidCorner className="fixed bottom-0 left-0 -z-1 hidden lg:block" />
         <Header />
         <GetStarted />
       </>

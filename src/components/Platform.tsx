@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
 import { platform } from '../content'
+import { LucidWave } from '../effects/LucidLine'
 import { Eyebrow, Reveal, SplitHeading, ease } from '../effects/motion'
 
 // Liquid accordion: the hovered/tapped panel expands fluidly and the others compress.
@@ -9,6 +10,8 @@ export default function Platform() {
 
   return (
     <section id="products" className="relative px-4 py-28 md:px-8 md:py-40">
+      {/* Lucid Line in the gap after the destination cards, above the eyebrow */}
+      <LucidWave shape="swell" mirror className="absolute inset-x-0 -top-10 -z-1 h-[152px] md:h-[200px]" />
       <div className="mx-auto max-w-7xl">
         <Reveal><Eyebrow>The platform</Eyebrow></Reveal>
         <div className="grid items-end gap-6 md:grid-cols-[1.4fr_1fr]">
@@ -43,6 +46,7 @@ export default function Platform() {
                   src={p.img}
                   alt={p.title}
                   loading="lazy"
+                  decoding="async"
                   className={`absolute inset-0 h-full w-full object-cover transition-all duration-1000 ${on ? 'scale-100' : 'scale-125 saturate-50'}`}
                 />
                 <div className={`absolute inset-0 transition-colors duration-700 ${on ? 'bg-brand/10' : 'bg-brand/55'}`} />

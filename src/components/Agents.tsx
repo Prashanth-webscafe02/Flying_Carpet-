@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useRef } from 'react'
 import { agentsImg } from '../content'
+import { LucidWave } from '../effects/LucidLine'
 import { Eyebrow, PillButton, Reveal, SplitHeading } from '../effects/motion'
 
 const regions = ['India', 'South Africa', 'North America', 'Flights', 'Hotels', 'Experiences', 'Transfers']
@@ -20,9 +21,12 @@ export default function Agents() {
           src={agentsImg}
           alt="Open road through uncrowded high country at dusk"
           loading="lazy"
-          className="absolute inset-0 h-full w-full object-cover"
+          decoding="async"
+          className="absolute inset-0 h-full w-full object-cover will-change-transform"
         />
         <div className="absolute inset-0 bg-gradient-to-br from-brand/60 via-brand/20 to-accent/30" />
+        {/* Lucid Line over the photo, passing behind the card (stops above the marquee ribbon) */}
+        <LucidWave shape="lift" className="absolute inset-x-0 top-0 bottom-15 hidden md:block" />
 
         <div className="relative grid min-h-[640px] items-center p-4 md:p-12">
           <div className="glass-strong max-w-2xl rounded-[2.5rem] p-7 md:p-12">

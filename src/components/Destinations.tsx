@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion'
 import { useRef } from 'react'
 import { destinations } from '../content'
+import { LucidWave } from '../effects/LucidLine'
 import { Eyebrow, PillButton, Reveal, SplitHeading } from '../effects/motion'
 
 type D = (typeof destinations)[number]
@@ -29,7 +30,7 @@ function Card({ d, i, total, progress }: { d: D; i: number; total: number; progr
           <div><PillButton href="/get-started/market">Get Agency Access</PillButton></div>
         </div>
         <div className="relative min-h-0 overflow-hidden">
-          <img src={d.img} alt={d.name} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+          <img src={d.img} alt={d.name} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-brand/40 to-transparent md:from-brand/30" />
         </div>
         <motion.div aria-hidden style={{ opacity: dim }} className="pointer-events-none absolute inset-0 z-[3] bg-brand" />
@@ -44,6 +45,8 @@ export default function Destinations() {
 
   return (
     <section id="destinations" className="relative">
+      {/* Lucid Line across the gap above (About's bottom padding + this section's top padding) */}
+      <LucidWave shape="fall" className="absolute inset-x-0 -top-16 -z-1 h-44 md:-top-24 md:h-64" />
       {/* Same width + gutters as the cards, so heading and copy line up with the card and its image column. */}
       <div className="px-4 pt-28 md:px-8 md:pt-40">
         <div className="mx-auto max-w-6xl">
