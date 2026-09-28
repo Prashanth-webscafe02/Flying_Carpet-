@@ -5,6 +5,7 @@ import About from './components/About'
 import Agents from './components/Agents'
 import Destinations from './components/Destinations'
 import Footer from './components/Footer'
+import DestinationsPage from './destinations/DestinationsPage'
 import GetStarted from './get-started/GetStarted'
 import Header from './components/Header'
 import Hero from './components/Hero'
@@ -15,8 +16,10 @@ import CursorGlow from './effects/CursorGlow'
 import FluidBackground from './effects/FluidBackground'
 import { LucidCorner, LucidWave } from './effects/LucidLine'
 
-// The agency onboarding flow lives under /get-started; everything else is the landing page.
+// The agency onboarding flow lives under /get-started and lands on the personalised /destinations
+// page; everything else is the landing page.
 const isGetStarted = window.location.pathname.startsWith('/get-started')
+const isDestinations = window.location.pathname.startsWith('/destinations')
 
 export default function App() {
   const { scrollYProgress } = useScroll()
@@ -41,6 +44,17 @@ export default function App() {
         <LucidCorner className="fixed bottom-0 left-0 -z-1 hidden lg:block" />
         <Header />
         <GetStarted />
+      </>
+    )
+  }
+
+  if (isDestinations) {
+    return (
+      <>
+        <FluidBackground />
+        <Header />
+        <DestinationsPage />
+        <Footer />
       </>
     )
   }

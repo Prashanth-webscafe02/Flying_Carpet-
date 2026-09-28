@@ -19,17 +19,14 @@ import { PillButton, ease } from "../effects/motion";
 import ChoiceTile from "./ChoiceTile";
 import Stepper from "./Stepper";
 import { LucidWave } from "../effects/LucidLine";
+import { empty, loadAnswers, saveAnswers, type Answers } from "./answers";
 import { steps, type Step, type StepId } from "./steps";
 
-type Answers = Record<StepId, string[]>;
-const STORAGE_KEY = "fct-get-started";
 const DONE = steps.length; // index of the recap screen
-const empty: Answers = {
-  market: [],
-  destinations: [],
-  specialise: [],
-  hotels: [],
-};
+
+// Opened from an "Edit" link on the destinations page: saving a step goes straight back there.
+const returnToDestinations =
+  new URLSearchParams(window.location.search).get("return") === "destinations";
 
 // Routes mirror the original site: /get-started/<step>, plus /get-started/done for the recap.
 const indexFromPath = () => {
@@ -41,46 +38,12 @@ const indexFromPath = () => {
 const pathFor = (i: number) =>
   `/get-started/${i === DONE ? "done" : steps[i].id}`;
 
-function load(): { answers: Answers; visited: StepId[] } {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) {
-      const saved = JSON.parse(raw) as Partial<{
-        answers: Partial<Answers>;
-        visited: StepId[];
-      }>;
-      const answers = { ...empty };
-      for (const s of steps) {
-        const ids = (saved.answers?.[s.id] ?? []).filter((id) =>
-          s.choices.some((c) => c.id === id),
-        );
-        answers[s.id] = s.multi ? ids : ids.slice(0, 1);
-      }
-      return {
-        answers,
-        visited: (saved.visited ?? []).filter((v) =>
-          steps.some((s) => s.id === v),
-        ),
-      };
-    }
-  } catch {
-    /* storage blocked or corrupt — start fresh */
-  }
-  return { answers: empty, visited: [] };
-}
-
 export default function GetStarted() {
   const [index, setIndex] = useState(indexFromPath);
   const [dir, setDir] = useState(1);
-  const [{ answers, visited }, setState] = useState(load);
+  const [{ answers, visited }, setState] = useState(loadAnswers);
 
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ answers, visited }));
-    } catch {
-      /* ignore */
-    }
-  }, [answers, visited]);
+  useEffect(() => saveAnswers({ answers, visited }), [answers, visited]);
 
   // Normalise the URL on first load and follow browser back/forward.
   useEffect(() => {
@@ -125,12 +88,18 @@ export default function GetStarted() {
     });
 
   const complete = () => {
-    setState((s) => ({
-      answers: s.answers,
-      visited: s.visited.includes(step.id)
-        ? s.visited
-        : [...s.visited, step.id],
-    }));
+    const next = {
+      answers,
+      visited: visited.includes(step.id) ? visited : [...visited, step.id],
+    };
+    // The last step (or any step edited from the destinations page) lands on the personalised
+    // destinations page; save first so it reads the latest picks.
+    if (returnToDestinations || index === steps.length - 1) {
+      saveAnswers(next);
+      window.location.assign("/destinations");
+      return;
+    }
+    setState(next);
     go(index + 1);
   };
 
@@ -192,6 +161,7 @@ export default function GetStarted() {
                   hasPicks={selected.length > 0}
                   onBack={() => go(index - 1)}
                   onNext={() => complete()}
+                  returning={returnToDestinations}
                 />
               </div>
             </div>
@@ -343,12 +313,14 @@ function Actions({
   hasPicks,
   onBack,
   onNext,
+  returning,
 }: {
   step: Step;
   first: boolean;
   hasPicks: boolean;
   onBack: () => void;
   onNext: () => void;
+  returning: boolean;
 }) {
   return (
     <div className="flex flex-wrap items-center justify-between gap-3">
@@ -369,7 +341,11 @@ function Actions({
         disabled={!hasPicks && !step.skipHint}
         className="group inline-flex items-center gap-2.5 rounded-full bg-accent py-2.5 pl-5 pr-2.5 text-sm font-semibold text-white shadow-[0_10px_30px_-10px_rgb(232_101_37/0.9)] transition-all duration-300 hover:brightness-110 disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-white/45 disabled:shadow-none"
       >
-        {!hasPicks && step.skipHint ? "Continue without choosing" : step.next}
+        {returning
+          ? "Save & view destinations"
+          : !hasPicks && step.skipHint
+            ? "Continue without choosing"
+            : step.next}
         <span className="grid size-6 place-items-center rounded-full bg-white/20 transition-transform duration-300 group-hover:translate-x-0.5 group-disabled:translate-x-0">
           <ArrowRight className="size-3.5" />
         </span>
@@ -448,7 +424,7 @@ function Recap({
       </ul>
 
       <div className="mt-8 flex flex-wrap items-center gap-3">
-        <PillButton href="/#destinations">Show my destinations</PillButton>
+        <PillButton href="/destinations">Show my destinations</PillButton>
         <button
           type="button"
           onClick={onRestart}

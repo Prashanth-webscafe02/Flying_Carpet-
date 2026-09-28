@@ -1,3 +1,6 @@
 {
-  "rewrites": [{ "source": "/get-started/(.*)", "destination": "/index.html" }]
+  "rewrites": [
+    { "source": "/get-started/(.*)", "destination": "/index.html" },
+    { "source": "/destinations", "destination": "/index.html" }
+  ]
 }
