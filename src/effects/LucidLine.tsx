@@ -216,7 +216,8 @@ function heroRoute(headline: RefObject<HTMLElement | null>, card: RefObject<HTML
     const band = B - T
     // Wide screens have room right of the headline: dip just past the card, then rise into a crest
     // there, like the creatives. The dip stays above the bottom controls.
-    if (w - text.right > w * 0.2) {
+    // (Only when the card also leaves room beside it; a full-width phone card would push the dip off-screen.)
+    if (w - text.right > w * 0.2 && c.right + 0.06 * w < w * 0.6) {
       const floor = h - Math.max(130, h * 0.2)
       const troughX = Math.max(0.28 * w, c.right + 0.06 * w)
       const troughY = Math.min(floor, T + Math.max(60, (floor - T) * 0.5))
@@ -269,7 +270,7 @@ export function LucidWave({ shape = 'rise', mirror = false, draw = 'scroll', cla
   className?: string
 }) {
   const ref = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'center 0.45'] })
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end 0.75'] })
   const scrolled = useSpring(scrollYProgress, { stiffness: 70, damping: 22, restDelta: 0.0005 })
   const seen = useInView(ref, { once: true, margin: '0px 0px -10% 0px' })
   const intro = useIntroProgress(draw === 'view' ? 0.2 : 0.6, draw !== 'view' || seen)
