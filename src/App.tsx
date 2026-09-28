@@ -5,7 +5,7 @@ import About from './components/About'
 import Agents from './components/Agents'
 import Destinations from './components/Destinations'
 import Footer from './components/Footer'
-import DestinationsPage from './destinations/DestinationsPage'
+import DestinationsRoute from './destinations/DestinationsRoute'
 import GetStarted from './get-started/GetStarted'
 import Header from './components/Header'
 import Hero from './components/Hero'
@@ -53,7 +53,7 @@ export default function App() {
       <>
         <FluidBackground />
         <Header />
-        <DestinationsPage />
+        <DestinationsRoute />
         <Footer />
       </>
     )

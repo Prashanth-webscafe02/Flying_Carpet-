@@ -6,6 +6,8 @@ import { Reveal, ease } from '../effects/motion'
 import { clearAnswers, loadAnswers, type Answers } from '../get-started/answers'
 import { steps, type StepId } from '../get-started/steps'
 import { bannerImg, destinations, specialistImg, whatsapp, type Destination, type ProductId } from './data'
+import ChatFab from './ChatFab'
+import { useFavourites } from './favourites'
 
 const PAGE = 8
 const regions = steps.find((s) => s.id === 'destinations')!.choices
@@ -29,20 +31,6 @@ function summary(answers: Answers, id: StepId, fallback: string) {
   const picked = steps.find((s) => s.id === id)!.choices.filter((c) => answers[id].includes(c.id)).map((c) => c.title.trim())
   if (!picked.length) return fallback
   return picked.length === 1 ? picked[0] : `${picked[0]} +${picked.length - 1}`
-}
-
-// Hearted destinations, remembered on this device.
-function useFavourites() {
-  const key = 'fct-favourites'
-  const [favs, setFavs] = useState<string[]>(() => {
-    try { return JSON.parse(localStorage.getItem(key) ?? '[]') as string[] } catch { return [] }
-  })
-  const toggle = (id: string) => setFavs((f) => {
-    const next = f.includes(id) ? f.filter((x) => x !== id) : [...f, id]
-    try { localStorage.setItem(key, JSON.stringify(next)) } catch { /* ignore */ }
-    return next
-  })
-  return [favs, toggle] as const
 }
 
 // Personalised results page the onboarding flow lands on: the agent's picks, a region filter,
@@ -310,15 +298,7 @@ export default function DestinationsPage() {
         </section>
       </main>
 
-      <a
-        href={whatsapp("Hi! I have a question about Flying Carpet destinations.")}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Chat with a destination specialist"
-        className="glass-orange fixed bottom-5 right-5 z-40 grid size-14 place-items-center rounded-full transition-transform duration-300 hover:scale-105 md:bottom-8 md:right-8"
-      >
-        <MessageCircle className="size-6" />
-      </a>
+      <ChatFab />
     </>
   )
 }
@@ -378,12 +358,10 @@ function Card({ d, i, list, fav, onFav, inMyRegion, mySpecialise }: {
         </ul>
         <div className="mt-auto pt-5">
           <a
-            href={whatsapp(`Hi! I'd like to explore ${name} for my clients.`)}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={`/destinations/${d.id}`}
             className="group/btn inline-flex items-center gap-2.5 rounded-full bg-accent py-2 pl-4 pr-2 text-sm font-semibold shadow-[0_10px_30px_-10px_rgb(232_101_37/0.9)] transition hover:brightness-110"
           >
-            Enquire
+            Explore
             <span className="grid size-6 place-items-center rounded-full bg-white/20 transition-transform duration-300 group-hover/btn:translate-x-0.5">
               <ArrowRight className="size-3.5" />
             </span>

@@ -49,8 +49,8 @@ export default function Header() {
         <nav className="hidden md:block" onPointerLeave={() => setActive(null)}>
           <ul className="flex items-center gap-1">
             {nav.map((n) => (
-              <li key={n.href} className="relative">
-                {active === n.href && (
+              <li key={n.label} className="relative">
+                {active === n.label && (
                   <motion.span
                     layoutId="nav-pill"
                     className="glass absolute inset-0 rounded-full"
@@ -59,7 +59,7 @@ export default function Header() {
                 )}
                 <a
                   href={home + n.href}
-                  onPointerEnter={() => setActive(n.href)}
+                  onPointerEnter={() => setActive(n.label)}
                   className="relative block px-4 py-2 text-sm font-semibold text-white/90 transition-colors hover:text-white"
                 >
                   {n.label}
@@ -99,7 +99,7 @@ export default function Header() {
           >
             {nav.map((n, i) => (
               <motion.a
-                key={n.href}
+                key={n.label}
                 href={home + n.href}
                 onClick={() => setOpen(false)}
                 initial={{ opacity: 0, x: -12 }}
