@@ -50,3 +50,10 @@ export const specialistImg = u("photo-1544551763-46a013bb70d5", 1800);
 const WHATSAPP_NUMBER = "1012345678";
 export const whatsapp = (text: string) =>
   `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+
+/** Larger version of a photo URL for galleries (Unsplash `w=` parameter). */
+export const bigPhoto = (src: string) => src.replace(/w=\d+/, "w=1600");
+
+/** Full country name for location lines ("UAE" → "United Arab Emirates"). */
+const countryNames: Record<string, string> = { UAE: "United Arab Emirates", USA: "United States" };
+export const countryName = (country: string) => countryNames[country] ?? country;

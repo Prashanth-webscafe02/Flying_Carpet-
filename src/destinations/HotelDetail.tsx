@@ -1,19 +1,18 @@
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import {
-  Accessibility, ArrowLeft, ArrowRight, Baby, Bike, Briefcase, Leaf, SquareParking, Building2, Check, ChevronLeft, ChevronRight, Clock, Coffee, ConciergeBell, CreditCard, Dumbbell, Eye, Images, Info, Landmark,
-  Languages, Link2, MapPin, MessageCircle, Mountain, Sparkles, Star, TrainFront, Umbrella, Users, UtensilsCrossed, Waves, Wifi, X, type LucideIcon,
+  Accessibility, ArrowLeft, ArrowRight, Baby, Bike, Briefcase, Leaf, SquareParking, Building2, Check, Clock, Coffee, ConciergeBell, CreditCard, Dumbbell, Eye, Info, Landmark,
+  Languages, Link2, MapPin, MessageCircle, Mountain, Sparkles, Star, TrainFront, Umbrella, Users, UtensilsCrossed, Waves, Wifi, type LucideIcon,
 } from 'lucide-react'
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useState } from 'react'
 import { LucidCorner } from '../effects/LucidLine'
 import { ease } from '../effects/motion'
 import ChatFab from './ChatFab'
-import { whatsapp, type Destination } from './data'
+import Gallery from './Gallery'
+import { bigPhoto, countryName, whatsapp, type Destination } from './data'
 import { categoryLabel, details, hotelImages, images, type Detail, type Hotel } from './details'
 import { hotelFacts, roomRows, sampleRoomFacts, useSampleRoomFacts } from './hotelFacts'
 import { linkTo, slug } from './navigate'
 
-const countryNames: Record<string, string> = { UAE: 'United Arab Emirates', USA: 'United States' }
-const big = (src: string) => src.replace(/w=\d+/, 'w=1600')
 
 // Facility → icon for the key info strip.
 const facilityIcon = (label: string): LucideIcon => {
@@ -98,14 +97,13 @@ function facilityGroups(hotel: Hotel, info: Detail): FacilityGroup[] {
 export default function HotelDetail({ d, hotel }: { d: Destination; hotel: Hotel }) {
   const info = details[d.id]
   const index = info.hotels.indexOf(hotel)
-  const country = countryNames[d.country] ?? d.country
+  const country = countryName(d.country)
   const facts = hotelFacts[hotel.name] ?? {}
   // Year built + room counts: the shared sample while `useSampleRoomFacts` is on, else this hotel's own.
   const roomFacts = useSampleRoomFacts ? sampleRoomFacts : { opened: facts.opened, rooms: facts.rooms }
   const where = d.city === country ? country : `${d.city}, ${country}`
   const address = facts.address ? `${facts.address}, ${where}` : `${hotel.area}, ${where}`
-  const photos = [...hotelImages.slice(index % hotelImages.length), ...hotelImages.slice(0, index % hotelImages.length), images.hotels, d.img].map(big)
-  const [viewer, setViewer] = useState<number | null>(null)
+  const photos = [...hotelImages.slice(index % hotelImages.length), ...hotelImages.slice(0, index % hotelImages.length), images.hotels, d.img].map(bigPhoto)
   const [copied, setCopied] = useState(false)
   const enquire = whatsapp(`Hi! I'd like rates and availability for ${hotel.name} (${d.city}) for my clients.`)
   const back = `/destinations/${d.id}/hotels`
@@ -170,20 +168,7 @@ export default function HotelDetail({ d, hotel }: { d: Destination; hotel: Hotel
           </motion.div>
 
           {/* 3. Gallery: hero + two thumbnails + "All photos" */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.1, ease }}
-            className="mt-6 grid h-[clamp(16rem,48vw,32rem)] gap-3 md:grid-cols-[2fr_1fr] md:grid-rows-2"
-          >
-            <GalleryTile src={photos[0]} alt={hotel.name} onClick={() => setViewer(0)} className="md:row-span-2" eager>
-              <AllPhotos count={photos.length} onClick={() => setViewer(0)} className="md:hidden" />
-            </GalleryTile>
-            <GalleryTile src={photos[1]} alt="" onClick={() => setViewer(1)} className="hidden md:block" />
-            <GalleryTile src={photos[2]} alt="" onClick={() => setViewer(2)} className="hidden md:block">
-              <AllPhotos count={photos.length} onClick={() => setViewer(0)} />
-            </GalleryTile>
-          </motion.div>
+          <Gallery photos={photos} name={hotel.name} />
 
           {/* 4. Key amenities: icon + label, single row (scrolls sideways on small screens) */}
           <ul className="glass mt-4 flex gap-x-6 overflow-x-auto whitespace-nowrap rounded-[1.5rem] px-5 py-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -271,28 +256,8 @@ export default function HotelDetail({ d, hotel }: { d: Destination; hotel: Hotel
         </div>
       </main>
 
-      <AnimatePresence>{viewer !== null && <Viewer photos={photos} start={viewer} name={hotel.name} onClose={() => setViewer(null)} />}</AnimatePresence>
       <ChatFab text={`Hi! I have a question about ${hotel.name} in ${d.city}.`} />
     </>
-  )
-}
-
-function GalleryTile({ src, alt, onClick, className = '', eager = false, children }: { src: string; alt: string; onClick: () => void; className?: string; eager?: boolean; children?: ReactNode }) {
-  return (
-    <div className={`group relative min-h-0 overflow-hidden rounded-[1.5rem] ring-1 ring-white/10 ${className}`}>
-      <button type="button" onClick={onClick} aria-label="Open photo" className="absolute inset-0">
-        <img src={src} alt={alt} loading={eager ? 'eager' : 'lazy'} decoding="async" className="h-full w-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105" />
-      </button>
-      {children}
-    </div>
-  )
-}
-
-function AllPhotos({ count, onClick, className = '' }: { count: number; onClick: () => void; className?: string }) {
-  return (
-    <button type="button" onClick={onClick} className={`glass absolute bottom-3 right-3 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-colors hover:bg-white/20 ${className}`}>
-      <Images className="size-4" /> All {count} photos
-    </button>
   )
 }
 
@@ -333,59 +298,5 @@ function FacilityList({ group }: { group: FacilityGroup }) {
         </button>
       )}
     </div>
-  )
-}
-
-// Full-screen photo viewer: arrows / swipe-free buttons, Esc to close, thumbnails to jump.
-function Viewer({ photos, start, name, onClose }: { photos: string[]; start: number; name: string; onClose: () => void }) {
-  const [i, setI] = useState(start)
-  const go = (n: number) => setI((n + photos.length) % photos.length)
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
-      if (e.key === 'ArrowRight') setI((x) => (x + 1) % photos.length)
-      if (e.key === 'ArrowLeft') setI((x) => (x - 1 + photos.length) % photos.length)
-    }
-    window.addEventListener('keydown', onKey)
-    const html = document.documentElement
-    const prev = html.style.overflow
-    html.style.overflow = 'hidden'
-    return () => { window.removeEventListener('keydown', onKey); html.style.overflow = prev }
-  }, [onClose, photos.length])
-
-  return (
-    <motion.div
-      role="dialog"
-      aria-modal="true"
-      aria-label={`${name} photos`}
-      data-lenis-prevent
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
-      className="fixed inset-0 z-[80] flex flex-col bg-brand/95 backdrop-blur-md"
-    >
-      <div className="flex items-center justify-between px-4 py-4 md:px-8">
-        <p className="text-sm font-semibold text-white/80">{name} · {i + 1} / {photos.length}</p>
-        <button type="button" onClick={onClose} aria-label="Close photos" className="glass grid size-11 place-items-center rounded-full hover:bg-white/15">
-          <X className="size-5" />
-        </button>
-      </div>
-      <div className="relative flex min-h-0 flex-1 items-center justify-center px-4 md:px-20">
-        <AnimatePresence mode="wait">
-          <motion.img key={i} src={photos[i]} alt="" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }} className="max-h-full max-w-full rounded-2xl object-contain" />
-        </AnimatePresence>
-        <button type="button" onClick={() => go(i - 1)} aria-label="Previous photo" className="glass absolute left-3 grid size-11 place-items-center rounded-full hover:bg-white/15 md:left-6"><ChevronLeft className="size-5" /></button>
-        <button type="button" onClick={() => go(i + 1)} aria-label="Next photo" className="glass absolute right-3 grid size-11 place-items-center rounded-full hover:bg-white/15 md:right-6"><ChevronRight className="size-5" /></button>
-      </div>
-      <div className="flex justify-center gap-2 overflow-x-auto px-4 py-4">
-        {photos.map((p, k) => (
-          <button key={p + k} type="button" onClick={() => setI(k)} aria-label={`Photo ${k + 1}`} className={`size-14 shrink-0 overflow-hidden rounded-lg ring-2 transition ${k === i ? 'ring-accent' : 'opacity-60 ring-transparent hover:opacity-100'}`}>
-            <img src={p.replace('w=1600', 'w=200')} alt="" className="h-full w-full object-cover" />
-          </button>
-        ))}
-      </div>
-    </motion.div>
   )
 }

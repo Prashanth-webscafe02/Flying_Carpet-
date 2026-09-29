@@ -75,6 +75,7 @@ export const details: Record<string, Detail> = {
       { name: 'Rove Downtown', area: 'Downtown Dubai', category: 'midscale', stars: 3, text: 'Contemporary, comfortable and great value, with an easy central location.', amenities: ['Free Wi-Fi', 'Gym', 'Metro access'] },
     ],
     experiences: [
+      { title: 'Dubai Global Village Entry Ticket', place: 'Global Village', duration: '4–5 hours', tags: ['Family', 'Evening', 'Shopping'] },
       { title: 'Premium Desert Safari', place: 'Dubai desert', duration: '6 hours', tags: ['Sunset', 'Dinner', 'Private option'], img: images.desert },
       { title: 'Burj Khalifa At The Top', place: 'Downtown Dubai', duration: '2 hours', tags: ['Skip the line', 'Day or night'] },
       { title: 'Marina Dhow Cruise', place: 'Dubai Marina', duration: '3 hours', tags: ['Dinner', 'Family'] },

@@ -33,6 +33,8 @@ import {
   type HotelCategory,
 } from "./details";
 import { useFavourites } from "./favourites";
+import { mobility } from "./mobility";
+import { CarRentalInfo, TransfersInfo } from "./MobilityViews";
 import { linkTo, slug } from "./navigate";
 import { flightOptionsEnabled, isOpen, tabs, type Tab } from "./tabs";
 
@@ -293,15 +295,10 @@ export default function DestinationDetail({
                 />
               )}
               {tab === "experiences" && (
-                <Experiences
-                  d={d}
-                  info={info}
-                  onBack={() => go(null)}
-                  enquire={enquire}
-                />
+                <Experiences d={d} info={info} onBack={() => go(null)} />
               )}
               {tab === "transfers" && (
-                <Transfers
+                <TransfersInfo
                   d={d}
                   info={info}
                   onBack={() => go(null)}
@@ -309,7 +306,7 @@ export default function DestinationDetail({
                 />
               )}
               {tab === "car-rentals" && (
-                <CarRentals
+                <CarRentalInfo
                   d={d}
                   info={info}
                   onBack={() => go(null)}
@@ -543,17 +540,14 @@ const productCopy = (
         : "Reliable airport and local transfers",
     img: images.transfers,
     icon: CarFront,
-    chips:
-      info.transferMode === "sea"
-        ? ["Speedboat", "Seaplane"]
-        : ["Private", "Shared", "Chauffeur"],
+    chips: mobility[d.id].vehicles,
   },
   "car-rentals": {
     title: "Car rentals",
     text: `Self-drive cars to explore ${d.city} at your clients’ own pace`,
     img: images.chauffeur,
     icon: Car,
-    chips: ["Economy", "SUV", "Luxury"],
+    chips: mobility[d.id].carTypes,
   },
 });
 
@@ -1145,12 +1139,10 @@ function Experiences({
   d,
   info,
   onBack,
-  enquire,
 }: {
   d: Destination;
   info: Detail;
   onBack: () => void;
-  enquire: Enquire;
 }) {
   const pool = [d.img, images.experiences, images.outdoors];
   return (
@@ -1194,238 +1186,21 @@ function Experiences({
                 ))}
               </div>
               <div className="mt-auto pt-5">
-                <Cta stretch href={enquire(`options for ${e.title}`)}>
-                  View options
-                </Cta>
+                <a
+                  href={`/destinations/${d.id}/experiences/${slug(e.title)}`}
+                  onClick={linkTo(`/destinations/${d.id}/experiences/${slug(e.title)}`)}
+                  className={`group/cta inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full bg-accent py-2 pl-4 pr-2 text-sm font-semibold shadow-[0_10px_30px_-10px_rgb(232_101_37/0.9)] transition hover:bg-[#f0763a] group-hover:bg-[#f0763a] ${stretched}`}
+                >
+                  View details
+                  <span className="grid size-6 place-items-center rounded-full bg-white/20 transition-transform duration-300 group-hover/cta:translate-x-0.5">
+                    <ArrowRight className="size-3.5" />
+                  </span>
+                </a>
               </div>
             </div>
           </motion.article>
         ))}
       </div>
-    </>
-  );
-}
-
-/* ---------- transfers ---------- */
-
-function Transfers({
-  d,
-  info,
-  onBack,
-  enquire,
-}: {
-  d: Destination;
-  info: Detail;
-  onBack: () => void;
-  enquire: Enquire;
-}) {
-  const offered = d.products.includes("transfers");
-  const options =
-    info.transferMode === "sea"
-      ? [
-          {
-            title: "Speedboat transfer",
-            route: `${info.airport} Airport → nearby atoll resorts`,
-            detail: "Speedboat · shared or private",
-            img: images.transfers,
-          },
-          {
-            title: "Seaplane transfer",
-            route: `${info.airport} Airport → outer atoll resorts`,
-            detail: "Scenic flight · daylight hours",
-            img: images.wing,
-          },
-          {
-            title: "Domestic flight & boat",
-            route: `${info.airport} Airport → remote resorts`,
-            detail: "Flight + speedboat",
-            img: images.chauffeur,
-          },
-        ]
-      : [
-          {
-            title: "Private airport transfer",
-            route: `${info.airport} Airport → ${d.city} hotels`,
-            detail: "Sedan · up to 3 guests",
-            img: images.transfers,
-          },
-          {
-            title: "Shared shuttle",
-            route: `${info.airport} Airport → selected hotels`,
-            detail: "Coach · shared",
-            img: images.transfers,
-          },
-          {
-            title: "Chauffeur by the hour",
-            route: `Anywhere in ${d.city} → flexible`,
-            detail: "Luxury sedan",
-            img: images.chauffeur,
-          },
-        ];
-  return (
-    <>
-      <ViewHead
-        d={d}
-        onBack={onBack}
-        title={`Transfers in ${d.city}`}
-        sub={
-          info.transferMode === "sea"
-            ? "Speedboat, seaplane and domestic flight transfers to every resort."
-            : "Airport, hotel and hourly chauffeur options with reliable partners."
-        }
-      />
-      {offered ? (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {options.map((o, i) => (
-            <motion.article
-              key={o.title}
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: i * 0.07, ease }}
-              className="group glass-solid relative flex cursor-pointer flex-col overflow-hidden rounded-[1.5rem] ring-white/25 transition-shadow hover:ring-1"
-            >
-              <div className="relative aspect-[16/9] overflow-hidden">
-                <img
-                  src={o.img}
-                  alt=""
-                  loading="lazy"
-                  decoding="async"
-                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.2s] group-hover:scale-110"
-                />
-              </div>
-              <div className="flex flex-1 flex-col p-5">
-                <h3 className="text-lg font-semibold tracking-tight">
-                  {o.title}
-                </h3>
-                <p className="mt-1 text-sm text-white/65">{o.route}</p>
-                <div className="mt-3">
-                  <Chip>{o.detail}</Chip>
-                </div>
-                <div className="mt-auto pt-5">
-                  <Cta
-                    stretch
-                    href={enquire(`a quote for a ${o.title.toLowerCase()}`)}
-                  >
-                    View options
-                  </Cta>
-                </div>
-              </div>
-            </motion.article>
-          ))}
-        </div>
-      ) : (
-        <div className="glass rounded-[1.75rem] px-6 py-12 text-center">
-          <p className="text-lg font-semibold tracking-tight">
-            Transfers in {d.city} are arranged on request
-          </p>
-          <p className="mx-auto mt-2 max-w-md text-white/65">
-            Tell us your clients’ arrival details and we’ll organise private or
-            shared transfers.
-          </p>
-          <div className="mt-6 flex justify-center">
-            <Cta href={enquire("a transfer quote")}>Request a transfer</Cta>
-          </div>
-        </div>
-      )}
-    </>
-  );
-}
-
-/* ---------- car rentals ---------- */
-
-function CarRentals({
-  d,
-  info,
-  onBack,
-  enquire,
-}: {
-  d: Destination;
-  info: Detail;
-  onBack: () => void;
-  enquire: Enquire;
-}) {
-  const offered = d.products.includes("car-rentals");
-  const options = [
-    {
-      title: "Economy",
-      detail: "Compact car · up to 4 guests",
-      text: "Easy to park and great value for city trips and short drives.",
-      img: images.transfers,
-    },
-    {
-      title: "SUV",
-      detail: "SUV · up to 5 guests + luggage",
-      text: "Room for families and bags, ideal for day trips out of town.",
-      img: images.outdoors,
-    },
-    {
-      title: "Luxury",
-      detail: "Premium sedan · up to 4 guests",
-      text: "A premium drive for special occasions and VIP clients.",
-      img: images.chauffeur,
-    },
-  ];
-  return (
-    <>
-      <ViewHead
-        d={d}
-        onBack={onBack}
-        title={`Car rentals in ${d.city}`}
-        sub={`Self-drive cars from trusted partners, with pick-up at ${info.airport} airport or in the city.`}
-      />
-      {offered ? (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {options.map((o, i) => (
-            <motion.article
-              key={o.title}
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: i * 0.07, ease }}
-              className="group glass-solid relative flex cursor-pointer flex-col overflow-hidden rounded-[1.5rem] ring-white/25 transition-shadow hover:ring-1"
-            >
-              <div className="relative aspect-[16/9] overflow-hidden">
-                <img
-                  src={o.img}
-                  alt=""
-                  loading="lazy"
-                  decoding="async"
-                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.2s] group-hover:scale-110"
-                />
-              </div>
-              <div className="flex flex-1 flex-col p-5">
-                <h3 className="text-lg font-semibold tracking-tight">
-                  {o.title}
-                </h3>
-                <p className="mt-1 text-sm text-white/65">{o.text}</p>
-                <div className="mt-3">
-                  <Chip>{o.detail}</Chip>
-                </div>
-                <div className="mt-auto pt-5">
-                  <Cta
-                    stretch
-                    href={enquire(`a ${o.title.toLowerCase()} car rental`)}
-                  >
-                    View options
-                  </Cta>
-                </div>
-              </div>
-            </motion.article>
-          ))}
-        </div>
-      ) : (
-        <div className="glass rounded-[1.75rem] px-6 py-12 text-center">
-          <p className="text-lg font-semibold tracking-tight">
-            Car rentals aren’t offered in {d.city}
-          </p>
-          <p className="mx-auto mt-2 max-w-md text-white/65">
-            Getting around is by boat, seaplane or resort transfer. Our team can
-            arrange it all.
-          </p>
-          <div className="mt-6 flex justify-center">
-            <Cta href={enquire("help getting around")}>Ask a specialist</Cta>
-          </div>
-        </div>
-      )}
     </>
   );
 }
