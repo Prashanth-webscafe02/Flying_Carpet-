@@ -115,7 +115,7 @@ export default function GetStarted() {
           <div className="mb-5 flex items-center justify-between text-sm">
             <a
               href="/"
-              className="inline-flex items-center gap-2 font-medium text-white/70 transition-colors hover:text-white"
+              className="-my-2 inline-flex items-center gap-2 py-2 font-medium text-white/70 transition-colors hover:text-white"
             >
               <ArrowLeft className="size-4" /> Back to home
             </a>

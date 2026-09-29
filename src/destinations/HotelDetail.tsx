@@ -137,7 +137,7 @@ export default function HotelDetail({ d, hotel }: { d: Destination; hotel: Hotel
         <div className="mx-auto max-w-7xl px-4 pb-24 pt-28 sm:pt-32 md:px-8">
           {/* Back + actions */}
           <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-            <a href={back} onClick={linkTo(back)} className="inline-flex items-center gap-2 text-sm font-medium text-white/70 transition-colors hover:text-white">
+            <a href={back} onClick={linkTo(back)} className="-my-2 inline-flex items-center gap-2 py-2 text-sm font-medium text-white/70 transition-colors hover:text-white">
               <ArrowLeft className="size-4" /> Hotels in {d.city}
             </a>
             <div className="flex items-center gap-2">
@@ -293,7 +293,7 @@ function FacilityList({ group }: { group: FacilityGroup }) {
         ))}
       </ul>
       {group.items.length > SHOWN && (
-        <button type="button" onClick={() => setAll((x) => !x)} aria-expanded={all} className="mt-2 text-sm font-semibold text-accent hover:underline">
+        <button type="button" onClick={() => setAll((x) => !x)} aria-expanded={all} className="-mb-2 mt-0 py-2 text-sm font-semibold text-accent hover:underline">
           {all ? 'Show less' : 'See all'}
         </button>
       )}

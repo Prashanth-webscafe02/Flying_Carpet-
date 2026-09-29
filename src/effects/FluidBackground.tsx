@@ -1,8 +1,13 @@
 import { useEffect, useRef } from 'react'
 
 // Full-screen liquid gradient: domain-warped noise in brand colours, pulled toward the cursor.
+// highp isn't guaranteed in fragment shaders on some older mobile GPUs; fall back instead of failing to compile.
 const frag = `
+#ifdef GL_FRAGMENT_PRECISION_HIGH
 precision highp float;
+#else
+precision mediump float;
+#endif
 uniform vec2 uRes;
 uniform float uTime;
 uniform vec2 uMouse;
@@ -80,13 +85,22 @@ export default function FluidBackground() {
 
     // Render at half resolution — the shader is soft, so this is invisible and much cheaper.
     const scale = 0.5
-    const resize = () => {
+    const setSize = () => {
       canvas.width = Math.floor(window.innerWidth * scale)
       canvas.height = Math.floor(window.innerHeight * scale)
       gl.viewport(0, 0, canvas.width, canvas.height)
       gl.uniform2f(uRes, canvas.width, canvas.height)
     }
-    resize()
+    // Mobile browsers resize the viewport as the address bar shows/hides while scrolling; the canvas is
+    // CSS-stretched anyway, so skip reallocating it for those small height-only changes (avoids scroll jank).
+    const resize = () => {
+      const w = Math.floor(window.innerWidth * scale)
+      const h = Math.floor(window.innerHeight * scale)
+      if (w === canvas.width && Math.abs(h - canvas.height) < 100 * scale) return
+      setSize()
+    }
+    // Always size on mount: a remount (e.g. StrictMode) gets a fresh program whose uRes must be set.
+    setSize()
     window.addEventListener('resize', resize)
 
     const target = { x: 0.5, y: 0.5 }

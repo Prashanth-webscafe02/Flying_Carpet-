@@ -46,7 +46,7 @@ export default function Header() {
           />
         </a>
 
-        <nav className="hidden md:block" onPointerLeave={() => setActive(null)}>
+        <nav className="hidden lg:block" onPointerLeave={() => setActive(null)}>
           <ul className="flex items-center gap-1">
             {nav.map((n) => (
               <li key={n.label} className="relative">
@@ -60,7 +60,7 @@ export default function Header() {
                 <a
                   href={home + n.href}
                   onPointerEnter={() => setActive(n.label)}
-                  className="relative block px-4 py-2 text-sm font-semibold text-white/90 transition-colors hover:text-white"
+                  className="relative block whitespace-nowrap px-3 py-2 text-sm font-semibold text-white/90 xl:px-4 transition-colors hover:text-white"
                 >
                   {n.label}
                 </a>
@@ -69,14 +69,14 @@ export default function Header() {
           </ul>
         </nav>
 
-        <div className="hidden md:block">
+        <div className="ml-auto mr-3 hidden md:block lg:m-0">
           <PillButton href={`${home}#`}>Login</PillButton>
         </div>
 
         <button
           aria-label={open ? "Close menu" : "Open menu"}
           onClick={() => setOpen((o) => !o)}
-          className="glass grid size-11 place-items-center rounded-full md:hidden"
+          className="glass grid size-11 place-items-center rounded-full lg:hidden"
         >
           {open ? <X className="size-5" /> : <Menu className="size-5" />}
         </button>
@@ -95,7 +95,7 @@ export default function Header() {
             }}
             exit={{ opacity: 0, y: -16, scale: 0.96, filter: "blur(8px)" }}
             transition={{ duration: 0.45, ease }}
-            className="glass-strong mx-auto mt-3 max-w-7xl rounded-3xl p-3 md:hidden"
+            className="glass-strong mx-auto mt-3 max-w-7xl rounded-3xl p-3 lg:hidden"
           >
             {nav.map((n, i) => (
               <motion.a

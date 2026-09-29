@@ -10,11 +10,11 @@ const MOBILE_MQ = '(max-width: 767px) and (orientation: portrait)'
 // Foreground cut-out geometry: aspect ratio, and the highest point of its ridge under the headline
 // (as a fraction of the image height, measured from the alpha channel).
 const FG = {
-  desktop: { aspect: 1350 / 2899, ridge: 0.23 },
-  mobile: { aspect: 1026 / 750, ridge: 0.1 },
+  desktop: { aspect: 1350 / 2899, ridge: 0.18 },
+  mobile: { aspect: 1026 / 750, ridge: 0.085 },
 }
 const FG_BLEED = 1.06 // foreground is inset -3% on each side
-const VISIBLE = 0.67 // headline top-to-cap-bottom (em) that must stay above the ridge
+const VISIBLE = 0.86 // headline top-to-glyph-bottom (em, Google Sans at leading-none) that must stay above the ridge
 const MIN_FONT = 56
 
 // Fit "Unlock" into the sky above the ridge: first sink the foreground (up to 40% of its height),

@@ -119,7 +119,7 @@ export default function DestinationDetail({
             <div className="mb-8 flex items-center justify-between gap-4">
               <a
                 href="/destinations"
-                className="inline-flex items-center gap-2 text-sm font-medium text-white/75 transition-colors hover:text-white"
+                className="-my-2 inline-flex items-center gap-2 py-2 text-sm font-medium text-white/75 transition-colors hover:text-white"
               >
                 <ArrowLeft className="size-4" /> All destinations
               </a>
@@ -344,7 +344,7 @@ function ViewHead({
       <button
         type="button"
         onClick={onBack}
-        className="mb-3 inline-flex items-center gap-2 text-sm font-medium text-white/65 transition-colors hover:text-white"
+        className="-mt-2 mb-1 inline-flex items-center gap-2 py-2 text-sm font-medium text-white/65 transition-colors hover:text-white"
       >
         <ArrowLeft className="size-4" /> Back to {d.city}
       </button>
