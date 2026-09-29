@@ -1,5 +1,5 @@
-import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowLeft, ArrowRight, Check, Clock, Languages, Link2, MapPin, MessageCircle, Plus, Smartphone, X, type LucideIcon } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { ArrowLeft, ArrowRight, Check, Clock, Languages, Link2, MapPin, MessageCircle, Smartphone, X, type LucideIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { LucidCorner } from '../effects/LucidLine'
 import { ease } from '../effects/motion'
@@ -112,11 +112,20 @@ export default function ExperienceDetail({ d, experience: e }: { d: Destination;
               </section>
             )}
 
-            {/* 7. Itinerary: numbered, expandable stops */}
-            {content && (
-              <section id="itinerary">
-                <h2 className="text-[clamp(1.6rem,2.6vw,2.25rem)] font-semibold tracking-[-0.04em]">Itinerary</h2>
-                <ol className="mt-5 space-y-3">
+            {/* 7. Itinerary: visible stops in journey order */}
+            {content && content.stops.length > 0 && (
+              <section id="itinerary" aria-labelledby="itinerary-heading">
+                <div className="flex flex-wrap items-end justify-between gap-4">
+                  <div>
+                    <h2 id="itinerary-heading" className="text-[clamp(1.6rem,2.6vw,2.25rem)] font-semibold tracking-[-0.04em]">Itinerary</h2>
+                    <p className="mt-2 text-white/65">A closer look at what you will experience along the way.</p>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-3 text-sm text-white/75">
+                    <span className="glass inline-flex items-center gap-2 rounded-full px-3 py-1.5"><Clock aria-hidden="true" className="size-4 text-accent" />{e.duration} total</span>
+                    <span>{content.stops.length} {content.stops.length === 1 ? 'stop' : 'stops'}</span>
+                  </div>
+                </div>
+                <ol className="mt-6">
                   {content.stops.map(([name, text], i) => <Stop key={name} n={i + 1} name={name} text={text} />)}
                 </ol>
               </section>
@@ -186,23 +195,18 @@ function IncludeList({ items, included = false }: { items: string[]; included?: 
 }
 
 function Stop({ n, name, text }: { n: number; name: string; text: string }) {
-  const [open, setOpen] = useState(false)
   return (
-    <li className="glass overflow-hidden rounded-[1.25rem]">
-      <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} className="flex w-full items-center gap-4 px-5 py-4 text-left">
-        <span className="text-lg font-bold tabular-nums text-accent">{String(n).padStart(2, '0')}</span>
-        <span className="flex-1 font-semibold tracking-tight">{name}</span>
-        <span className={`grid size-7 shrink-0 place-items-center rounded-full ring-1 ring-white/30 transition-transform duration-300 ${open ? 'rotate-45' : ''}`}>
-          <Plus className="size-4" />
+    <li className="group relative flex gap-4 pb-5 last:pb-0 sm:gap-5">
+      <div aria-hidden="true" className="relative flex w-10 shrink-0 justify-center sm:w-12">
+        <span className="absolute bottom-0 left-1/2 top-10 w-px bg-gradient-to-b from-accent/50 to-white/15 group-last:hidden sm:top-12" />
+        <span className="relative grid size-10 place-items-center rounded-full border border-accent/40 bg-brand text-sm font-bold tabular-nums text-accent sm:size-12">
+          {String(n).padStart(2, '0')}
         </span>
-      </button>
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.35, ease }} className="overflow-hidden">
-            <p className="border-t border-white/10 px-5 pb-5 pl-14 pt-4 text-white/75">{text}</p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      </div>
+      <div className="glass min-w-0 flex-1 rounded-[1.25rem] p-5 sm:p-6">
+        <h3 className="text-lg font-semibold leading-snug tracking-tight">{name}</h3>
+        <p className="mt-2 leading-relaxed text-white/75">{text}</p>
+      </div>
     </li>
   )
 }
