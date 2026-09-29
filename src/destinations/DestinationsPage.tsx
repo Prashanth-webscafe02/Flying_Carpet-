@@ -1,13 +1,14 @@
 import { AnimatePresence, LayoutGroup, motion } from 'framer-motion'
-import { ArrowRight, ArrowUpRight, BedDouble, CarFront, Heart, LayoutGrid, List, MessageCircle, Pencil, Plane, RotateCcw, Ticket, type LucideIcon } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, BedDouble, Car, CarFront, Heart, LayoutGrid, List, MessageCircle, Pencil, Plane, RotateCcw, Ticket, type LucideIcon } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { LucidCorner, LucidWave } from '../effects/LucidLine'
 import { Reveal, ease } from '../effects/motion'
 import { clearAnswers, loadAnswers, type Answers } from '../get-started/answers'
 import { steps, type StepId } from '../get-started/steps'
-import { bannerImg, destinations, specialistImg, whatsapp, type Destination, type ProductId } from './data'
+import { bannerImg, destinations, productsOf, specialistImg, whatsapp, type Destination, type ProductId } from './data'
 import ChatFab from './ChatFab'
 import { useFavourites } from './favourites'
+import { linkTo } from './navigate'
 
 const PAGE = 8
 const regions = steps.find((s) => s.id === 'destinations')!.choices
@@ -17,6 +18,7 @@ const products: Record<ProductId, { label: string; icon: LucideIcon }> = {
   hotels: { label: 'Hotels', icon: BedDouble },
   experiences: { label: 'Experiences', icon: Ticket },
   transfers: { label: 'Transfers', icon: CarFront },
+  'car-rentals': { label: 'Car rentals', icon: Car },
 }
 
 type Sort = 'relevance' | 'popular' | 'az'
@@ -320,7 +322,7 @@ function Card({ d, i, list, fav, onFav, inMyRegion, mySpecialise }: {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.96 }}
       transition={{ duration: 0.5, delay: Math.min(i % PAGE, 7) * 0.04, ease }}
-      className={`group glass-solid flex overflow-hidden rounded-[1.75rem] ${list ? 'flex-col sm:flex-row' : 'flex-col'}`}
+      className={`group glass-solid relative flex cursor-pointer overflow-hidden rounded-[1.75rem] ring-white/25 transition-shadow hover:ring-1 ${list ? 'flex-col sm:flex-row' : 'flex-col'}`}
     >
       <div className={`relative shrink-0 overflow-hidden ${list ? 'aspect-[4/3] sm:aspect-auto sm:w-64' : 'aspect-[4/3]'}`}>
         <img src={d.img} alt={name} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-110" />
@@ -334,7 +336,7 @@ function Card({ d, i, list, fav, onFav, inMyRegion, mySpecialise }: {
           onClick={onFav}
           aria-pressed={fav}
           aria-label={fav ? `Remove ${name} from favourites` : `Save ${name} to favourites`}
-          className="glass absolute right-4 top-4 grid size-10 place-items-center rounded-full transition-transform duration-300 hover:scale-110"
+          className="glass absolute right-4 top-4 z-10 grid size-10 place-items-center rounded-full transition-transform duration-300 hover:scale-110"
         >
           <motion.span key={String(fav)} initial={{ scale: 0.6 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 500, damping: 15 }}>
             <Heart className={`size-4 ${fav ? 'fill-accent text-accent' : ''}`} />
@@ -346,7 +348,7 @@ function Card({ d, i, list, fav, onFav, inMyRegion, mySpecialise }: {
         <h3 className="text-xl font-semibold tracking-tight">{name}</h3>
         <p className="mt-1 text-sm leading-relaxed text-white/65">{d.tagline}</p>
         <ul className="mt-4 flex flex-wrap gap-1.5">
-          {d.products.map((p) => {
+          {productsOf(d).map((p) => {
             const { label, icon: Icon } = products[p]
             const match = mySpecialise.includes(p)
             return (
@@ -357,9 +359,13 @@ function Card({ d, i, list, fav, onFav, inMyRegion, mySpecialise }: {
           })}
         </ul>
         <div className="mt-auto pt-5">
+          {/* Stretched link: its ::after covers the whole card, so clicking anywhere opens the
+              destination (the heart sits above it on z-10). No filter/transform on this link:
+              either would shrink the ::after back to the button. */}
           <a
             href={`/destinations/${d.id}`}
-            className="group/btn inline-flex items-center gap-2.5 rounded-full bg-accent py-2 pl-4 pr-2 text-sm font-semibold shadow-[0_10px_30px_-10px_rgb(232_101_37/0.9)] transition hover:brightness-110"
+            onClick={linkTo(`/destinations/${d.id}`)}
+            className="group/btn inline-flex items-center gap-2.5 rounded-full bg-accent py-2 pl-4 pr-2 text-sm font-semibold shadow-[0_10px_30px_-10px_rgb(232_101_37/0.9)] transition after:absolute after:inset-0 after:rounded-[inherit] after:content-[''] hover:bg-[#f0763a] group-hover:bg-[#f0763a]"
           >
             Explore
             <span className="grid size-6 place-items-center rounded-full bg-white/20 transition-transform duration-300 group-hover/btn:translate-x-0.5">

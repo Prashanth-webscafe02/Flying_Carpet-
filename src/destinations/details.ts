@@ -71,6 +71,7 @@ export const details: Record<string, Detail> = {
       { name: 'Address Downtown', area: 'Downtown Dubai', category: 'luxury', stars: 5, text: 'A premium city hotel with stunning views of the Burj Khalifa and Dubai Fountain. Ideal for business and leisure travellers.', amenities: ['Pool', 'Spa', 'Business facilities', 'Fine dining'] },
       { name: 'Jumeirah Beach Hotel', area: 'Jumeirah Beach', category: 'upscale', stars: 5, text: 'A stylish beachfront hotel with world-class amenities, ideal for families and couples.', amenities: ['Beach access', 'Pool', 'Spa', 'Family friendly'] },
       { name: 'JA Ocean View Hotel', area: 'Dubai Marina', category: 'upscale', stars: 4, text: 'A vibrant beachfront hotel with spacious rooms, popular with families and groups.', amenities: ['Pool', 'Family friendly', 'Water sports'] },
+      { name: 'Avani Deira Dubai Hotel', area: 'Deira', category: 'upscale', stars: 5, text: 'A five-star hotel in the heart of Dubai’s historic Deira quarter, close to the Creek, the souks and Dubai Metro, with connecting rooms for families.', amenities: ['Pool', 'Sauna', 'Gym', 'Business facilities'] },
       { name: 'Rove Downtown', area: 'Downtown Dubai', category: 'midscale', stars: 3, text: 'Contemporary, comfortable and great value, with an easy central location.', amenities: ['Free Wi-Fi', 'Gym', 'Metro access'] },
     ],
     experiences: [

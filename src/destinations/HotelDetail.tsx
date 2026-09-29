@@ -1,16 +1,16 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import {
-  ArrowLeft, ArrowRight, Baby, Briefcase, Building2, Check, ChevronDown, ChevronLeft, ChevronRight, Clock, ConciergeBell, Dumbbell, Eye, Images, Landmark,
-  Link2, MapPin, MessageCircle, Mountain, Sparkles, Star, TrainFront, Umbrella, Users, UtensilsCrossed, Waves, Wifi, X, type LucideIcon,
+  Accessibility, ArrowLeft, ArrowRight, Baby, Bike, Briefcase, Leaf, SquareParking, Building2, Check, ChevronLeft, ChevronRight, Clock, Coffee, ConciergeBell, CreditCard, Dumbbell, Eye, Images, Info, Landmark,
+  Languages, Link2, MapPin, MessageCircle, Mountain, Sparkles, Star, TrainFront, Umbrella, Users, UtensilsCrossed, Waves, Wifi, X, type LucideIcon,
 } from 'lucide-react'
 import { useEffect, useState, type ReactNode } from 'react'
 import { LucidCorner } from '../effects/LucidLine'
 import { ease } from '../effects/motion'
 import ChatFab from './ChatFab'
 import { whatsapp, type Destination } from './data'
-import { categoryLabel, details, hotelImages, images, type Hotel } from './details'
+import { categoryLabel, details, hotelImages, images, type Detail, type Hotel } from './details'
+import { hotelFacts, roomRows, sampleRoomFacts, useSampleRoomFacts } from './hotelFacts'
 import { linkTo, slug } from './navigate'
-import { isOpen } from './tabs'
 
 const countryNames: Record<string, string> = { UAE: 'United Arab Emirates', USA: 'United States' }
 const big = (src: string) => src.replace(/w=\d+/, 'w=1600')
@@ -22,7 +22,7 @@ const facilityIcon = (label: string): LucideIcon => {
     [/pool|water|diving|snorkel|surf/, Waves], [/spa|yoga|hammam|wellness/, Sparkles], [/wi-?fi/, Wifi], [/beach/, Umbrella],
     [/dining|restaurant|breakfast|tea|bar|inclusive/, UtensilsCrossed], [/kids|family/, Baby], [/gym|fitness/, Dumbbell], [/business/, Briefcase],
     [/view/, Eye], [/heritage|palace/, Landmark], [/butler|riad/, ConciergeBell], [/metro|skytrain|shuttle/, TrainFront], [/rooftop|design|art/, Building2],
-    [/garden|desert|ski|nature|mountain/, Mountain], [/group/, Users], [/reception|central/, Clock],
+    [/garden|desert|ski|nature|mountain/, Mountain], [/group/, Users], [/reception|central/, Clock], [/multilingual|language/, Languages], [/wheelchair|accessib/, Accessibility], [/car park|parking/, SquareParking],
   ]
   return rules.find(([re]) => re.test(l))?.[1] ?? Check
 }
@@ -35,13 +35,75 @@ const categoryBlurb: Record<Hotel['category'], string> = {
   budget: 'A smart, comfortable option for value-conscious travellers, groups and longer stays.',
 }
 
-// A hotel's own page (the reference site's hotel detail, minus prices and booking):
-// title, location, gallery, facility strip, overview, what's included, and nearby highlights.
+type Facility = { label: string; paid?: boolean }
+type FacilityGroup = { title: string; icon: LucideIcon; items: Facility[] }
+
+const groupIcons: Record<string, LucideIcon> = {
+  'Amenities and Services': ConciergeBell, 'Restaurant Service': UtensilsCrossed, Meals: Coffee, Business: Briefcase,
+  'Internet Access': Wifi, Entertainment: Waves, 'Health and Beauty': Sparkles, 'Sustainable Certification': Leaf,
+  Activities: Bike, 'To take into account': Info, 'Cards Accepted': CreditCard,
+}
+
+// Grouped facilities, built from the hotel's own amenities (sorted into groups) plus standard
+// services for its category. `paid` items are marked "$" on the page.
+function facilityGroups(hotel: Hotel, info: Detail): FacilityGroup[] {
+  const premium = hotel.category === 'luxury' || hotel.category === 'upscale' || hotel.category === 'boutique'
+  const f = (label: string, paid = false): Facility => ({ label, paid })
+  const groups: FacilityGroup[] = [
+    { title: 'Amenities and Services', icon: ConciergeBell, items: [f('24-hour reception'), f('Multilingual staff'), ...(premium ? [f('Concierge')] : []), f('Luggage storage'), f('Laundry service', true), ...(info.transferMode !== 'sea' && hotel.category !== 'budget' ? [f('Car park')] : [])] },
+    { title: 'Restaurant Service', icon: UtensilsCrossed, items: [f('Restaurant'), ...(hotel.category !== 'budget' ? [f('Bar')] : []), ...(premium ? [f('Room service', true)] : [])] },
+    { title: 'Meals', icon: Coffee, items: [f('Breakfast buffet'), ...(premium ? [f('Lunch'), f('Dinner')] : [])] },
+    { title: 'Business', icon: Briefcase, items: premium ? [f('Meeting rooms'), f('Business centre'), f('Printer', true)] : [] },
+    { title: 'Internet Access', icon: Wifi, items: [f('Wi-Fi')] },
+    { title: 'Entertainment', icon: Waves, items: [] },
+    { title: 'Health and Beauty', icon: Sparkles, items: premium ? [f('Fitness centre')] : [] },
+    { title: 'Activities', icon: Bike, items: [] },
+    { title: 'To take into account', icon: Info, items: [f('Deposit may be required on arrival'), f('Photo ID required at check-in')] },
+    { title: 'Cards Accepted', icon: CreditCard, items: [f('American Express'), f('MasterCard'), f('Visa')] },
+  ]
+  const group = (title: string) => groups.find((g) => g.title === title)!
+  // Sort each of the hotel's own amenities into a group.
+  const rules: [RegExp, string, boolean][] = [
+    [/wi-?fi/i, 'Internet Access', false],
+    [/dining|tea|breakfast|bar$|rooftop bar/i, 'Restaurant Service', false],
+    [/inclusive/i, 'Meals', false],
+    [/business/i, 'Business', false],
+    [/spa|hammam/i, 'Health and Beauty', true],
+    [/gym|fitness|yoga/i, 'Health and Beauty', false],
+    [/diving|snorkel|surf|water sports|ski|desert/i, 'Activities', true],
+    [/pool|beach|kids|family|garden|view|casino|art|design|rooftop/i, 'Entertainment', false],
+  ]
+  for (const a of hotel.amenities) {
+    const [, title, paid] = rules.find(([re]) => re.test(a)) ?? [null, 'Amenities and Services', false]
+    group(title).items.push(f(a, paid))
+    if (/spa/i.test(a)) group('Health and Beauty').items.push(f('Massage', true))
+  }
+  // De-duplicate (e.g. "Wi-Fi" vs "Free Wi-Fi") and drop empty groups.
+  for (const g of groups) {
+    const seen = new Set<string>()
+    g.items = g.items.filter((i) => {
+      const key = i.label.toLowerCase().replace(/^free /, '')
+      if (seen.has(key)) return false
+      seen.add(key)
+      return true
+    })
+    if (g.title === 'Internet Access' && g.items.length > 1) g.items = g.items.filter((i) => i.label !== 'Wi-Fi')
+    if (g.title === 'Health and Beauty' && g.items.some((i) => /gym|fitness/i.test(i.label) && i.label !== 'Fitness centre')) g.items = g.items.filter((i) => i.label !== 'Fitness centre')
+  }
+  return groups.filter((g) => g.items.length)
+}
+
+// A hotel's own page (the reference site's hotel detail, minus search, prices and booking):
+// name + stars, street address, gallery, amenities strip, overview, property facts, facilities.
 export default function HotelDetail({ d, hotel }: { d: Destination; hotel: Hotel }) {
   const info = details[d.id]
   const index = info.hotels.indexOf(hotel)
   const country = countryNames[d.country] ?? d.country
-  const place = d.city === country ? `${hotel.area} – ${country}` : `${hotel.area}, ${d.city} – ${country}`
+  const facts = hotelFacts[hotel.name] ?? {}
+  // Year built + room counts: the shared sample while `useSampleRoomFacts` is on, else this hotel's own.
+  const roomFacts = useSampleRoomFacts ? sampleRoomFacts : { opened: facts.opened, rooms: facts.rooms }
+  const where = d.city === country ? country : `${d.city}, ${country}`
+  const address = facts.address ? `${facts.address}, ${where}` : `${hotel.area}, ${where}`
   const photos = [...hotelImages.slice(index % hotelImages.length), ...hotelImages.slice(0, index % hotelImages.length), images.hotels, d.img].map(big)
   const [viewer, setViewer] = useState<number | null>(null)
   const [copied, setCopied] = useState(false)
@@ -50,10 +112,17 @@ export default function HotelDetail({ d, hotel }: { d: Destination; hotel: Hotel
 
   useEffect(() => { document.title = `${hotel.name} · ${d.city} — Flying Carpet` }, [hotel.name, d.city])
 
-  const facilities = [...hotel.amenities, ...['Free Wi-Fi', '24-hour reception'].filter((f) => !hotel.amenities.some((a) => a.toLowerCase().includes(f.split(' ').pop()!.toLowerCase())))].slice(0, 6)
-  const overview = `${hotel.text} Set in ${hotel.area === d.city ? d.city : `${hotel.area}, ${d.city}`}, it makes an easy base for ${info.experiences.slice(0, 2).map((e) => e.title).join(' and ')}. ${categoryBlurb[hotel.category]}`
-  const included = ['Accommodation for the selected nights', 'Room taxes and service charges, as quoted', ...hotel.amenities.slice(0, 2).map((a) => `Access to ${a.toLowerCase()}`)]
-  const excluded = ['Flights to ' + d.city, 'Airport transfers (can be added)', 'Local city or tourism tax, if payable at the hotel', 'Personal expenses and extras']
+  // Top amenities for the single-row strip: the hotel's own, then standard services.
+  const strip = facts.strip ?? [...hotel.amenities, ...['Restaurant', 'Free Wi-Fi', '24-hour reception', 'Multilingual staff'].filter((f) => !hotel.amenities.some((a) => a.toLowerCase().includes(f.split(' ').pop()!.toLowerCase())))].slice(0, 7)
+  const groups: FacilityGroup[] = facts.facilities
+    ? facts.facilities.map((g) => ({ ...g, icon: groupIcons[g.title] ?? Check }))
+    : facilityGroups(hotel, info)
+  const listFormatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' })
+  const location = hotel.area === d.city ? d.city : `${hotel.area}, ${d.city}`
+  const overview = [
+    `${hotel.text} Located in ${location}, ${hotel.name} is listed in our ${categoryLabel[hotel.category].toLowerCase()} collection. ${categoryBlurb[hotel.category]}`,
+    ...(hotel.amenities.length ? [`The property's highlights include ${listFormatter.format(hotel.amenities)}. These features help shape the stay beyond the room itself, whether your clients want to spend time enjoying the hotel or balance their visit with days out in ${d.city}.`] : []),
+  ]
   const others = info.hotels.filter((h) => h !== hotel).slice(0, 3)
 
   const share = async () => {
@@ -83,7 +152,7 @@ export default function HotelDetail({ d, hotel }: { d: Destination; hotel: Hotel
             </div>
           </div>
 
-          {/* 1–2. Title and location */}
+          {/* 1–2. Name with star rating, full address underneath */}
           <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease }}>
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
               <h1 className="text-[clamp(2rem,4.4vw,3.75rem)] font-bold leading-[1.02] tracking-[-0.045em]">{hotel.name}</h1>
@@ -91,9 +160,12 @@ export default function HotelDetail({ d, hotel }: { d: Destination; hotel: Hotel
                 {Array.from({ length: hotel.stars }, (_, i) => <Star key={i} className="size-4.5 fill-accent text-accent" />)}
               </span>
             </div>
-            <p className="mt-2 inline-flex items-center gap-1.5 text-white/70">
-              <MapPin className="size-4 text-accent" /> {place}
-              <span className="ml-2 rounded-full bg-white/10 px-2.5 py-0.5 text-xs font-semibold text-white/80">{categoryLabel[hotel.category]}</span>
+            <p className="mt-2 flex items-start gap-1.5 text-white/70">
+              <MapPin className="mt-1 size-4 shrink-0 text-accent" />
+              <span>
+                {address}
+                <span className="ml-2 inline-block rounded-full bg-white/10 px-2.5 py-0.5 align-middle text-xs font-semibold text-white/80">{categoryLabel[hotel.category]}</span>
+              </span>
             </p>
           </motion.div>
 
@@ -113,63 +185,50 @@ export default function HotelDetail({ d, hotel }: { d: Destination; hotel: Hotel
             </GalleryTile>
           </motion.div>
 
-          {/* 4. Key info strip */}
-          <ul className="glass mt-4 flex flex-wrap gap-x-6 gap-y-3 rounded-[1.5rem] px-5 py-4">
-            {facilities.map((f) => {
+          {/* 4. Key amenities: icon + label, single row (scrolls sideways on small screens) */}
+          <ul className="glass mt-4 flex gap-x-6 overflow-x-auto whitespace-nowrap rounded-[1.5rem] px-5 py-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {strip.map((f) => {
               const Icon = facilityIcon(f)
               return (
-                <li key={f} className="inline-flex items-center gap-2 text-sm font-medium text-white/85">
+                <li key={f} className="inline-flex shrink-0 items-center gap-2 text-sm font-medium text-white/85">
                   <Icon className="size-4 text-accent" /> {f}
                 </li>
               )
             })}
           </ul>
 
-          {/* Jump to section */}
-          <nav aria-label="Jump to section" className="mt-10 flex gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {[['overview', 'Overview'], ['included', 'What’s included'], ['nearby', 'Nearby highlights']].map(([id, label]) => (
-              <a key={id} href={`#${id}`} className="glass shrink-0 rounded-full px-4 py-2 text-sm font-semibold text-white/80 transition-colors hover:bg-white/15 hover:text-white">{label}</a>
-            ))}
-          </nav>
-
           {/* 5. Overview */}
-          <section id="overview" className="mt-8 grid scroll-mt-28 gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
+          <section id="overview" className="mt-12 grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
             <div>
               <h2 className="text-[clamp(1.6rem,2.6vw,2.25rem)] font-semibold tracking-[-0.04em]">Overview</h2>
-              <p className="mt-4 max-w-3xl text-lg leading-relaxed text-white/80">{overview}</p>
+              <div className="mt-4 max-w-3xl space-y-4 text-lg leading-relaxed text-white/80">
+                {overview.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+              </div>
             </div>
-            <dl className="glass h-fit rounded-[1.5rem] p-5 text-sm">
-              {[
-                ['Category', categoryLabel[hotel.category]],
-                ['Star rating', `${hotel.stars} star`],
-                ['Area', hotel.area],
-                ['Nearest airport', `${info.airport} · ${info.airportName}`],
-              ].map(([k, v]) => (
-                <div key={k} className="flex justify-between gap-4 border-b border-white/10 py-2.5 last:border-0">
-                  <dt className="text-white/55">{k}</dt>
-                  <dd className="text-right font-semibold">{v}</dd>
-                </div>
-              ))}
-            </dl>
+            {/* 6. Property facts: year built, then room counts by type (same rows for every hotel) */}
+            <div aria-label="Property facts" className="glass h-fit rounded-[1.5rem] p-5 text-sm">
+              <dl>
+                <FactRow label="Year built" value={roomFacts.opened} />
+              </dl>
+              <p className="mb-1 mt-5 text-xs font-semibold uppercase tracking-[0.14em] text-white/50">Room count by type</p>
+              <dl>
+                {roomRows.map(([key, label]) => <FactRow key={key} label={label} value={roomFacts.rooms?.[key]} />)}
+              </dl>
+              {(!roomFacts.opened || roomRows.some(([key]) => roomFacts.rooms?.[key] === undefined)) && (
+                <p className="mt-3 text-xs text-white/45">— Confirmed on request</p>
+              )}
+            </div>
           </section>
 
-          {/* 6. Included / Excluded */}
-          <section id="included" className="mt-14 scroll-mt-28">
-            <h2 className="text-[clamp(1.6rem,2.6vw,2.25rem)] font-semibold tracking-[-0.04em]">What’s included</h2>
-            <div className="mt-5 grid gap-4 md:grid-cols-2">
-              <List title="Included" items={included} icon={Check} tone="in" />
-              <List title="Not included" items={excluded} icon={X} tone="out" />
+          {/* 7. Facilities, grouped; "$" marks items with an extra charge */}
+          <section id="facilities" className="mt-14">
+            <div className="flex flex-wrap items-end justify-between gap-2">
+              <h2 className="text-[clamp(1.6rem,2.6vw,2.25rem)] font-semibold tracking-[-0.04em]">Facilities</h2>
+              <p className="text-sm text-white/55"><span className="font-bold text-accent">$</span> Additional charge</p>
             </div>
-            <p className="mt-3 text-sm text-white/50">Final inclusions are confirmed with your quote.</p>
-          </section>
-
-          {/* 7. Nearby highlights (numbered, expandable) */}
-          <section id="nearby" className="mt-14 scroll-mt-28">
-            <h2 className="text-[clamp(1.6rem,2.6vw,2.25rem)] font-semibold tracking-[-0.04em]">Nearby highlights</h2>
-            <p className="mt-1 text-white/60">Experiences your clients can add to their stay.</p>
-            <ol className="mt-5 space-y-3">
-              {info.experiences.map((e, i) => <Stop key={e.title} n={i + 1} title={e.title} place={e.place} duration={e.duration} tags={e.tags} href={`/destinations/${d.id}/experiences`} defaultOpen={i === 0} />)}
-            </ol>
+            <div className="glass mt-5 grid gap-x-8 gap-y-8 rounded-[1.75rem] p-6 sm:grid-cols-2 lg:grid-cols-4 md:p-8">
+              {groups.map((g) => <FacilityList key={g.title} group={g} />)}
+            </div>
           </section>
 
           {/* Enquiry prompt */}
@@ -179,7 +238,7 @@ export default function HotelDetail({ d, hotel }: { d: Destination; hotel: Hotel
               <div className="max-w-xl">
                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-accent">Special agent rates</p>
                 <h2 className="mt-2 text-[clamp(1.5rem,2.4vw,2rem)] font-semibold leading-tight tracking-[-0.04em]">Want {hotel.name} for your client?</h2>
-                <p className="mt-2 text-white/70">Our specialists will confirm rates, rooms and availability, and can add flights, transfers and experiences.</p>
+                <p className="mt-2 text-white/70">Our specialists will confirm rates, rooms and availability, and can add flights, experiences, transfers and car rentals.</p>
               </div>
               <a href={enquire} target="_blank" rel="noopener noreferrer" className="inline-flex shrink-0 items-center gap-3 self-start rounded-full bg-cream py-1.5 pl-5 pr-1.5 font-bold tracking-tight text-ink shadow-[0_10px_40px_-8px_rgb(232_101_37/0.7)] transition-transform duration-500 hover:scale-[1.04] md:self-auto">
                 Chat on WhatsApp
@@ -237,54 +296,43 @@ function AllPhotos({ count, onClick, className = '' }: { count: number; onClick:
   )
 }
 
-function List({ title, items, icon: Icon, tone }: { title: string; items: string[]; icon: LucideIcon; tone: 'in' | 'out' }) {
+function FactRow({ label, value }: { label: string; value?: number }) {
   return (
-    <div className="glass rounded-[1.5rem] p-6">
-      <p className="font-semibold tracking-tight">{title}</p>
-      <ul className="mt-4 space-y-3">
-        {items.map((t) => (
-          <li key={t} className="flex gap-3 text-white/80">
-            <span className={`mt-0.5 grid size-5 shrink-0 place-items-center rounded-full ${tone === 'in' ? 'bg-emerald-400/20 text-emerald-300' : 'bg-white/10 text-white/55'}`}>
-              <Icon className="size-3.5" strokeWidth={2.5} />
-            </span>
-            {t}
-          </li>
-        ))}
-      </ul>
+    <div className="flex justify-between gap-4 border-b border-white/10 py-2.5 last:border-0">
+      <dt className="text-white/55">{label}</dt>
+      <dd className={`text-right font-semibold tabular-nums ${value === undefined ? 'text-white/35' : ''}`}>
+        {value === undefined ? '—' : label === 'Year built' ? value : value.toLocaleString('en')}
+      </dd>
     </div>
   )
 }
 
-function Stop({ n, title, place, duration, tags, href, defaultOpen }: { n: number; title: string; place: string; duration: string; tags: string[]; href: string; defaultOpen: boolean }) {
-  const [open, setOpen] = useState(defaultOpen)
+const SHOWN = 5
+
+function FacilityList({ group }: { group: FacilityGroup }) {
+  const [all, setAll] = useState(false)
+  const items = all ? group.items : group.items.slice(0, SHOWN)
   return (
-    <li className="glass overflow-hidden rounded-[1.25rem]">
-      <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} className="flex w-full items-center gap-4 px-5 py-4 text-left">
-        <span className="text-lg font-bold tabular-nums text-accent">{String(n).padStart(2, '0')}</span>
-        <span className="flex-1 font-semibold tracking-tight">{title}</span>
-        <ChevronDown className={`size-5 shrink-0 text-white/60 transition-transform duration-300 ${open ? 'rotate-180' : ''}`} />
-      </button>
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.35, ease }} className="overflow-hidden">
-            <div className="border-t border-white/10 px-5 pb-5 pl-14 pt-4">
-              <p className="inline-flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-white/65">
-                <span className="inline-flex items-center gap-1.5"><MapPin className="size-3.5" /> {place}</span>
-                <span className="inline-flex items-center gap-1.5"><Clock className="size-3.5" /> {duration}</span>
-              </p>
-              <div className="mt-3 flex flex-wrap gap-1.5">
-                {tags.map((t) => <span key={t} className="rounded-full bg-white/[0.07] px-2.5 py-1 text-xs font-medium text-white/70">{t}</span>)}
-              </div>
-              {isOpen('experiences') && (
-                <a href={href} onClick={linkTo(href)} className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:gap-2.5">
-                  See experiences <ArrowRight className="size-4" />
-                </a>
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </li>
+    <div>
+      <p className="flex items-center gap-2 font-semibold tracking-tight">
+        <group.icon className="size-4.5 text-accent" /> {group.title}
+      </p>
+      <ul className="mt-3 space-y-2">
+        {items.map((i) => (
+          <li key={i.label} className="flex items-start gap-2.5 text-sm text-white/75">
+            {i.paid
+              ? <span aria-label="Additional charge" className="mt-px w-4 shrink-0 text-center font-bold text-accent">$</span>
+              : <Check className="mt-0.5 size-4 shrink-0 text-white/60" strokeWidth={2.5} />}
+            {i.label}
+          </li>
+        ))}
+      </ul>
+      {group.items.length > SHOWN && (
+        <button type="button" onClick={() => setAll((x) => !x)} aria-expanded={all} className="mt-2 text-sm font-semibold text-accent hover:underline">
+          {all ? 'Show less' : 'See all'}
+        </button>
+      )}
+    </div>
   )
 }
 
