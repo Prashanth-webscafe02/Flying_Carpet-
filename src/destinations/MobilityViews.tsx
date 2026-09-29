@@ -31,6 +31,11 @@ export function TransfersInfo({ d, info, onBack }: Props) {
         <Hero photo={transferHero[sea ? 'sea' : 'road']} />
         <Section title="Overview">
           <p className="max-w-4xl text-lg leading-relaxed text-white/80">{overview}</p>
+          <p className="mt-4 max-w-4xl text-lg leading-relaxed text-white/80">
+            {sea
+              ? 'The transfer is an important part of an island stay, connecting the international arrival with the resort itself. Share your clients’ resort, flight details, group size and luggage needs so our team can help match the connection to their journey. Planning both arrival and departure together helps build a clear picture of the time needed between the airport and the island.'
+              : `Whether your clients are travelling as a couple, a family or a larger group, the right transfer brings their arrival and onward plans together. Share their pickup and drop-off locations, arrival details, passenger numbers and luggage needs so our team can help select a suitable vehicle. Return transfers can be discussed alongside the arrival journey to keep their time in ${d.city} organised from start to finish.`}
+          </p>
         </Section>
         <Section title="Vehicle types" note={`${m.vehicles.length} in ${d.city}`}>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -61,7 +66,7 @@ export function CarRentalInfo({ d, info, onBack, enquire }: Props) {
       </>
     )
   }
-  const overview = `Self-drive car rental in ${d.city} from ${m.companies.length} rental car companies, with pickup at ${info.airportName} (${info.airport}) or in the city. Choose from ${m.carTypes.length} car types, from hatchbacks and sedans to SUVs, with unlimited mileage options.`
+  const overview = `Explore ${d.city} at your clients’ own pace with self-drive car rental, giving them the freedom to plan their route, choose their stops and spend more time in the places that interest them. Browse ${m.companies.length} listed rental car companies and ${m.carTypes.length} car types, with airport pickup at ${info.airportName} (${info.airport}) or city collection to discuss as part of their travel plans.`
 
   return (
     <>
@@ -70,6 +75,9 @@ export function CarRentalInfo({ d, info, onBack, enquire }: Props) {
         <Hero photo={carRentalHero} />
         <Section title="Overview">
           <p className="max-w-4xl text-lg leading-relaxed text-white/80">{overview}</p>
+          <p className="mt-4 max-w-4xl text-lg leading-relaxed text-white/80">
+            Match the car to the journey by considering passenger numbers, luggage space and the routes your clients want to explore. Share their travel dates and preferred collection and return points so our team can help compare suitable options. Mileage, fuel arrangements and included cover can then be considered alongside the vehicle, making it easier to choose a rental that fits the whole trip.
+          </p>
         </Section>
         <Section title="Rental car companies" note={`${m.companies.length} in ${d.city}`}>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">

@@ -25,6 +25,10 @@ export default function ExperienceDetail({ d, experience: e }: { d: Destination;
   const enquire = whatsapp(`Hi! I'd like rates and availability for ${e.title} (${d.city}) for my clients.`)
   const back = `/destinations/${d.id}/experiences`
   const others = info.experiences.filter((x) => x !== e).slice(0, 3)
+  const highlights = content?.stops.map(([name]) => name) ?? []
+  const overviewDetail = highlights.length
+    ? `With a listed duration of ${e.duration.toLowerCase()}, the experience centres on ${new Intl.ListFormat('en', { style: 'long', type: 'conjunction' }).format(highlights)}. It gives your clients a dedicated part of their ${d.city} journey to enjoy these highlights, with time around the activity to shape the rest of their day. Explore the itinerary below for a closer look at each stop and what the visit involves.`
+    : `With a listed duration of ${e.duration.toLowerCase()}, this experience adds a focused visit to ${e.place} to your clients’ time in ${d.city}. Build it into their itinerary alongside time to explore and unwind, choosing a pace that reflects their interests. Our team can help you understand the available options and how the activity fits into their wider journey.`
 
   useEffect(() => { document.title = `${e.title} · ${d.city} — Flying Carpet` }, [e.title, d.city])
 
@@ -91,7 +95,10 @@ export default function ExperienceDetail({ d, experience: e }: { d: Destination;
             {/* 5. Overview */}
             <section id="overview">
               <h2 className="text-[clamp(1.6rem,2.6vw,2.25rem)] font-semibold tracking-[-0.04em]">Overview</h2>
-              <p className="mt-4 text-lg leading-relaxed text-white/80">{content?.overview ?? `${e.title} in ${e.place}, ${d.city}.`}</p>
+              <div className="mt-4 space-y-4 text-lg leading-relaxed text-white/80">
+                <p>{content?.overview ?? `Discover ${e.title} in ${e.place}, ${d.city}, and make it part of a journey shaped around your clients’ interests.`}</p>
+                <p>{overviewDetail}</p>
+              </div>
             </section>
 
             {/* 6. Included / Excluded */}
