@@ -10,6 +10,8 @@ import Gallery from './Gallery'
 import { bigPhoto, countryName, whatsapp, type Destination } from './data'
 import { details, images, type Experience } from './details'
 import { defaultLanguages, defaultTicket, experienceImage, experienceInfo } from './experienceDetails'
+import { asia } from './itineraries/asia'
+import { west } from './itineraries/west'
 import { linkTo, slug } from './navigate'
 
 // An experience's own page, laid out like a tour booking page (Viator-style, without live prices or
@@ -27,7 +29,7 @@ export default function ExperienceDetail({ d, experience: e }: { d: Destination;
   const enquire = whatsapp(`Hi! I'd like rates and availability for ${e.title} (${d.city}) for my clients.`)
   const back = `/destinations/${d.id}/experiences`
   const others = info.experiences.filter((x) => x !== e).slice(0, 3)
-  const stops = content?.stops ?? []
+  const stops = asia[e.title] ?? west[e.title] ?? content?.stops ?? []
   const highlights = stops.map(([name]) => name)
   const pickup = content?.included.some((i) => /pick-?up/i.test(i)) ?? false
   const ticket = content?.ticket ?? defaultTicket
@@ -157,7 +159,7 @@ export default function ExperienceDetail({ d, experience: e }: { d: Destination;
             {stops.length > 0 && (
               <section id="expect" className="scroll-mt-24 pt-14">
                 <div className="flex flex-wrap items-end justify-between gap-4">
-                  <SectionTitle>What to expect</SectionTitle>
+                  <SectionTitle>Itinerary</SectionTitle>
                   <div className="flex flex-wrap items-center gap-3 text-sm text-white/75">
                     <span className="glass inline-flex items-center gap-2 rounded-full px-3 py-1.5"><Clock aria-hidden="true" className="size-4 text-accent" />{e.duration} total</span>
                     <span>{stops.length} {stops.length === 1 ? 'stop' : 'stops'}</span>
