@@ -1,11 +1,12 @@
 import { AnimatePresence, LayoutGroup, motion } from 'framer-motion'
-import { ArrowRight, ArrowUpRight, BedDouble, Car, CarFront, LayoutGrid, List, MessageCircle, Pencil, Plane, RotateCcw, Ticket, type LucideIcon } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, BedDouble, Car, CarFront, LayoutGrid, List, Pencil, Plane, RotateCcw, Ticket, type LucideIcon } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { LucidCorner, LucidWave } from '../effects/LucidLine'
 import { Reveal, ease } from '../effects/motion'
 import { clearAnswers, loadAnswers, type Answers } from '../get-started/answers'
 import { steps, type StepId } from '../get-started/steps'
-import { bannerImg, destinations, productsOf, specialistImg, whatsapp, type Destination, type ProductId } from './data'
+import { REGISTER_URL } from '../content'
+import { bannerImg, destinations, productsOf, specialistImg, type Destination, type ProductId } from './data'
 import ChatFab from './ChatFab'
 import { linkTo } from './navigate'
 
@@ -248,8 +249,8 @@ export default function DestinationsPage() {
                 <div className="glass rounded-[1.75rem] px-6 py-12 text-center">
                   <p className="text-lg font-semibold tracking-tight">No {regionTitle} destinations listed yet</p>
                   <p className="mx-auto mt-2 max-w-md text-white/65">Our specialists can still build journeys there for your clients.</p>
-                  <a href={whatsapp(`Hi! I'm looking for ${regionTitle} options for my clients.`)} target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold transition hover:brightness-110">
-                    <MessageCircle className="size-4" /> Ask a specialist
+                  <a href={REGISTER_URL} className="mt-6 inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold transition hover:brightness-110">
+                    <ArrowRight className="size-4" /> Get Agency Access
                   </a>
                 </div>
               )}
@@ -279,15 +280,13 @@ export default function DestinationsPage() {
             <div className="relative flex flex-col gap-8 p-8 md:flex-row md:items-end md:justify-between md:p-14">
               <div className="max-w-lg">
                 <h2 className="text-[clamp(1.9rem,3.4vw,3rem)] font-semibold leading-[1.05] tracking-[-0.045em]">Not sure where to start?</h2>
-                <p className="mt-4 text-lg leading-relaxed text-white/75">Chat with our destination specialists and get personalised recommendations for your clients.</p>
+                <p className="mt-4 text-lg leading-relaxed text-white/75">Get agency access to destination options and travel products for your clients.</p>
                 <a
-                  href={whatsapp("Hi! I'd like personalised destination recommendations for my clients.")}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={REGISTER_URL}
                   className="group mt-7 inline-flex items-center gap-3 rounded-full bg-cream py-1.5 pl-5 pr-1.5 font-bold tracking-tight text-ink shadow-[0_10px_40px_-8px_rgb(232_101_37/0.7)] transition-transform duration-500 hover:scale-[1.04]"
                 >
-                  Chat on WhatsApp
-                  <span className="grid size-8 place-items-center rounded-full bg-accent text-white"><MessageCircle className="size-4" /></span>
+                  Get Agency Access
+                  <span className="grid size-8 place-items-center rounded-full bg-accent text-white"><ArrowRight className="size-4" /></span>
                 </a>
               </div>
               <p className="text-[clamp(1.75rem,3.2vw,2.75rem)] font-light italic tracking-[-0.03em] text-white/90">Travel sells dreams.</p>

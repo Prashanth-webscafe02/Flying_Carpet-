@@ -25,7 +25,6 @@ import {
   Leaf,
   Link2,
   MapPin,
-  MessageCircle,
   Mountain,
   Sofa,
   Sparkles,
@@ -42,10 +41,11 @@ import {
 import { useEffect, useState } from "react";
 import { LucidCorner } from "../effects/LucidLine";
 import { Reveal, ease } from "../effects/motion";
+import { REGISTER_URL } from "../content";
 import { SectionTabs, SectionTitle } from "./AgentRates";
 import Gallery from "./Gallery";
 import ProductInfoPanel from "./ProductInfoPanel";
-import { bigPhoto, countryName, whatsapp, type Destination } from "./data";
+import { bigPhoto, countryName, type Destination } from "./data";
 import {
   categoryLabel,
   details,
@@ -295,9 +295,6 @@ export default function HotelDetail({
     ]),
   ].map(bigPhoto);
   const [copied, setCopied] = useState(false);
-  const enquire = whatsapp(
-    `Hi! I'd like rates and availability for ${hotel.name} (${d.city}) for my clients.`,
-  );
   const back = `/destinations/${d.id}/hotels`;
 
   useEffect(() => {
@@ -686,14 +683,12 @@ export default function HotelDetail({
               </p>
             </div>
             <a
-              href={enquire}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={REGISTER_URL}
               className="inline-flex shrink-0 items-center gap-3 self-start rounded-full bg-cream py-1.5 pl-5 pr-1.5 font-bold tracking-tight text-ink shadow-[0_10px_40px_-8px_rgb(232_101_37/0.7)] transition-transform duration-500 hover:scale-[1.04] md:self-auto"
             >
-              Chat on WhatsApp
+              Get Agency Access
               <span className="grid size-8 place-items-center rounded-full bg-accent text-white">
-                <MessageCircle className="size-4" />
+                <ArrowRight className="size-4" />
               </span>
             </a>
           </div>

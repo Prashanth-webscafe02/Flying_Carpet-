@@ -1,12 +1,12 @@
 import { motion } from "framer-motion";
 import {
   ArrowLeft,
+  ArrowRight,
   Bus,
   Check,
   BusFront,
   Car,
   CarFront,
-  MessageCircle,
   Plane,
   PlaneTakeoff,
   Ship,
@@ -16,13 +16,15 @@ import {
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { ease } from "../effects/motion";
+import { REGISTER_URL } from "../content";
 import type { Destination } from "./data";
-import type { Detail } from "./details";
+import { images, type Detail } from "./details";
+import Gallery from "./Gallery";
 import {
   carRentalHero,
+  carRentalPhotos,
   mobility,
   transferHero,
-  type HeroPhoto,
 } from "./mobility";
 import ProductInfoPanel from "./ProductInfoPanel";
 
@@ -57,6 +59,16 @@ const carTypeIcon = (type: string): LucideIcon =>
 export function TransfersInfo({ d, info, onBack }: Props) {
   const m = mobility[d.id];
   const sea = info.transferMode === "sea";
+  const minibusImage =
+    "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&w=900&q=80";
+  const transferPhotos = sea
+    ? [transferHero.sea.src, images.flights, images.wing]
+    : [
+        transferHero.road.src,
+        images.chauffeur,
+        carRentalHero.src,
+        minibusImage,
+      ];
   const overview = sea
     ? `We arrange shared and private speedboat transfers to resorts near Malé, seaplane flights to the outer atolls in daylight hours, and domestic flights with a connecting speedboat for the most remote islands, all timed to your clients’ arrival at ${info.airportName} (${info.airport}).`
     : `We arrange airport${m.port ? ", port" : ""} and hotel pickups in ${d.city}, shared or private. Your clients are met on arrival at ${info.airportName} (${info.airport})${m.port ? ` or at ${m.port}` : ""} and taken straight to their hotel, in the vehicle that suits their group.`;
@@ -65,7 +77,11 @@ export function TransfersInfo({ d, info, onBack }: Props) {
     <>
       <Head d={d} onBack={onBack} title={`Transfers in ${d.city}`} />
       <div className="space-y-12">
-        <Hero photo={transferHero[sea ? "sea" : "road"]} />
+        <Gallery
+          photos={transferPhotos}
+          name={`Transfers in ${d.city}`}
+          variant="mosaic"
+        />
         <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-12">
           <div className="space-y-12">
             <Section title="Overview">
@@ -107,7 +123,7 @@ export function TransfersInfo({ d, info, onBack }: Props) {
 // Car rental: one shared info page per destination, exactly as specified —
 // 1. hero image of the car types, 2. overview, 3. rental car companies, 4. car types.
 // (No search, driver's age, filters, result cards or Reserve.)
-export function CarRentalInfo({ d, info, onBack, enquire }: Props) {
+export function CarRentalInfo({ d, info, onBack }: Props) {
   const m = mobility[d.id];
   if (!m.companies.length) {
     return (
@@ -122,12 +138,10 @@ export function CarRentalInfo({ d, info, onBack, enquire }: Props) {
             Transfers.
           </p>
           <a
-            href={enquire("help getting around")}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={REGISTER_URL}
             className="mt-6 inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold transition hover:bg-[#f0763a]"
           >
-            <MessageCircle className="size-4" /> Ask a specialist
+            <ArrowRight className="size-4" /> Get Agency Access
           </a>
         </div>
       </>
@@ -139,7 +153,11 @@ export function CarRentalInfo({ d, info, onBack, enquire }: Props) {
     <>
       <Head d={d} onBack={onBack} title={`Car rentals in ${d.city}`} />
       <div className="space-y-12">
-        <Hero photo={carRentalHero} />
+        <Gallery
+          photos={carRentalPhotos}
+          name={`Car rentals in ${d.city}`}
+          variant="mosaic"
+        />
         <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-12">
           <div className="space-y-12">
             <Section title="Overview">
@@ -235,26 +253,6 @@ function Head({
         {title}
       </h2>
     </div>
-  );
-}
-
-// 1. One hero image of the vehicle / car types usually available.
-function Hero({ photo }: { photo: HeroPhoto }) {
-  return (
-    <motion.figure
-      initial={{ opacity: 0, y: 24 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, ease }}
-      className="relative h-[clamp(14rem,38vw,26rem)] overflow-hidden rounded-[1.75rem] ring-1 ring-white/15"
-    >
-      <img
-        src={photo.src}
-        alt={photo.label}
-        loading="eager"
-        decoding="async"
-        className="absolute inset-0 h-full w-full object-cover"
-      />
-    </motion.figure>
   );
 }
 

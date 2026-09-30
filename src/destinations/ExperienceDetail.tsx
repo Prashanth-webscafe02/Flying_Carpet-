@@ -10,7 +10,6 @@ import {
   Languages,
   Link2,
   MapPin,
-  MessageCircle,
   Smartphone,
   X,
   type LucideIcon,
@@ -18,10 +17,11 @@ import {
 import { useEffect, useState } from "react";
 import { LucidCorner } from "../effects/LucidLine";
 import { Reveal, ease } from "../effects/motion";
+import { REGISTER_URL } from "../content";
 import { SectionTabs, SectionTitle } from "./AgentRates";
 import Gallery from "./Gallery";
 import ProductInfoPanel from "./ProductInfoPanel";
-import { bigPhoto, countryName, whatsapp, type Destination } from "./data";
+import { bigPhoto, countryName, type Destination } from "./data";
 import { details, images, type Experience } from "./details";
 import {
   defaultLanguages,
@@ -54,9 +54,6 @@ export default function ExperienceDetail({
     ...new Set([hero, d.img, images.experiences, images.outdoors, images.wing]),
   ].map(bigPhoto);
   const [copied, setCopied] = useState(false);
-  const enquire = whatsapp(
-    `Hi! I'd like rates and availability for ${e.title} (${d.city}) for my clients.`,
-  );
   const back = `/destinations/${d.id}/experiences`;
   const others = info.experiences.filter((x) => x !== e).slice(0, 3);
   const stops =
@@ -94,16 +91,8 @@ export default function ExperienceDetail({
     { id: "overview", label: "Overview" },
     ...(content ? [{ id: "included", label: "What’s included" }] : []),
     ...(stops.length ? [{ id: "expect", label: "What to expect" }] : []),
-    { id: "good-to-know", label: "Good to know" },
   ];
   const meetAt = stops[0]?.[0] ?? e.place;
-  const goodToKnow = [
-    "Confirmation is received with your booking",
-    ticket,
-    `Offered in ${languages}`,
-    "Accessibility and suitability for young children confirmed on request",
-    "Cancellation terms confirmed with your quote",
-  ];
 
   const share = async () => {
     const url = window.location.href;
@@ -293,24 +282,6 @@ export default function ExperienceDetail({
               </section>
             )}
 
-            {/* Good to know */}
-            <section id="good-to-know" className="scroll-mt-24 pt-14">
-              <SectionTitle>Good to know</SectionTitle>
-              <ul className="glass mt-5 grid gap-x-8 gap-y-3 rounded-[1.75rem] p-6 sm:grid-cols-2 md:p-8">
-                {goodToKnow.map((t) => (
-                  <li
-                    key={t}
-                    className="flex items-start gap-2.5 text-[0.95rem] text-white/80"
-                  >
-                    <Check
-                      className="mt-0.5 size-4 shrink-0 text-accent"
-                      strokeWidth={2.5}
-                    />{" "}
-                    {t}
-                  </li>
-                ))}
-              </ul>
-            </section>
           </div>
         </div>
 
@@ -339,14 +310,12 @@ export default function ExperienceDetail({
               </p>
             </div>
             <a
-              href={enquire}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={REGISTER_URL}
               className="inline-flex shrink-0 items-center gap-3 self-start rounded-full bg-cream py-1.5 pl-5 pr-1.5 font-bold tracking-tight text-ink shadow-[0_10px_40px_-8px_rgb(232_101_37/0.7)] transition-transform duration-500 hover:scale-[1.04] md:self-auto"
             >
-              Chat on WhatsApp
+              Get Agency Access
               <span className="grid size-8 place-items-center rounded-full bg-accent text-white">
-                <MessageCircle className="size-4" />
+                <ArrowRight className="size-4" />
               </span>
             </a>
           </div>

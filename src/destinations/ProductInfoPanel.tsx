@@ -175,7 +175,7 @@ export default function ProductInfoPanel({ product }: { product: string }) {
             </li>
           ))}
         </ul>
-        {content.points.length > visiblePoints.length && (
+        {content.points.length > 3 && (
           <button
             type="button"
             aria-expanded={expanded}

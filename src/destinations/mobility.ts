@@ -17,6 +17,11 @@ export const transferHero: Record<'road' | 'sea', HeroPhoto> = {
 }
 
 export const carRentalHero: HeroPhoto = { src: u('photo-1630165356623-266076eaceb6', 1800), label: 'Hatchbacks, sedans and SUVs parked in a row' }
+export const carRentalPhotos = [
+  carRentalHero.src,
+  u('photo-1492144534655-ae79c964c9d7', 1800),
+  u('photo-1519641471654-76ce0107ad1b', 1800),
+]
 
 export type Mobility = {
   /** Vehicle types for transfers ("Transfers for" group). */

@@ -8,7 +8,6 @@ import {
   Check,
   Clock,
   MapPin,
-  MessageCircle,
   Plane,
   Sparkles,
   Star,
@@ -18,6 +17,7 @@ import {
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { LucidCorner, LucidWave } from "../effects/LucidLine";
 import { ease } from "../effects/motion";
+import { REGISTER_URL } from "../content";
 import { loadAnswers } from "../get-started/answers";
 import { steps } from "../get-started/steps";
 import ChatFab from "./ChatFab";
@@ -251,7 +251,6 @@ export default function DestinationDetail({
                   info={info}
                   mySpecialise={answers.specialise}
                   onTab={go}
-                  enquire={enquire}
                 />
               )}
               {tab === "flights" && (
@@ -301,7 +300,7 @@ export default function DestinationDetail({
           </AnimatePresence>
         </section>
       </main>
-      <ChatFab text={`Hi! I have a question about ${name}.`} />
+      <ChatFab />
     </>
   );
 }
@@ -400,11 +399,9 @@ function HelpCard({
       )}
       <a
         href={href}
-        target="_blank"
-        rel="noopener noreferrer"
         className="mt-5 inline-flex items-center gap-2 rounded-full bg-cream px-4 py-2 text-sm font-bold text-ink transition-transform duration-300 hover:scale-[1.03]"
       >
-        <MessageCircle className="size-4 text-accent" /> Chat on WhatsApp
+        <ArrowRight className="size-4 text-accent" /> Get Agency Access
       </a>
     </div>
   );
@@ -538,13 +535,11 @@ function Overview({
   info,
   mySpecialise,
   onTab,
-  enquire,
 }: {
   d: Destination;
   info: Detail;
   mySpecialise: string[];
   onTab: (t: Tab) => void;
-  enquire: Enquire;
 }) {
   const copy = productCopy(d, info);
   // Always the site-wide order (flights, hotels, experiences, transfers, car rentals); the
@@ -690,7 +685,7 @@ function Overview({
         <HelpCard
           title="Need help planning a trip for your client?"
           text="Our destination specialists are here to help."
-          href={enquire("help planning a trip")}
+          href={REGISTER_URL}
         />
       </div>
     </div>
@@ -836,7 +831,7 @@ function Flights({
           />
           <HelpCard
             title="Need help finding the right flight?"
-            href={enquire("help finding the right flight")}
+            href={REGISTER_URL}
           />
         </div>
       </div>
@@ -1107,7 +1102,7 @@ function Hotels({
           </div>
           <HelpCard
             title="Need help finding the right hotel?"
-            href={enquire("help finding the right hotel")}
+            href={REGISTER_URL}
           />
         </div>
       </div>
