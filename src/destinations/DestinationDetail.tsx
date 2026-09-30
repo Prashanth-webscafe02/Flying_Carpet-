@@ -1170,7 +1170,9 @@ function Experiences({
               <div className="mt-auto pt-5">
                 <a
                   href={`/destinations/${d.id}/experiences/${slug(e.title)}`}
-                  onClick={linkTo(`/destinations/${d.id}/experiences/${slug(e.title)}`)}
+                  onClick={linkTo(
+                    `/destinations/${d.id}/experiences/${slug(e.title)}`,
+                  )}
                   className={`group/cta inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full bg-accent py-2 pl-4 pr-2 text-sm font-semibold shadow-[0_10px_30px_-10px_rgb(232_101_37/0.9)] transition hover:bg-[#f0763a] group-hover:bg-[#f0763a] ${stretched}`}
                 >
                   View details

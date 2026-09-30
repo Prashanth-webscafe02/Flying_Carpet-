@@ -59,7 +59,12 @@ export default function ExperienceDetail({
   );
   const back = `/destinations/${d.id}/experiences`;
   const others = info.experiences.filter((x) => x !== e).slice(0, 3);
-  const stops = additional[e.title] ?? asia[e.title] ?? west[e.title] ?? content?.stops ?? [];
+  const stops =
+    additional[e.title] ??
+    asia[e.title] ??
+    west[e.title] ??
+    content?.stops ??
+    [];
   const highlights = stops.map(([name]) => name);
   const pickup = content?.included.some((i) => /pick-?up/i.test(i)) ?? false;
   const ticket = content?.ticket ?? defaultTicket;
@@ -307,7 +312,6 @@ export default function ExperienceDetail({
               </ul>
             </section>
           </div>
-
         </div>
 
         {/* Enquiry banner */}
@@ -404,7 +408,6 @@ export default function ExperienceDetail({
           </section>
         )}
       </div>
-
     </main>
   );
 }
