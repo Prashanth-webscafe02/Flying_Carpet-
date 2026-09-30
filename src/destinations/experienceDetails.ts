@@ -1,5 +1,8 @@
 import type { Destination } from './data'
 import { images, type Experience } from './details'
+import { asia } from './itineraries/asia'
+import { south } from './itineraries/south'
+import { west } from './itineraries/west'
 
 // Experience page content, keyed by experience title (see `details.ts`): overview, what's
 // included / excluded, and the itinerary stops. Ticket type and languages default to the
@@ -447,4 +450,9 @@ export const experienceInfo: Record<string, ExperienceInfo> = {
     excluded: ['Transport to Bondi', 'Food and drinks'],
     stops: [['Bondi Beach', 'Start at Sydney’s iconic beach.'], ['Bronte', 'Stop at the ocean pool and park.'], ['Coogee Beach', 'Finish with a swim or a coffee.']],
   },
+}
+
+// Full itineraries (every stop, each with a 4–5 line description) replace the short stop lists above.
+for (const [title, stops] of Object.entries({ ...asia, ...west, ...south })) {
+  if (experienceInfo[title]) experienceInfo[title].stops = stops
 }

@@ -226,12 +226,10 @@ export default function DestinationDetail({
               </nav>
             </LayoutGroup>
             <a
-              href={enquire("to plan a trip")}
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/get-started/market"
               className="hidden shrink-0 items-center gap-2 rounded-full bg-cream px-5 py-2.5 text-sm font-bold text-ink transition-transform duration-300 hover:scale-[1.03] lg:inline-flex"
             >
-              Enquire about {d.city}
+              Get Agency access
             </a>
           </div>
         </div>

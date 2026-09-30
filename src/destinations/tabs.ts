@@ -8,8 +8,8 @@ export const tabs: { id: Tab; label: string; icon: LucideIcon; disabled?: boolea
   { id: 'flights', label: 'Flights', icon: Plane, disabled: true },
   { id: 'hotels', label: 'Hotels', icon: BedDouble },
   { id: 'experiences', label: 'Experiences', icon: Ticket },
-  { id: 'transfers', label: 'Transfers', icon: CarFront },
-  { id: 'car-rentals', label: 'Car rentals', icon: Car },
+  { id: 'transfers', label: 'Transfers', icon: CarFront, disabled: true },
+  { id: 'car-rentals', label: 'Car rentals', icon: Car, disabled: true },
 ]
 export const isTab = (t?: string): t is Tab => tabs.some((x) => x.id === t)
 /** A tab that exists and is switched on. */

@@ -1,9 +1,10 @@
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowLeft,
   ArrowRight,
   Bus,
   Check,
+  ChevronDown,
   ChevronRight,
   Clock,
   Flag,
@@ -443,6 +444,8 @@ function Marker({
 }
 
 function Stop({ n, name, text }: { n: number; name: string; text: string }) {
+  const [open, setOpen] = useState(false);
+  const id = `stop-${n}`;
   return (
     <li className="relative flex gap-4 pb-5 sm:gap-5">
       <div
@@ -454,11 +457,43 @@ function Stop({ n, name, text }: { n: number; name: string; text: string }) {
           {String(n).padStart(2, "0")}
         </span>
       </div>
-      <div className="glass min-w-0 flex-1 rounded-[1.25rem] p-5 sm:p-6">
-        <h3 className="text-lg font-semibold leading-snug tracking-tight">
-          {name}
+      {/* Collapsed by default: the stop name is a button that reveals the details (Viator-style). */}
+      <div className="glass min-w-0 flex-1 rounded-[1.25rem]">
+        <h3>
+          <button
+            type="button"
+            onClick={() => setOpen((o) => !o)}
+            aria-expanded={open}
+            aria-controls={id}
+            className="flex w-full items-center gap-3 p-5 text-left sm:px-6"
+          >
+            <span className="min-w-0 flex-1 text-lg font-semibold leading-snug tracking-tight">
+              {name}
+            </span>
+            <span className="hidden shrink-0 text-sm font-semibold text-accent sm:inline">
+              {open ? "Hide details" : "See details"}
+            </span>
+            <ChevronDown
+              className={`size-5 shrink-0 text-accent transition-transform duration-300 ${open ? "rotate-180" : ""}`}
+            />
+          </button>
         </h3>
-        <p className="mt-2 leading-relaxed text-white/75">{text}</p>
+        <AnimatePresence initial={false}>
+          {open && (
+            <motion.div
+              id={id}
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease }}
+              className="overflow-hidden"
+            >
+              <p className="px-5 pb-5 leading-relaxed text-white/75 sm:px-6 sm:pb-6">
+                {text}
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </li>
   );

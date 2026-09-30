@@ -219,20 +219,35 @@ function heroRoute(headline: RefObject<HTMLElement | null>, card: RefObject<HTML
     // (Only when the card also leaves room beside it; a full-width phone card would push the dip off-screen.)
     if (w - text.right > w * 0.2 && c.right + 0.06 * w < w * 0.6) {
       const floor = h - Math.max(130, h * 0.2)
-      const troughX = Math.max(0.28 * w, c.right + 0.06 * w)
-      const troughY = Math.min(floor, T + Math.max(60, (floor - T) * 0.5))
-      const crestX = Math.min(w * 0.9, text.right + (w - text.right) * 0.55)
-      const crestY = Math.max(text.top + (text.bottom - text.top) * 0.3, h * 0.2)
-      const pts: Pt[] = [[-0.04 * w, Math.max(T + 10, Math.min(B, troughY) - band * 0.3)], [troughX, troughY], [text.right + 0.02 * w, T + (troughY - T) * 0.25], [crestX, crestY], [1.05 * w, crestY + h * 0.1]]
+      const troughX = Math.max(0.24 * w, c.right + 0.05 * w)
+      const troughY = Math.min(floor, T + band * 0.82)
+      const riseX = Math.min(w * 0.64, text.right + (w - text.right) * 0.25)
+      const crestX = Math.min(w * 0.86, text.right + (w - text.right) * 0.6)
+      const secondDipX = Math.min(w * 0.94, crestX + (w - crestX) * 0.42)
+      const pts: Pt[] = [
+        [-0.04 * w, T + band * 0.34],
+        [troughX, troughY],
+        [riseX, T + band * 0.56],
+        [crestX, T + band * 0.16],
+        [secondDipX, T + band * 0.3],
+        [1.05 * w, T + band * 0.5],
+      ]
       // First dot on the entry stroke when it's clear of the card, else on the rising stroke.
       const entry = at(segments(pts)[0], 0.55)
       const clear = entry[0] > c.right || entry[1] < c.top - 12
-      return { pts, dots: [clear ? [0, 0.55] : [1, 0.3], [2, 0.45]] }
+      return { pts, dots: [clear ? [0, 0.55] : [1, 0.3], [3, 0.55]] }
     }
-    // Narrow screens: a gentle S inside the band between headline and card.
+    // Narrow screens: preserve the asymmetric S in the clear band between headline and card.
     return {
-      pts: [[-0.06 * w, T + band * 0.3], [0.28 * w, B], [0.74 * w, T], [1.06 * w, T + band * 0.35]],
-      dots: [[0, 0.6], [1, 0.7]],
+      pts: [
+        [-0.06 * w, T + band * 0.32],
+        [0.22 * w, T + band * 0.76],
+        [0.43 * w, T + band * 0.85],
+        [0.66 * w, T + band * 0.54],
+        [0.85 * w, T + band * 0.16],
+        [1.06 * w, T + band * 0.42],
+      ],
+      dots: [[1, 0.52], [3, 0.55]],
     }
   }
 }
@@ -250,14 +265,14 @@ export default function LucidLine({ headline, card }: { headline: RefObject<HTML
 
 // Ready-made wave shapes, as fractions of the wave's box. Each enters and exits past the edges.
 const waves = {
-  // dips on the left, rises to a crest on the right (the creatives' signature S)
-  rise: { pts: [[-0.05, 0.4], [0.3, 0.82], [0.72, 0.22], [1.05, 0.42]], dots: [[0, 0.6], [1, 0.62]] },
-  // crest on the left, dip on the right
-  fall: { pts: [[-0.05, 0.55], [0.26, 0.2], [0.68, 0.8], [1.05, 0.5]], dots: [[0, 0.7], [2, 0.35]] },
-  // a long low swell with a single lift
-  swell: { pts: [[-0.05, 0.72], [0.45, 0.66], [0.8, 0.22], [1.05, 0.3]], dots: [[1, 0.2], [2, 0.3]] },
-  // low along the left, lifting away on the right (for photos with a card on the left)
-  lift: { pts: [[-0.05, 0.9], [0.55, 0.86], [0.82, 0.45], [1.05, 0.2]], dots: [[1, 0.55], [2, 0.4]] },
+  // Deep left trough, long rising middle, then a gentle turn into the exit.
+  rise: { pts: [[-0.05, 0.36], [0.14, 0.67], [0.3, 0.82], [0.48, 0.62], [0.68, 0.28], [0.84, 0.18], [1.05, 0.39]], dots: [[1, 0.55], [4, 0.55]] },
+  // A high entry rolls down through a broad middle trough and rises toward the right.
+  fall: { pts: [[-0.05, 0.62], [0.13, 0.35], [0.3, 0.18], [0.49, 0.38], [0.69, 0.74], [0.86, 0.82], [1.05, 0.55]], dots: [[1, 0.55], [4, 0.55]] },
+  // Low, unhurried entry with a broad lift and a small settling turn before the edge.
+  swell: { pts: [[-0.05, 0.72], [0.17, 0.84], [0.35, 0.76], [0.56, 0.48], [0.76, 0.22], [0.9, 0.27], [1.05, 0.48]], dots: [[1, 0.55], [4, 0.55]] },
+  // Low entry, rolling up into a long crest, then easing down toward the right.
+  lift: { pts: [[-0.05, 0.88], [0.16, 0.79], [0.35, 0.63], [0.57, 0.4], [0.77, 0.2], [0.9, 0.22], [1.05, 0.42]], dots: [[2, 0.5], [4, 0.5]] },
 } satisfies Record<string, { pts: Pt[]; dots: [number, number][] }>
 
 // A Lucid Line in its own box (positioned by `className`), meant to sit behind the surrounding
