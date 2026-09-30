@@ -367,7 +367,7 @@ export default function HotelDetail({ d, hotel }: { d: Destination; hotel: Hotel
             </section>
 
             {/* Policies */}
-            <section id="policies" className="scroll-mt-24 pt-14">
+            {/* <section id="policies" className="scroll-mt-24 pt-14">
               <SectionTitle>Policies</SectionTitle>
               <div className="mt-5 grid gap-3 sm:grid-cols-2">
                 <Policy icon={CalendarCheck} title="Check-in">{checkIn ? `From ${checkIn[0]}` : 'Confirmed at booking'}</Policy>
@@ -393,7 +393,7 @@ export default function HotelDetail({ d, hotel }: { d: Destination; hotel: Hotel
                   'City taxes and resort fees, where applicable, are paid directly to the hotel',
                 ].map((t) => <li key={t} className="flex items-start gap-2"><Check className="mt-0.5 size-4 shrink-0 text-accent" strokeWidth={2.5} /> {t}</li>)}
               </ul>
-            </section>
+            </section> */}
           </div>
 
           {/* Agent rates panel (desktop) */}
@@ -488,9 +488,9 @@ function RatesPanel({ hotel, enquire, share, copied }: { hotel: Hotel; enquire: 
       <a href={enquire} target="_blank" rel="noopener noreferrer" className="mt-6 flex items-center justify-center gap-2 rounded-full bg-cream px-5 py-3 font-bold text-ink shadow-[0_10px_40px_-8px_rgb(232_101_37/0.7)] transition-transform duration-300 hover:scale-[1.02]">
         <MessageCircle className="size-4 text-accent" /> Request rates on WhatsApp
       </a>
-      <button type="button" onClick={share} className="mt-2.5 flex w-full items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold ring-1 ring-white/20 transition-colors hover:bg-white/10">
+      {/* <button type="button" onClick={share} className="mt-2.5 flex w-full items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold ring-1 ring-white/20 transition-colors hover:bg-white/10">
         <Link2 className="size-4" /> {copied ? 'Link copied' : 'Share with your client'}
-      </button>
+      </button> */}
       <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-4 text-sm text-white/60">
         <span>{categoryLabel[hotel.category]} collection</span>
         <span className="flex gap-0.5">{Array.from({ length: hotel.stars }, (_, i) => <Star key={i} className="size-3.5 fill-accent text-accent" />)}</span>
