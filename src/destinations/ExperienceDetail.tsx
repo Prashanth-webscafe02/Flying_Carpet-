@@ -235,6 +235,8 @@ export default function ExperienceDetail({
                 <SectionTitle>What’s included</SectionTitle>
                 <div className="glass mt-5 grid gap-6 rounded-[1.75rem] p-6 sm:grid-cols-2 md:p-8">
                   <IncludeList items={content.included} included />
+                </div>
+                <div className="glass mt-5 grid gap-6 rounded-[1.75rem] p-6 sm:grid-cols-2 md:p-8">
                   <IncludeList items={content.excluded} />
                 </div>
               </section>
