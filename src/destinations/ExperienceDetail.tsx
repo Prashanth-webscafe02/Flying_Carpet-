@@ -281,7 +281,6 @@ export default function ExperienceDetail({
                 </ol>
               </section>
             )}
-
           </div>
         </div>
 

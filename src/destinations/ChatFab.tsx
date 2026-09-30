@@ -1,5 +1,5 @@
-import { ArrowUpRight } from 'lucide-react'
-import { REGISTER_URL } from '../content'
+import { ArrowUpRight } from "lucide-react";
+import { REGISTER_URL } from "../content";
 
 // Floating agency-access button shared by the destinations pages.
 export default function ChatFab() {
@@ -11,5 +11,5 @@ export default function ChatFab() {
     >
       Get Agency Access <ArrowUpRight aria-hidden="true" className="size-4" />
     </a>
-  )
+  );
 }
