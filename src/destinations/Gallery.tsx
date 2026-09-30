@@ -40,6 +40,14 @@ export default function Gallery({ photos, name, variant = 'classic' }: { photos:
 function Mosaic({ photos, name, onOpen }: { photos: string[]; name: string; onOpen: (i: number) => void }) {
   const [at, setAt] = useState(0)
   const tiles = photos.slice(0, 5)
+  // Fewer than 5 photos: stretch the small tiles so the grid never shows an empty cell
+  // (4 photos: two small on top, one wide below; 3: two wide; 2: one tall).
+  const small = tiles.length - 1
+  const span = (i: number) =>
+    i === 0 ? (small === 0 ? 'col-span-4 row-span-2' : 'col-span-2 row-span-2')
+      : small === 1 ? 'col-span-2 row-span-2'
+        : small === 2 || (small === 3 && i === 3) ? 'col-span-2'
+          : ''
   return (
     <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.1, ease }} className="mt-6">
       {/* Phones: swipe through every photo, with a counter */}
@@ -60,7 +68,7 @@ function Mosaic({ photos, name, onOpen }: { photos: string[]; name: string; onOp
       {/* Tablet/desktop: 1 large + 4 small */}
       <div className="hidden h-[clamp(22rem,38vw,32rem)] grid-cols-4 grid-rows-2 gap-2 overflow-hidden rounded-[1.75rem] ring-1 ring-white/10 md:grid">
         {tiles.map((p, i) => (
-          <div key={p + i} className={`group relative min-h-0 overflow-hidden bg-white/5 ${i === 0 ? 'col-span-2 row-span-2' : ''}`}>
+          <div key={p + i} className={`group relative min-h-0 overflow-hidden bg-white/5 ${span(i)}`}>
             <button type="button" onClick={() => onOpen(i)} aria-label={`Open photo ${i + 1}`} className="absolute inset-0">
               <img src={i === 0 ? p : p.replace('w=1600', 'w=800')} alt={i === 0 ? name : ''} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" className="h-full w-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105" />
               <span className="absolute inset-0 bg-brand/0 transition-colors duration-500 group-hover:bg-brand/15" />

@@ -61,7 +61,7 @@ export default function Agents() {
               </ul>
             </Reveal>
             <Reveal delay={0.25} className="mt-8">
-              <PillButton href={REGISTER_URL}>Register free</PillButton>
+              <PillButton href={REGISTER_URL}>Get Agency Access</PillButton>
             </Reveal>
           </div>
         </div>
