@@ -1,5 +1,5 @@
 import { AnimatePresence, LayoutGroup, motion } from 'framer-motion'
-import { ArrowRight, ArrowUpRight, BedDouble, Car, CarFront, Heart, LayoutGrid, List, MessageCircle, Pencil, Plane, RotateCcw, Ticket, type LucideIcon } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, BedDouble, Car, CarFront, LayoutGrid, List, MessageCircle, Pencil, Plane, RotateCcw, Ticket, type LucideIcon } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { LucidCorner, LucidWave } from '../effects/LucidLine'
 import { Reveal, ease } from '../effects/motion'
@@ -7,7 +7,6 @@ import { clearAnswers, loadAnswers, type Answers } from '../get-started/answers'
 import { steps, type StepId } from '../get-started/steps'
 import { bannerImg, destinations, productsOf, specialistImg, whatsapp, type Destination, type ProductId } from './data'
 import ChatFab from './ChatFab'
-import { useFavourites } from './favourites'
 import { linkTo } from './navigate'
 
 const PAGE = 8
@@ -43,7 +42,6 @@ export default function DestinationsPage() {
   const [sort, setSort] = useState<Sort>('relevance')
   const [view, setView] = useState<'grid' | 'list'>('grid')
   const [shown, setShown] = useState(PAGE)
-  const [favs, toggleFav] = useFavourites()
 
   useEffect(() => { document.title = 'Your destinations — Flying Carpet' }, [])
 
@@ -240,8 +238,6 @@ export default function DestinationsPage() {
                         d={d}
                         i={i}
                         list={view === 'list'}
-                        fav={favs.includes(d.id)}
-                        onFav={() => toggleFav(d.id)}
                         inMyRegion={myRegions.includes(d.region)}
                         mySpecialise={mySpecialise}
                       />
@@ -305,12 +301,10 @@ export default function DestinationsPage() {
   )
 }
 
-function Card({ d, i, list, fav, onFav, inMyRegion, mySpecialise }: {
+function Card({ d, i, list, inMyRegion, mySpecialise }: {
   d: Destination
   i: number
   list: boolean
-  fav: boolean
-  onFav: () => void
   inMyRegion: boolean
   mySpecialise: string[]
 }) {
@@ -331,17 +325,6 @@ function Card({ d, i, list, fav, onFav, inMyRegion, mySpecialise }: {
           {d.popular && <span className="rounded-full bg-accent px-2.5 py-1 text-[0.68rem] font-bold uppercase tracking-[0.08em]">Popular</span>}
           {inMyRegion && <span className="glass rounded-full px-2.5 py-1 text-[0.68rem] font-bold uppercase tracking-[0.08em]">Your region</span>}
         </div>
-        <button
-          type="button"
-          onClick={onFav}
-          aria-pressed={fav}
-          aria-label={fav ? `Remove ${name} from favourites` : `Save ${name} to favourites`}
-          className="glass absolute right-4 top-4 z-10 grid size-10 place-items-center rounded-full transition-transform duration-300 hover:scale-110"
-        >
-          <motion.span key={String(fav)} initial={{ scale: 0.6 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 500, damping: 15 }}>
-            <Heart className={`size-4 ${fav ? 'fill-accent text-accent' : ''}`} />
-          </motion.span>
-        </button>
       </div>
 
       <div className="flex flex-1 flex-col p-5">

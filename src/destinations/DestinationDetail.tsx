@@ -7,7 +7,6 @@ import {
   CarFront,
   Check,
   Clock,
-  Heart,
   MapPin,
   MessageCircle,
   Plane,
@@ -32,7 +31,6 @@ import {
   type Detail,
   type HotelCategory,
 } from "./details";
-import { useFavourites } from "./favourites";
 import { mobility } from "./mobility";
 import { CarRentalInfo, TransfersInfo } from "./MobilityViews";
 import { linkTo, slug } from "./navigate";
@@ -54,10 +52,8 @@ export default function DestinationDetail({
   const info = details[d.id];
   const [{ answers }] = useState(loadAnswers);
   const [tab, setTab] = useState<Tab | null>(initialTab);
-  const [favs, toggleFav] = useFavourites();
   const tabsRef = useRef<HTMLDivElement>(null);
   const name = nameOf(d);
-  const saved = favs.includes(d.id);
 
   useEffect(() => {
     const t = tab ? tabs.find((x) => x.id === tab)!.label : null;
@@ -123,24 +119,6 @@ export default function DestinationDetail({
               >
                 <ArrowLeft className="size-4" /> All destinations
               </a>
-              <button
-                type="button"
-                onClick={() => toggleFav(d.id)}
-                aria-pressed={saved}
-                className="glass inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-colors hover:bg-white/15"
-              >
-                <motion.span
-                  key={String(saved)}
-                  initial={{ scale: 0.6 }}
-                  animate={{ scale: 1 }}
-                  transition={{ type: "spring", stiffness: 500, damping: 15 }}
-                >
-                  <Heart
-                    className={`size-4 ${saved ? "fill-accent text-accent" : ""}`}
-                  />
-                </motion.span>
-                {saved ? "Saved" : "Save destination"}
-              </button>
             </div>
             <motion.div
               initial={{ opacity: 0, y: 30 }}

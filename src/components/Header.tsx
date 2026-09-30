@@ -6,7 +6,7 @@ import {
 } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
-import { nav } from "../content";
+import { REGISTER_URL, nav } from "../content";
 import { PillButton, ease } from "../effects/motion";
 
 // Section anchors only exist on the landing page; elsewhere they point back to it.
@@ -42,7 +42,7 @@ export default function Header() {
             alt="Flying Carpet Travel — For magical experiences"
             width={1400}
             height={416}
-            className={`w-auto transition-[height] duration-500 ${scrolled ? "h-10 sm:h-11 lg:h-14" : "h-12 sm:h-14 md:h-16 lg:h-20"}`}
+            className={`w-auto transition-[height] duration-500 ${scrolled ? "h-10 sm:h-11 lg:h-14" : "h-12 sm:h-14 md:h-16 xl:h-20"}`}
           />
         </a>
 
@@ -69,8 +69,14 @@ export default function Header() {
           </ul>
         </nav>
 
-        <div className="ml-auto mr-3 hidden md:block lg:m-0">
-          <PillButton href={`${home}#`}>Login</PillButton>
+        {/* One call to action everywhere: Register free. Login stays as a quieter link. */}
+        <div className="ml-auto mr-3 flex items-center gap-4 lg:m-0">
+          <a href={`${home}#`} className="hidden text-sm font-semibold text-white/85 transition-colors hover:text-white xl:inline">
+            Login
+          </a>
+          <div className="hidden sm:block">
+            <PillButton href={REGISTER_URL}>Register free</PillButton>
+          </div>
         </div>
 
         <button
@@ -110,6 +116,14 @@ export default function Header() {
                 {n.label}
               </motion.a>
             ))}
+            <div className="mt-2 flex items-center gap-2 border-t border-white/10 px-1 pt-3">
+              <a href={REGISTER_URL} className="flex-1 rounded-full bg-cream px-4 py-3 text-center font-bold text-ink">
+                Register free
+              </a>
+              <a href={`${home}#`} onClick={() => setOpen(false)} className="rounded-full px-5 py-3 font-semibold ring-1 ring-white/20">
+                Login
+              </a>
+            </div>
           </motion.nav>
         )}
       </AnimatePresence>

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { ArrowLeft, Bus, BusFront, Car, CarFront, MessageCircle, Plane, PlaneTakeoff, Ship, Truck, Van, type LucideIcon } from 'lucide-react'
+import { ArrowLeft, Bus, Check, BusFront, Car, CarFront, MessageCircle, Plane, PlaneTakeoff, Ship, Truck, Van, type LucideIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { ease } from '../effects/motion'
 import type { Destination } from './data'
@@ -37,6 +37,7 @@ export function TransfersInfo({ d, info, onBack }: Props) {
               : `Whether your clients are travelling as a couple, a family or a larger group, the right transfer brings their arrival and onward plans together. Share their pickup and drop-off locations, arrival details, passenger numbers and luggage needs so our team can help select a suitable vehicle. Return transfers can be discussed alongside the arrival journey to keep their time in ${d.city} organised from start to finish.`}
           </p>
         </Section>
+        <Facts items={['Airports, train stations, ports and hotels', 'Private or shared', 'Standard, Premium and Luxury', 'Upfront pricing, no hidden fees']} />
         <Section title="Vehicle types" note={`${m.vehicles.length} in ${d.city}`}>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             {m.vehicles.map((v, i) => <Tile key={v} icon={vehicleIcons[v] ?? Car} label={v} i={i} />)}
@@ -79,6 +80,7 @@ export function CarRentalInfo({ d, info, onBack, enquire }: Props) {
             Match the car to the journey by considering passenger numbers, luggage space and the routes your clients want to explore. Share their travel dates and preferred collection and return points so our team can help compare suitable options. Mileage, fuel arrangements and included cover can then be considered alongside the vehicle, making it easier to choose a rental that fits the whole trip.
           </p>
         </Section>
+        <Facts items={['No booking fee', 'Your client pays at pick-up', 'Free cancellation before pick-up*', 'Card held as a guarantee, nothing charged']} note="*Subject to the rental's cancellation policy." />
         <Section title="Rental car companies" note={`${m.companies.length} in ${d.city}`}>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
             {m.companies.map((c, i) => (
@@ -147,6 +149,21 @@ function Section({ title, note, children }: { title: string; note?: ReactNode; c
       </div>
       {children}
     </section>
+  )
+}
+
+function Facts({ items, note }: { items: string[]; note?: string }) {
+  return (
+    <div>
+      <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {items.map((t) => (
+          <li key={t} className="glass flex items-center gap-3 rounded-2xl px-4 py-3.5 text-[0.95rem] font-medium">
+            <Check className="size-4 shrink-0 text-accent" strokeWidth={3} /> {t}
+          </li>
+        ))}
+      </ul>
+      {note && <p className="mt-2 text-xs text-white/45">{note}</p>}
+    </div>
   )
 }
 

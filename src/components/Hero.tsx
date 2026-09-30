@@ -1,6 +1,7 @@
 import { motion, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion'
 import { ArrowDown } from 'lucide-react'
 import { useLayoutEffect, useRef, useState, type RefObject } from 'react'
+import { REGISTER_URL, proofLine } from '../content'
 import LucidLine from '../effects/LucidLine'
 import { PillButton, ease } from '../effects/motion'
 
@@ -147,12 +148,13 @@ export default function Hero() {
         initial={{ opacity: 0, y: 40, filter: 'blur(12px)' }}
         animate={{ opacity: 1, y: 0, filter: 'blur(0px)', transitionEnd: { filter: 'none' } }}
         transition={{ duration: 1.2, delay: 1, ease }}
-        className="glass-orange absolute bottom-8 left-4 right-4 z-[5] rounded-[2rem] p-6 md:bottom-14 md:left-10 md:right-auto md:max-w-md md:p-7"
+        className="glass-orange absolute bottom-8 left-4 right-4 z-[5] rounded-[2rem] p-6 md:bottom-14 md:left-10 md:right-auto md:max-w-lg md:p-7"
       >
-        <p className="mb-5 text-[clamp(1.125rem,1.65vw,1.6rem)] font-semibold leading-[1.3] tracking-[-0.03em]">
-          Exclusive inventory, Higher commissions, and Seamless technology
+        <p className="text-[clamp(1.4rem,2.1vw,2rem)] font-semibold leading-[1.1] tracking-[-0.04em]">
+          For everything last minute.
         </p>
-        <PillButton href="/get-started/market">Get Agency Access</PillButton>
+        <p className="mb-5 mt-2 text-sm font-medium leading-snug text-white/85">{proofLine}</p>
+        <PillButton href={REGISTER_URL}>Register free</PillButton>
       </motion.div>
 
       <motion.a

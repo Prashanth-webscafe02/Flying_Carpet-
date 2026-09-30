@@ -9,20 +9,34 @@ export const nav = [
   { label: "Contacts", href: "#contact" },
 ];
 
+// Where every "Register free" button goes. The campaign's final microsite / registration address
+// isn't confirmed yet (the ads use flyingcarpet.travel as a placeholder): swap it here when it is.
+export const REGISTER_URL = "/get-started/market";
+
+// Reason-to-believe line used in the ads (campaign deck, "Gives a reason to believe").
+export const proofLine = "350+ airlines · 300,000+ hotels · 400,000+ experiences · 24/7 support";
+
+// All five categories, always (campaign deck rule 4). Figures from the campaign deck and product sheet.
 export const offers = [
-  {
-    title: "Flights",
-    stat: "1000+",
-    unit: "Airlines",
-    img: "/images/flights.webp",
-  },
-  { title: "Hotels", stat: "56+", unit: "countries", img: "/images/hotel.webp" },
-  {
-    title: "Experiences",
-    stat: "3000+",
-    unit: "Activities",
-    img: "/images/activities.webp",
-  },
+  { title: "Flights", stat: "350+", unit: "Airlines", img: "/images/flights.webp" },
+  { title: "Hotels", stat: "300,000+", unit: "Hotels", img: "/images/hotel.webp" },
+  { title: "Experiences", stat: "400,000+", unit: "Experiences", img: "/images/activities.webp" },
+  { title: "Transfers", stat: "Upfront", unit: "Pricing", img: u("photo-1449965408869-eaa3f722e40d") },
+  { title: "Car rentals", stat: "11", unit: "Global brands", img: u("photo-1630165356623-266076eaceb6") },
+];
+
+// "Why choose us" points from the client's B2B product sheet.
+export const whyUs = [
+  { title: "One-stop travel platform", text: "Access flights, hotels, transfers, car rentals, experiences and more from a single B2B marketplace built for agents." },
+  { title: "Last-minute bookings", text: "Search and book flights right up to the day of departure, even for urgent customer requests." },
+  { title: "Diverse travel content", text: "Access multi-GDS, multi-LCC and NDC flight content plus hotels, transfers, rental cars, experiences, insurance, holidays and more." },
+  { title: "Mobile-friendly portal and app", text: "Work from your desktop, tablet or phone, with a fast, responsive experience designed for same-day bookings on the go." },
+  { title: "White-label solutions", text: "Deliver a fully branded experience with your own themes, look and feel, and customer communications." },
+  { title: "Multi-currency wallets", text: "Hold funds in multiple currencies with balance visibility, controls and alerts to streamline operations." },
+  { title: "Flexible payments", text: "Collect payments your way through multiple gateways, payment links and automated wallet top-ups." },
+  { title: "Group travel requests", text: "Manage group bookings in one place, with a faster workflow for complex itineraries and larger parties." },
+  { title: "Customer profiles", text: "Save customer details once and reuse them across products, bookings and your back office for more efficient service." },
+  { title: "Ready-to-use reports", text: "Track daily operations and performance with standard reports built for faster decision-making and reconciliation." },
 ];
 
 export const stats = [
@@ -63,31 +77,13 @@ export const destinations = [
   },
 ];
 
+// Product descriptions from the client's B2B product sheet, written to the agent.
 export const platform = [
-  {
-    n: "01",
-    title: "Flights",
-    img: "/images/flights.webp",
-    text: "Transparent routes into destinations most travelers never reach first.",
-  },
-  {
-    n: "02",
-    title: "Hotels",
-    img: "/images/hotel.webp",
-    text: "Stays with character — boutique lodges, coastal riads, and jungle hideaways.",
-  },
-  {
-    n: "03",
-    title: "Experiences",
-    img: u("photo-1476514525535-07fb3b4ae5f1"),
-    text: "Immersive days with local hosts: safaris, spice gardens, lagoon crossings.",
-  },
-  {
-    n: "04",
-    title: "Transfers",
-    img: u("photo-1449965408869-eaa3f722e40d"),
-    text: "The quiet logistics that make a journey feel seamless from the first mile.",
-  },
+  { n: "01", title: "Flights", img: "/images/flights.webp", text: "Access negotiated, low-cost and NDC fares from 350+ airlines, with seat, meal and baggage options visible on the platform and last-minute availability included." },
+  { n: "02", title: "Hotels", img: "/images/hotel.webp", text: "Browse 300,000+ properties with total pricing shown upfront, clear cancellation terms and both refundable and non-refundable choices." },
+  { n: "03", title: "Experiences", img: u("photo-1476514525535-07fb3b4ae5f1"), text: "Offer experiences for every budget, from short local activities to multi-day adventures, with easy availability even on short notice." },
+  { n: "04", title: "Transfers", img: u("photo-1449965408869-eaa3f722e40d"), text: "Book airport, station, port and hotel transfers in private or shared formats, from standard to premium, with clear pricing and no hidden fees." },
+  { n: "05", title: "Car rentals", img: u("photo-1630165356623-266076eaceb6"), text: "Choose from major brands including Avis, Hertz, Sixt and Europcar, with no booking fee and free cancellation before pick-up." },
 ];
 
 export const testimonials = [

@@ -16,12 +16,12 @@ export default function Platform() {
         <Reveal><Eyebrow>The platform</Eyebrow></Reveal>
         <div className="grid items-end gap-6 md:grid-cols-[1.4fr_1fr]">
           <SplitHeading
-            text="Flights, hotels, experiences, and transfers"
+            text="Flights, hotels, experiences, transfers and car rentals"
             className="text-[clamp(2.2rem,5.2vw,4.75rem)] font-semibold leading-[1.02] tracking-[-0.05em]"
           />
           <Reveal delay={0.15}>
             <p className="text-lg leading-relaxed text-white/75">
-              One catalogue for agents and travelers. Magic at the top — clarity in every booking detail.
+              Five categories on one login, each with clear prices and terms, so you can answer your client fast, even at the last minute.
             </p>
           </Reveal>
         </div>

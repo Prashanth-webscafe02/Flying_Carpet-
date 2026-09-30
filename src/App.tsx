@@ -12,6 +12,7 @@ import Hero from './components/Hero'
 import Testimonials from './components/Testimonials'
 import Offers from './components/Offers'
 import Platform from './components/Platform'
+import WhyUs from './components/WhyUs'
 import CursorGlow from './effects/CursorGlow'
 import FluidBackground from './effects/FluidBackground'
 import { LucidCorner, LucidWave } from './effects/LucidLine'
@@ -69,6 +70,7 @@ export default function App() {
         <Hero />
         <Offers />
         <About />
+        <WhyUs />
         <Destinations />
         <Platform />
         <Testimonials />
