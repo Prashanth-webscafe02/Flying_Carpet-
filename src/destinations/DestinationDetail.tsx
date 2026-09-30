@@ -33,6 +33,7 @@ import {
 } from "./details";
 import { mobility } from "./mobility";
 import { CarRentalInfo, TransfersInfo } from "./MobilityViews";
+import ProductInfoPanel from "./ProductInfoPanel";
 import { linkTo, slug } from "./navigate";
 import { flightOptionsEnabled, isOpen, tabs, type Tab } from "./tabs";
 
@@ -254,13 +255,16 @@ export default function DestinationDetail({
                 />
               )}
               {tab === "flights" && (
-                <Flights
-                  d={d}
-                  info={info}
-                  origin={origin}
-                  onBack={() => go(null)}
-                  enquire={enquire}
-                />
+                <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1.3fr)_minmax(20rem,0.7fr)] lg:gap-12">
+                  <Flights
+                    d={d}
+                    info={info}
+                    origin={origin}
+                    onBack={() => go(null)}
+                    enquire={enquire}
+                  />
+                  <ProductInfoPanel product="flights" />
+                </div>
               )}
               {tab === "hotels" && (
                 <Hotels
@@ -725,7 +729,7 @@ function Flights({
         title={`Flights to ${d.city}`}
         sub={`Access a wide range of airlines, routes and flexible options to get your clients to ${d.city} and beyond.`}
       />
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_18rem]">
+      <div className="grid gap-6">
         <div className="min-w-0">
           <ResultsBar
             count={list.length}
@@ -1131,7 +1135,7 @@ function Experiences({
         title={`Experiences in ${d.city}`}
         sub="Tours, attractions and unforgettable moments you can add to any itinerary."
       />
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {info.experiences.map((e, i) => (
           <motion.article
             key={e.title}

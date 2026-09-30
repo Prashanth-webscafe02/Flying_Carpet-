@@ -1,19 +1,20 @@
 import { motion } from 'framer-motion'
 import {
-  Accessibility, ArrowLeft, ArrowRight, Baby, BedDouble, Bike, Briefcase, Building2, CalendarCheck, Car, Check, ChevronRight, Clock,
-  Coffee, ConciergeBell, CreditCard, Crown, Dumbbell, Eye, Hotel as HotelIcon, Info, Landmark, Languages, Leaf, Link2, MapPin, MessageCircle, Mountain, Plane,
+  Accessibility, ArrowLeft, ArrowRight, Baby, BedDouble, Bike, Briefcase, Building2, CalendarCheck, Check, ChevronRight, Clock,
+  Coffee, ConciergeBell, CreditCard, Crown, Dumbbell, Eye, Hotel as HotelIcon, Info, Landmark, Languages, Leaf, Link2, MapPin, MessageCircle, Mountain,
   Sofa, Sparkles, SquareParking, Star, TrainFront, Umbrella, Users, UtensilsCrossed, Waves, Wifi, type LucideIcon,
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { LucidCorner } from '../effects/LucidLine'
 import { Reveal, ease } from '../effects/motion'
-import { RatesBar, RatesPanel, SectionTabs, SectionTitle } from './AgentRates'
+import { SectionTabs, SectionTitle } from './AgentRates'
 import Gallery from './Gallery'
+import ProductInfoPanel from './ProductInfoPanel'
 import { bigPhoto, countryName, whatsapp, type Destination } from './data'
 import { categoryLabel, details, hotelImages, images, type Detail, type Hotel } from './details'
 import { hotelFacts, roomRows, sampleRoomFacts, useSampleRoomFacts, type RoomCounts } from './hotelFacts'
 import { linkTo, slug } from './navigate'
-import { isOpen } from './tabs'
+// import { isOpen } from './tabs'
 
 // Facility → icon for the amenity lists.
 const facilityIcon = (label: string): LucideIcon => {
@@ -110,7 +111,7 @@ const sections = [
   { id: 'overview', label: 'Overview' },
   { id: 'rooms', label: 'Rooms' },
   { id: 'facilities', label: 'Facilities' },
-  { id: 'location', label: 'Location' },
+  // { id: 'location', label: 'Location' },
   // { id: 'policies', label: 'Policies' },
 ]
 
@@ -167,8 +168,8 @@ export default function HotelDetail({ d, hotel }: { d: Destination; hotel: Hotel
     { icon: CalendarCheck, label: 'Opened', value: roomFacts.opened ? String(roomFacts.opened) : '—' },
     { icon: BedDouble, label: 'Rooms', value: roomFacts.rooms?.total ? roomFacts.rooms.total.toLocaleString('en') : '—' },
   ]
-  const mapQuery = encodeURIComponent(`${hotel.name}, ${address}`)
-  const transfers = `/destinations/${d.id}/transfers`
+  // const mapQuery = encodeURIComponent(`${hotel.name}, ${address}`)
+  // const transfers = `/destinations/${d.id}/transfers`
   const others = info.hotels.filter((h) => h !== hotel).slice(0, 3)
 
   const share = async () => {
@@ -208,13 +209,12 @@ export default function HotelDetail({ d, hotel }: { d: Destination; hotel: Hotel
           <h1 className="text-[clamp(2.1rem,4.6vw,3.9rem)] font-bold leading-[1.02] tracking-[-0.045em]">{hotel.name}</h1>
           <p className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-white/70">
             <span className="inline-flex items-start gap-1.5"><MapPin className="mt-1 size-4 shrink-0 text-accent" /> {address}</span>
-            <a href="#location" className="text-sm font-semibold text-accent underline-offset-4 hover:underline">Show on map</a>
           </p>
         </motion.div>
 
         <Gallery photos={photos} name={hotel.name} variant="mosaic" />
 
-        <div className="mt-8 grid gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-12">
+        <div className="mt-8">
           <div className="min-w-0">
             {/* Section tabs */}
             <SectionTabs sections={sections} />
@@ -231,32 +231,37 @@ export default function HotelDetail({ d, hotel }: { d: Destination; hotel: Hotel
                 ))}
               </ul>
 
-              <SectionTitle className="mt-10">About the hotel</SectionTitle>
-              <div className="mt-4 space-y-4 text-[1.0625rem] leading-relaxed text-white/80">
-                {overview.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-              </div>
+              <div className="mt-10 grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-12">
+                <div>
+                  <SectionTitle>About the hotel</SectionTitle>
+                  <div className="mt-4 space-y-4 text-[1.0625rem] leading-relaxed text-white/80">
+                    {overview.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+                  </div>
 
-              <div className="mt-6 flex flex-wrap items-center gap-2">
-                <span className="mr-1 text-sm font-semibold text-white/60">Ideal for</span>
-                {idealFor[hotel.category].map((t) => (
-                  <span key={t} className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-sm font-medium">
-                    <Check className="size-3.5 text-accent" strokeWidth={3} /> {t}
-                  </span>
-                ))}
-              </div>
+                  <div className="mt-6 flex flex-wrap items-center gap-2">
+                    <span className="mr-1 text-sm font-semibold text-white/60">Ideal for</span>
+                    {idealFor[hotel.category].map((t) => (
+                      <span key={t} className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-sm font-medium">
+                        <Check className="size-3.5 text-accent" strokeWidth={3} /> {t}
+                      </span>
+                    ))}
+                  </div>
 
-              <h3 className="mt-10 text-lg font-semibold tracking-tight">Popular amenities</h3>
-              <ul className="mt-4 grid grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-3">
-                {strip.map((f) => {
-                  const Icon = facilityIcon(f)
-                  return (
-                    <li key={f} className="flex items-center gap-3 text-[0.95rem] text-white/85">
-                      <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-white/8 ring-1 ring-white/10"><Icon className="size-4 text-accent" /></span>
-                      {f}
-                    </li>
-                  )
-                })}
-              </ul>
+                  <h3 className="mt-10 text-lg font-semibold tracking-tight">Popular amenities</h3>
+                  <ul className="mt-4 grid grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-3">
+                    {strip.map((f) => {
+                      const Icon = facilityIcon(f)
+                      return (
+                        <li key={f} className="flex items-center gap-3 text-[0.95rem] text-white/85">
+                          <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-white/8 ring-1 ring-white/10"><Icon className="size-4 text-accent" /></span>
+                          {f}
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </div>
+                <ProductInfoPanel product="hotels" />
+              </div>
             </section>
 
             {/* Rooms */}
@@ -296,7 +301,7 @@ export default function HotelDetail({ d, hotel }: { d: Destination; hotel: Hotel
             </section>
 
             {/* Location */}
-            <section id="location" className="scroll-mt-24 pt-14">
+            {/* <section id="location" className="scroll-mt-24 pt-14">
               <SectionTitle>Location</SectionTitle>
               <p className="mt-2 flex items-start gap-1.5 text-white/70"><MapPin className="mt-1 size-4 shrink-0 text-accent" /> {address}</p>
               <div className="mt-5 grid gap-4 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
@@ -333,7 +338,7 @@ export default function HotelDetail({ d, hotel }: { d: Destination; hotel: Hotel
                   </ul>
                 </div>
               </div>
-            </section>
+            </section> */}
 
             {/* Policies */}
             {/* <section id="policies" className="scroll-mt-24 pt-14">
@@ -365,21 +370,6 @@ export default function HotelDetail({ d, hotel }: { d: Destination; hotel: Hotel
             </section> */}
           </div>
 
-          {/* Agent rates panel (desktop) */}
-          <aside className="hidden lg:block">
-            <div className="sticky top-28">
-              <RatesPanel
-                intro="Tell us your client’s dates and room needs, and our specialists will come back with rates and availability."
-                points={['Special agent rates', 'Rooms and availability confirmed for your dates', 'Add flights, transfers and experiences']}
-                kind="hotel"
-                request={`rates and availability for ${hotel.name} (${d.city})`}
-                footer={<>
-                  <span>{categoryLabel[hotel.category]} collection</span>
-                  <span className="flex gap-0.5">{Array.from({ length: hotel.stars }, (_, i) => <Star key={i} className="size-3.5 fill-accent text-accent" />)}</span>
-                </>}
-              />
-            </div>
-          </aside>
         </div>
 
         {/* Enquiry banner */}
@@ -434,7 +424,6 @@ export default function HotelDetail({ d, hotel }: { d: Destination; hotel: Hotel
         )}
       </div>
 
-      <RatesBar name={hotel.name} enquire={enquire} />
     </main>
   )
 }
