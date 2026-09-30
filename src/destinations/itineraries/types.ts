@@ -1,3 +1,3 @@
-export type ItineraryStop = [string, string]
+export type ItineraryStop = [string, string];
 
-export type Itinerary = ItineraryStop[]
+export type Itinerary = ItineraryStop[];
