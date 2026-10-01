@@ -3,25 +3,95 @@ const u = (id: string, w = 1200) =>
 
 export const nav = [
   { label: "Partner With Us", href: "#journeys" },
-  { label: "About us", href: "#journeys" },
+  { label: "About us", href: "#about" },
   { label: "Destinations", href: "#destinations" },
-  { label: "Partners", href: "#partners" },
+  { label: "Why Choose Us", href: "#why-us" },
   { label: "Contacts", href: "#contact" },
 ];
 
+// Where every "Register free" button goes. The campaign's final microsite / registration address
+// isn't confirmed yet (the ads use flyingcarpet.travel as a placeholder): swap it here when it is.
+export const REGISTER_URL = "/get-started/market";
+
+// Reason-to-believe line used in the ads (campaign deck, "Gives a reason to believe").
+export const proofLine =
+  "350+ airlines · 300,000+ hotels · 400,000+ experiences · 24/7 support";
+
+// All five categories, always (campaign deck rule 4). Figures from the campaign deck and product sheet.
 export const offers = [
   {
     title: "Flights",
-    stat: "1000+",
+    stat: "350+",
     unit: "Airlines",
-    img: "/images/flights.jpg",
+    img: "/images/flights.webp",
   },
-  { title: "Hotels", stat: "56+", unit: "countries", img: "/images/hotel.jpg" },
+  {
+    title: "Hotels",
+    stat: "300,000+",
+    unit: "Hotels",
+    img: "/images/hotel.webp",
+  },
   {
     title: "Experiences",
-    stat: "3000+",
-    unit: "Activities",
-    img: "/images/activities.jpg",
+    stat: "400,000+",
+    unit: "Experiences",
+    img: "/images/activities.webp",
+  },
+  {
+    title: "Transfers",
+    stat: "Upfront",
+    unit: "Pricing",
+    img: u("photo-1449965408869-eaa3f722e40d"),
+  },
+  {
+    title: "Car rentals",
+    stat: "11",
+    unit: "Global brands",
+    img: u("photo-1630165356623-266076eaceb6"),
+  },
+];
+
+// "Why choose us" points from the client's B2B product sheet.
+export const whyUs = [
+  {
+    title: "One-stop travel platform",
+    text: "Access flights, hotels, transfers, car rentals, experiences and more from a single B2B marketplace built for agents.",
+  },
+  {
+    title: "Last-minute bookings",
+    text: "Search and book flights right up to the day of departure, even for urgent customer requests.",
+  },
+  {
+    title: "Diverse travel content",
+    text: "Access multi-GDS, multi-LCC and NDC flight content plus hotels, transfers, rental cars, experiences, insurance, holidays and more.",
+  },
+  {
+    title: "Mobile-friendly portal and app",
+    text: "Work from your desktop, tablet or phone, with a fast, responsive experience designed for same-day bookings on the go.",
+  },
+  {
+    title: "White-label solutions",
+    text: "Deliver a fully branded experience with your own themes, look and feel, and customer communications.",
+  },
+  {
+    title: "Multi-currency wallets",
+    text: "Hold funds in multiple currencies with balance visibility, controls and alerts to streamline operations.",
+  },
+  {
+    title: "Flexible payments",
+    text: "Collect payments your way through multiple gateways, payment links and automated wallet top-ups.",
+  },
+  {
+    title: "Group travel requests",
+    text: "Manage group bookings in one place, with a faster workflow for complex itineraries and larger parties.",
+  },
+  {
+    title: "Customer profiles",
+    text: "Save customer details once and reuse them across products, bookings and your back office for more efficient service.",
+  },
+  {
+    title: "Ready-to-use reports",
+    text: "Track daily operations and performance with standard reports built for faster decision-making and reconciliation.",
   },
 ];
 
@@ -63,30 +133,37 @@ export const destinations = [
   },
 ];
 
+// Product descriptions from the client's B2B product sheet, written to the agent.
 export const platform = [
   {
     n: "01",
     title: "Flights",
-    img: "/images/flights.jpg",
-    text: "Transparent routes into destinations most travelers never reach first.",
+    img: "/images/flights.webp",
+    text: "Access negotiated, low-cost and NDC fares from 350+ airlines, with seat, meal and baggage options visible on the platform and last-minute availability included.",
   },
   {
     n: "02",
     title: "Hotels",
-    img: "/images/hotel.jpg",
-    text: "Stays with character — boutique lodges, coastal riads, and jungle hideaways.",
+    img: "/images/hotel.webp",
+    text: "Browse 300,000+ properties with total pricing shown upfront, clear cancellation terms and both refundable and non-refundable choices.",
   },
   {
     n: "03",
     title: "Experiences",
     img: u("photo-1476514525535-07fb3b4ae5f1"),
-    text: "Immersive days with local hosts: safaris, spice gardens, lagoon crossings.",
+    text: "Offer experiences for every budget, from short local activities to multi-day adventures, with easy availability even on short notice.",
   },
   {
     n: "04",
     title: "Transfers",
     img: u("photo-1449965408869-eaa3f722e40d"),
-    text: "The quiet logistics that make a journey feel seamless from the first mile.",
+    text: "Book airport, station, port and hotel transfers in private or shared formats, from standard to premium, with clear pricing and no hidden fees.",
+  },
+  {
+    n: "05",
+    title: "Car rentals",
+    img: u("photo-1630165356623-266076eaceb6"),
+    text: "Choose from major brands including Avis, Hertz, Sixt and Europcar, with no booking fee and free cancellation before pick-up.",
   },
 ];
 
@@ -97,7 +174,7 @@ export const testimonials = [
     location: "Mumbai, India",
     avatar: u("photo-1531123897727-8f129e1688ce", 400),
     trip: "Italy",
-    tripImg: "/location/italy.jpg",
+    tripImg: "/location/italy-wide.webp",
     rating: 5,
     quote:
       "Flying Carpet turned a complicated three-city Italy itinerary into something my clients still talk about. Flights, boutique stays and transfers all in one place — I quoted in an hour instead of a week.",
@@ -108,7 +185,7 @@ export const testimonials = [
     location: "Toronto, Canada",
     avatar: u("photo-1507003211169-0a1dd7228f2d", 400),
     trip: "Morocco",
-    tripImg: "/location/morocco.jpg",
+    tripImg: "/location/morocco-wide.webp",
     rating: 5,
     quote:
       "The Sahara camp and riad stays were exactly as promised. My honeymoon couple came back glowing, and the support team answered every question before my clients even thought to ask.",
@@ -119,7 +196,7 @@ export const testimonials = [
     location: "Dubai, UAE",
     avatar: u("photo-1524504388940-b1c1722653e1", 400),
     trip: "Bali",
-    tripImg: "/location/bali.jpg",
+    tripImg: "/location/bali-wide.webp",
     rating: 5,
     quote:
       "Our group of 24 had a flawless week in Bali — villas in Ubud, a sunrise trek up Mount Batur and seamless transfers. Commission was paid on time, which says everything about the partnership.",
@@ -130,7 +207,7 @@ export const testimonials = [
     location: "Milan, Italy",
     avatar: u("photo-1506794778202-cad84cf45f1d", 400),
     trip: "Portugal",
-    tripImg: "/location/portugal.jpg",
+    tripImg: "/location/portugal-wide.webp",
     rating: 5,
     quote:
       "From Lisbon's trams to wine tastings in the Douro, every detail was handled. The destination guides help me sell with confidence, and my repeat bookings have grown steadily since we joined.",
@@ -141,7 +218,7 @@ export const testimonials = [
     location: "Paris, France",
     avatar: u("photo-1438761681033-6461ffad8d80", 400),
     trip: "India",
-    tripImg: "/location/india.jpg",
+    tripImg: "/location/india-wide.webp",
     rating: 5,
     quote:
       "Rajasthan's palaces, Varanasi at dawn and a houseboat in Kerala — all in one seamless itinerary. The local guides were exceptional, and my clients called it the trip of a lifetime.",
