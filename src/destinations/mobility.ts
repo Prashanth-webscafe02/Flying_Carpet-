@@ -2,10 +2,9 @@
 // Transfers: hero image, overview, vehicle types. Car rental: hero image, overview, rental car
 // companies and car types.
 // The vehicle types, rental companies and car types mirror the "Transfers for", "Rental Car
-// Company" and "Type" groups on the booking portal. Dubai follows the portal reference
-// (10 companies); the other destinations list the major brands usually found at their main
-// airport. Replace them with the portal groups for each destination. Car types are the portal's
-// nine everywhere.
+// Company" and "Type" groups on the booking portal.
+// The companies and car types of each destination come from a portal search at its main airport
+// (1-day rental, October 2026); a car type is listed only where the portal had a real picture for it.
 
 const u = (id: string, w = 900) =>
   `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=80`;
@@ -44,19 +43,10 @@ export const vehiclePhotos: Record<string, string> = {
   Seaplane: u("photo-1550259979-ffa0383e2b5e", 640),
   "Domestic flight": u("photo-1706723532458-392730ad1277", 640),
 };
-// Car types use the booking portal's own car pictures (cut-outs on white, saved in /public/images/cars).
-const car = (file: string) => `/images/cars/${file}.webp`;
-export const carTypePhotos: Record<string, string> = {
-  "2/4 Door": car("2-4-door"),
-  "4-5 Door": car("4-5-door"),
-  SUV: car("suv"),
-  "Open Air all terrain": car("open-air"),
-  Limousine: car("limousine"),
-  Special: car("special"),
-  "2/3 Door": car("2-3-door"),
-  "Passenger Van": car("passenger-van"),
-  Convertible: car("convertible"),
-};
+// Car types use the booking portal's own car pictures for that destination's airport (cut-outs on
+// white), saved as /public/images/cars/<destination>/<type>.webp.
+export const carPhoto = (destination: string, type: string) =>
+  `/images/cars/${destination}/${type.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}.webp`;
 
 // Rental company logos in /public/brands/rental. Companies without one show their name instead.
 const logo = (file: string) => `/brands/rental/${file}`;
@@ -89,47 +79,13 @@ export type Mobility = {
 };
 
 const road = ["Shuttle", "Car", "SUV", "Minibus"];
-const globalBrands = [
-  "Alamo",
-  "Avis",
-  "Budget",
-  "Enterprise",
-  "Europcar",
-  "Hertz",
-  "National",
-  "Sixt",
-  "Thrifty",
-];
-// The booking portal's "Type" group, in its order. Every destination with car rental lists all nine.
-const portalTypes = [
-  "2/4 Door",
-  "4-5 Door",
-  "SUV",
-  "Open Air all terrain",
-  "Limousine",
-  "Special",
-  "2/3 Door",
-  "Passenger Van",
-  "Convertible",
-];
 
 export const mobility: Record<string, Mobility> = {
   dubai: {
     vehicles: road,
     port: "Dubai Harbour and Port Rashid cruise terminals",
-    companies: [
-      "Alamo",
-      "Avis",
-      "Budget",
-      "Dollar",
-      "Enterprise",
-      "Europcar",
-      "Hertz",
-      "National",
-      "Sixt",
-      "Thrifty",
-    ],
-    carTypes: portalTypes,
+    companies: ["Alamo", "Avis", "Budget", "Dollar", "Enterprise", "Europcar", "Hertz", "National", "Sixt", "Thrifty"],
+    carTypes: ["2/4 Door", "4-5 Door", "SUV", "Open Air all terrain", "Limousine", "Special", "2/3 Door", "Passenger Van", "Convertible"],
   },
   maldives: {
     vehicles: ["Speedboat", "Seaplane", "Domestic flight"],
@@ -139,133 +95,86 @@ export const mobility: Record<string, Mobility> = {
   singapore: {
     vehicles: road,
     port: "Marina Bay Cruise Centre",
-    companies: ["Avis", "Budget", "Europcar", "Hertz", "Sixt"],
-    carTypes: portalTypes,
+    companies: ["Hertz", "Sixt"],
+    carTypes: ["4-5 Door", "SUV", "Passenger Van", "Sport"],
   },
   bangkok: {
     vehicles: road,
-    companies: ["Avis", "Budget", "Europcar", "Hertz", "Sixt", "Thrifty"],
-    carTypes: portalTypes,
+    companies: ["Alamo", "Avis", "Budget", "Dollar", "Enterprise", "Europcar", "Hertz", "National", "Sixt", "Thrifty"],
+    carTypes: ["4-5 Door", "Passenger Van", "2/4 Door", "SUV", "Pick Up extended Cab", "Wagon/Estate"],
   },
   bali: {
     vehicles: road,
     port: "Benoa cruise port",
-    companies: ["Avis", "Hertz"],
-    carTypes: portalTypes,
+    companies: ["Avis", "Europcar"],
+    carTypes: ["Monospace", "Passenger Van"],
   },
   istanbul: {
     vehicles: road,
     port: "Galataport cruise terminal",
-    companies: ["Avis", "Budget", "Enterprise", "Europcar", "Hertz", "Sixt"],
-    carTypes: portalTypes,
+    companies: ["Alamo", "Avis", "Budget", "Enterprise", "Europcar", "Hertz", "National", "Sixt"],
+    carTypes: ["4-5 Door", "Wagon/Estate", "SUV", "Passenger Van", "Monospace", "2/4 Door"],
   },
   london: {
     vehicles: road,
     port: "Southampton and Dover cruise terminals",
-    companies: globalBrands,
-    carTypes: portalTypes,
+    companies: ["Alamo", "Avis", "Budget", "Dollar", "Enterprise", "Europcar", "Hertz", "National", "Sixt", "Thrifty"],
+    carTypes: ["4-5 Door", "2/3 Door", "SUV", "Passenger Van", "2/4 Door", "Wagon/Estate", "Special"],
   },
   "new-york": {
     vehicles: road,
     port: "Manhattan and Brooklyn cruise terminals",
-    companies: [
-      "Alamo",
-      "Avis",
-      "Budget",
-      "Dollar",
-      "Enterprise",
-      "Hertz",
-      "National",
-      "Sixt",
-      "Thrifty",
-    ],
-    carTypes: portalTypes,
+    companies: ["Alamo", "Avis", "Budget", "Dollar", "Enterprise", "Hertz", "National", "Payless", "Sixt", "Thrifty"],
+    carTypes: ["Passenger Van", "2/4 Door", "SUV", "Open Air all terrain", "Pick Up Regular Cab", "Recreational"],
   },
   rajasthan: {
     vehicles: road,
-    companies: ["Avis", "Europcar", "Hertz"],
-    carTypes: portalTypes,
+    companies: ["Avis", "Europcar"],
+    carTypes: ["4-5 Door", "Passenger Van", "2/4 Door"],
   },
   rome: {
     vehicles: road,
     port: "Civitavecchia cruise port",
-    companies: [
-      "Avis",
-      "Budget",
-      "Enterprise",
-      "Europcar",
-      "Hertz",
-      "Maggiore",
-      "Sixt",
-    ],
-    carTypes: portalTypes,
+    companies: ["Alamo", "Avis", "Budget", "Dollar", "Enterprise", "Europcar", "Hertz", "National", "Sixt", "Thrifty"],
+    carTypes: ["2/3 Door", "4-5 Door", "SUV", "Wagon/Estate", "Passenger Van", "Convertible", "Limousine", "Coupe", "2/4 Door"],
   },
   marrakech: {
     vehicles: road,
-    companies: ["Avis", "Budget", "Europcar", "Hertz", "Sixt"],
-    carTypes: portalTypes,
+    companies: ["Alamo", "Avis", "Budget", "Dollar", "Enterprise", "Europcar", "Hertz", "National", "Sixt", "Thrifty"],
+    carTypes: ["4-5 Door", "SUV", "2/4 Door", "Monospace", "2/3 Door", "Passenger Van", "Limousine", "Wagon/Estate", "Special"],
   },
   paris: {
     vehicles: road,
-    companies: globalBrands,
-    carTypes: portalTypes,
+    companies: ["Alamo", "Avis", "Budget", "Dollar", "Enterprise", "Europcar", "Hertz", "National", "Sixt", "Thrifty"],
+    carTypes: ["Passenger Van", "4-5 Door", "2/4 Door", "SUV", "2/3 Door", "Wagon/Estate", "Monospace", "Limousine"],
   },
   tokyo: {
     vehicles: road,
     port: "Tokyo International Cruise Terminal",
-    companies: [
-      "Nippon Rent-A-Car",
-      "Nissan Rent a Car",
-      "Orix Rent-A-Car",
-      "Times Car Rental",
-      "Toyota Rent a Car",
-    ],
-    carTypes: portalTypes,
+    companies: ["Alamo", "Avis", "Budget", "Enterprise", "Europcar", "Hertz", "National", "Sixt"],
+    carTypes: ["2/4 Door", "SUV", "4-5 Door", "Wagon/Estate", "Passenger Van", "Monospace", "Pick Up Regular Cab"],
   },
   lisbon: {
     vehicles: road,
     port: "Lisbon Cruise Terminal",
-    companies: [
-      "Avis",
-      "Budget",
-      "Enterprise",
-      "Europcar",
-      "Goldcar",
-      "Hertz",
-      "Sixt",
-    ],
-    carTypes: portalTypes,
+    companies: ["Alamo", "Avis", "Budget", "Dollar", "Enterprise", "Europcar", "Hertz", "National", "Sixt", "Thrifty"],
+    carTypes: ["4-5 Door", "2/4 Door", "SUV", "Wagon/Estate", "Monospace", "Passenger Van", "2/3 Door", "Convertible", "Sport"],
   },
   "cape-town": {
     vehicles: road,
     port: "Cape Town Cruise Terminal (V&A Waterfront)",
-    companies: [
-      "Avis",
-      "Budget",
-      "Europcar",
-      "First Car Rental",
-      "Hertz",
-      "Tempest Car Hire",
-    ],
-    carTypes: portalTypes,
+    companies: ["Alamo", "Avis", "Budget", "Dollar", "Enterprise", "Europcar", "Hertz", "National", "Sixt", "Thrifty"],
+    carTypes: ["2/4 Door", "4-5 Door", "SUV", "Pick Up Regular Cab", "Passenger Van", "Pick Up extended Cab", "Special", "Monospace"],
   },
   brasov: {
     vehicles: ["Car", "SUV", "Minibus"],
-    companies: ["Avis", "Enterprise", "Europcar", "Hertz", "Sixt"],
-    carTypes: portalTypes,
+    companies: ["Alamo", "Avis", "Budget", "Dollar", "Enterprise", "Europcar", "Hertz", "National", "Sixt", "Thrifty"],
+    carTypes: ["4-5 Door", "Wagon/Estate", "SUV", "Passenger Van", "2/4 Door"],
   },
   sydney: {
     vehicles: road,
     port: "Overseas Passenger Terminal (Circular Quay)",
-    companies: [
-      "Avis",
-      "Budget",
-      "East Coast Car Rentals",
-      "Europcar",
-      "Hertz",
-      "Sixt",
-      "Thrifty",
-    ],
-    carTypes: portalTypes,
+    companies: ["Avis", "Budget", "Dollar", "Europcar", "Hertz", "Sixt", "Thrifty"],
+    carTypes: ["4-5 Door", "SUV", "Passenger Van", "Pick Up extended Cab", "Special", "2/4 Door", "Convertible", "Sport", "Pick Up Regular Cab"],
   },
 };

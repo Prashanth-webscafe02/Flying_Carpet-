@@ -1,7 +1,6 @@
-import { ArrowLeft, ArrowRight, Check, FileText, Upload, X } from "lucide-react";
-import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { ArrowLeft, ArrowRight, Check, ChevronDown, CircleAlert, FileText, Mail, Upload, X } from "lucide-react";
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent, type ReactNode } from "react";
 import { Eyebrow, Reveal, SplitHeading } from "../effects/motion";
-import { LucidWave } from "../effects/LucidLine";
 
 // Agency registration, mirroring the form on flyingcarpet.travel/partner-with-us (same sections,
 // fields and rules), in this site's glass style.
@@ -25,29 +24,31 @@ const sources = [
 ];
 const sourcesWithDetails = ["Online Travel Forums or Communities", "Networking / Word of Mouth"];
 const accreditations = [
-  { id: "arc_number", label: "ARC Number", placeholder: "Enter ARC Number" },
-  { id: "iata_number", label: "IATA Number", placeholder: "Enter IATA Number" },
-  { id: "clia_number", label: "CLIA Number", placeholder: "Enter CLIA Number" },
+  { id: "arc_number", label: "ARC number", placeholder: "Enter ARC number" },
+  { id: "iata_number", label: "IATA number", placeholder: "Enter IATA number" },
+  { id: "clia_number", label: "CLIA number", placeholder: "Enter CLIA number" },
   {
     id: "others",
-    label: "Other Number",
-    placeholder: "Business (or) Commercial (or) Tax Registration (or) Government ID",
+    label: "Other number",
+    placeholder: "Business, commercial or tax registration, or government ID number",
   },
 ];
 const MAX_DOC_BYTES = 512_000;
 const benefits = [
-  { title: "Global network", img: "/images/global.webp" },
-  { title: "Airline bookings", img: "/images/flights.webp" },
-  { title: "Hotel bookings", img: "/images/hotel.webp" },
+  { title: "Global network", stat: "24/7", unit: "Support", img: "/images/global.webp" },
+  { title: "Airline bookings", stat: "350+", unit: "Airlines", img: "/images/flights.webp" },
+  { title: "Hotel bookings", stat: "300,000+", unit: "Hotels", img: "/images/hotel.webp" },
 ];
 
+// One look for every text field and select: 48px tall, readable on the glass panel, an orange focus
+// ring, and a red border once the field has been touched (or the form submitted) while invalid.
 const control =
-  "w-full rounded-xl border border-white/12 bg-white/[0.05] px-3.5 py-2.5 text-sm outline-none transition-colors placeholder:text-white/40 focus:border-white/40";
+  "h-12 w-full rounded-xl border border-white/15 bg-white/[0.06] px-4 text-base text-white outline-none transition-[border-color,box-shadow,background-color] placeholder:text-white/35 hover:border-white/30 focus:border-accent focus:bg-white/[0.09] focus:ring-4 focus:ring-accent/20 user-invalid:border-red-400/80 group-data-[submitted=true]/form:invalid:border-red-400/80 autofill:shadow-[inset_0_0_0_1000px_#1d1a63] autofill:[-webkit-text-fill-color:#fff] sm:text-[0.95rem]";
 
 function Field({ label, className = "", children }: { label: string; className?: string; children: ReactNode }) {
   return (
     <label className={`block ${className}`}>
-      <span className="mb-1.5 block text-sm font-medium text-white/70">{label}</span>
+      <span className="mb-2 block text-[0.8rem] font-semibold tracking-wide text-white/75">{label}</span>
       {children}
     </label>
   );
@@ -59,7 +60,15 @@ function Text({
   type = "text",
   className,
   ...rest
-}: { label: string; name: string; type?: string; className?: string; maxLength?: number; autoComplete?: string }) {
+}: {
+  label: string;
+  name: string;
+  type?: string;
+  className?: string;
+  maxLength?: number;
+  autoComplete?: string;
+  placeholder?: string;
+}) {
   return (
     <Field label={label} className={className}>
       <input name={name} type={type} required className={control} {...rest} />
@@ -67,49 +76,101 @@ function Text({
   );
 }
 
-function Select({ label, name, options, className }: { label: string; name: string; options: string[]; className?: string }) {
+function Select({
+  label,
+  name,
+  options,
+  className,
+  placeholder = "Select",
+}: {
+  label: string;
+  name: string;
+  options: string[];
+  className?: string;
+  placeholder?: string;
+}) {
   return (
     <Field label={label} className={className}>
-      <select name={name} required defaultValue="" className={control}>
-        <option value="" disabled>
-          Select
-        </option>
-        {options.map((o) => (
-          <option key={o}>{o}</option>
-        ))}
-      </select>
+      <SelectBox name={name} options={options} placeholder={placeholder} />
     </Field>
   );
 }
 
-// Dial code + number, e.g. "+971" and "501234567".
-function Phone({ label, name }: { label: string; name: string }) {
+// The open list is drawn by the browser and takes the select's see-through fill, which on Windows
+// leaves white text on a white list. Give every option a solid navy background of its own.
+const option = "bg-[#15124f] text-white disabled:text-white/45";
+
+// Native select with its own chevron; the empty choice reads as a placeholder (muted) until picked.
+function SelectBox({
+  name,
+  options,
+  placeholder,
+  ...rest
+}: {
+  name: string;
+  options: string[];
+  placeholder: string;
+  value?: string;
+  onChange?: (e: ChangeEvent<HTMLSelectElement>) => void;
+  "aria-label"?: string;
+}) {
   return (
-    <Field label={label}>
-      <span className="flex gap-2">
+    <span className="relative block">
+      <select
+        name={name}
+        required
+        {...(rest.value === undefined ? { defaultValue: "" } : {})}
+        {...rest}
+        className={`${control} cursor-pointer appearance-none pr-11 invalid:text-white/40`}
+      >
+        <option value="" disabled className={option}>
+          {placeholder}
+        </option>
+        {options.map((o) => (
+          <option key={o} className={option}>
+            {o}
+          </option>
+        ))}
+      </select>
+      <ChevronDown className="pointer-events-none absolute right-4 top-1/2 size-4 -translate-y-1/2 text-white/55" />
+    </span>
+  );
+}
+
+// Dial code + number in one bordered control, e.g. "+971 | 50 123 4567".
+function Phone({ label, name, className }: { label: string; name: string; className?: string }) {
+  return (
+    <Field label={label} className={className}>
+      <span className="flex h-12 items-center rounded-xl border border-white/15 bg-white/[0.06] transition-[border-color,box-shadow,background-color] hover:border-white/30 focus-within:border-accent focus-within:bg-white/[0.09] focus-within:ring-4 focus-within:ring-accent/20 has-[:user-invalid]:border-red-400/80 group-data-[submitted=true]/form:has-[:invalid]:border-red-400/80">
         <input
           name={`${name}_code`}
           required
           inputMode="tel"
+          autoComplete="tel-country-code"
           placeholder="+1"
           pattern="\+?[0-9]{1,4}"
           title="Country code, e.g. +971"
           aria-label={`${label} country code`}
-          className={`${control} w-20 shrink-0`}
+          className="h-full w-16 shrink-0 bg-transparent pl-4 text-base text-white outline-none placeholder:text-white/35 sm:text-[0.95rem]"
         />
+        <span aria-hidden className="h-5 w-px bg-white/20" />
         <input
           name={name}
           type="tel"
           required
+          autoComplete="tel-national"
+          placeholder="Number"
           pattern="[0-9 ]{5,15}"
           title="Digits only, 5 to 15 long"
-          className={control}
+          className="h-full min-w-0 flex-1 bg-transparent px-3.5 text-base text-white outline-none placeholder:text-white/35 sm:text-[0.95rem]"
         />
       </span>
     </Field>
   );
 }
 
+// Radio or checkbox drawn as a pill: the native input stays in place (invisible) for the keyboard,
+// screen readers and validation; the pill and its tick follow its state.
 function Choice({
   type,
   name,
@@ -128,7 +189,7 @@ function Choice({
   children: ReactNode;
 }) {
   return (
-    <label className="inline-flex cursor-pointer items-center gap-2.5 text-sm font-medium text-white/85">
+    <label className="relative inline-flex cursor-pointer">
       <input
         type={type}
         name={name}
@@ -136,37 +197,62 @@ function Choice({
         checked={checked}
         onChange={onChange}
         required={required}
-        className="size-4 accent-accent"
+        className="peer absolute inset-0 cursor-pointer opacity-0"
       />
-      {children}
+      <span className="inline-flex min-h-11 items-center gap-2.5 rounded-full border border-white/15 bg-white/[0.05] py-2 pl-3 pr-4 text-sm font-medium text-white/80 transition-colors peer-hover:border-white/35 peer-checked:border-accent peer-checked:bg-accent/15 peer-checked:text-white peer-focus-visible:ring-4 peer-focus-visible:ring-accent/25 group-data-[submitted=true]/form:peer-invalid:border-red-400/80">
+        <span
+          className={`grid size-5 shrink-0 place-items-center border border-white/30 text-transparent transition-colors [input:checked+span>&]:border-accent [input:checked+span>&]:bg-accent [input:checked+span>&]:text-white ${type === "radio" ? "rounded-full" : "rounded-md"}`}
+        >
+          <Check className="size-3" strokeWidth={3.5} />
+        </span>
+        {children}
+      </span>
     </label>
   );
 }
 
-function Section({ title, hint, children }: { title: string; hint?: string; children: ReactNode }) {
+// A numbered form section: title and helper on the left, fields on the right (stacked on small screens).
+function Section({ step, title, hint, children }: { step: number; title: string; hint?: string; children: ReactNode }) {
+  const id = `signup-section-${step}`;
   return (
-    <fieldset className="border-t border-white/10 py-7 first:border-t-0 first:pt-0">
-      <legend className="float-left mb-4 w-full text-lg font-semibold tracking-tight">
-        {title} <span className="text-accent">*</span>
-      </legend>
-      {hint && <p className="clear-both -mt-2 mb-4 text-sm text-white/60">{hint}</p>}
-      <div className="clear-both">{children}</div>
-    </fieldset>
+    <section
+      aria-labelledby={id}
+      className="grid gap-x-12 gap-y-5 border-t border-white/10 py-8 first:border-t-0 first:pt-0 md:py-10 lg:grid-cols-[15rem_minmax(0,1fr)]"
+    >
+      <div>
+        <p className="text-xs font-semibold tracking-[0.16em] text-accent">{String(step).padStart(2, "0")}</p>
+        <h2 id={id} className="mt-2 scroll-mt-32 text-xl font-semibold leading-snug tracking-tight">
+          {title}
+        </h2>
+        {hint && <p className="mt-2 text-sm leading-relaxed text-white/60">{hint}</p>}
+      </div>
+      <div className="min-w-0">{children}</div>
+    </section>
   );
 }
 
-const grid = "grid gap-4 sm:grid-cols-2 lg:grid-cols-3";
+const SubLabel = ({ children }: { children: ReactNode }) => (
+  <p className="mb-3 mt-7 text-[0.8rem] font-semibold tracking-wide text-white/75">{children}</p>
+);
+const FieldError = ({ children }: { children: ReactNode }) => (
+  <p role="alert" className="mt-3 flex items-center gap-2 text-sm font-medium text-red-300">
+    <CircleAlert className="size-4 shrink-0" /> {children}
+  </p>
+);
+
+const grid = "grid gap-x-4 gap-y-5 sm:grid-cols-6";
+const choices = "flex flex-wrap gap-2.5";
 
 // Title, name, email and phones for one person; `prefix` keeps the field names apart.
 function Person({ prefix }: { prefix: string }) {
   return (
-    <div className={`mt-5 ${grid}`}>
-      <Select label="Title" name={`${prefix}_title`} options={titles} />
-      <Text label="First Name" name={`${prefix}_first_name`} />
-      <Text label="Last Name" name={`${prefix}_last_name`} />
-      <Text label="Email" name={`${prefix}_working_email`} type="email" />
-      <Phone label="Phone Number" name={`${prefix}_mobile_number`} />
-      <Phone label="Office Number" name={`${prefix}_office_number`} />
+    <div className={`mt-6 ${grid}`}>
+      <Select label="Title" name={`${prefix}_title`} options={titles} className="sm:col-span-2" />
+      <Text label="First name" name={`${prefix}_first_name`} className="sm:col-span-2" />
+      <Text label="Last name" name={`${prefix}_last_name`} className="sm:col-span-2" />
+      <Text label="Email" name={`${prefix}_working_email`} type="email" placeholder="name@agency.com" className="sm:col-span-6" />
+      <Phone label="Mobile number" name={`${prefix}_mobile_number`} className="sm:col-span-3" />
+      <Phone label="Office number" name={`${prefix}_office_number`} className="sm:col-span-3" />
     </div>
   );
 }
@@ -181,7 +267,7 @@ export default function Signup() {
   const [doc, setDoc] = useState<File | null>(null);
   const [docError, setDocError] = useState("");
   const [source, setSource] = useState("");
-  const [terms, setTerms] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
   const [sent, setSent] = useState(false);
 
@@ -199,27 +285,35 @@ export default function Signup() {
     setDoc(file);
   };
 
-  const submit = (e: FormEvent) => {
+  const accreditationMissing = submitted && !checked.length && !noAccreditation;
+  const docMissing = submitted && !doc && !docError;
+
+  const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const problem = !checked.length && !noAccreditation
-      ? "Add at least one accreditation number, or tick “I don't have one”."
-      : !doc
-        ? "Business Verification Document is required."
-        : "";
-    setError(problem);
-    if (problem) return;
+    setSubmitted(true);
+    const form = e.currentTarget;
+    const noAccreditationPicked = !checked.length && !noAccreditation;
+    const firstInvalid = form.querySelector<HTMLElement>("input:invalid, select:invalid");
+    if (firstInvalid || noAccreditationPicked || !doc) {
+      setError("Please complete the highlighted fields before submitting.");
+      const target =
+        firstInvalid ?? document.getElementById(noAccreditationPicked ? "signup-section-2" : "signup-section-6");
+      target?.scrollIntoView({ behavior: "smooth", block: "center" });
+      firstInvalid?.focus({ preventScroll: true });
+      return;
+    }
+    setError("");
     // TODO: send the form to the registration API once its endpoint is confirmed. Nothing is submitted yet.
     setSent(true);
     top.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
-    <main className="relative px-4 pb-8 pt-32 md:px-8 md:pt-44">
-      <LucidWave shape="swell" draw="intro" className="absolute inset-x-0 top-24 -z-1 hidden h-56 md:block" />
+    <main className="relative px-4 pb-8 pt-28 md:px-8 md:pt-40">
       <div ref={top} className="mx-auto max-w-7xl scroll-mt-28">
         <a
           href="/"
-          className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-white/70 transition-colors hover:text-white"
+          className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-white/70 transition-colors hover:text-white"
         >
           <ArrowLeft className="size-4" /> Back to home
         </a>
@@ -238,87 +332,90 @@ export default function Signup() {
           </div>
         ) : (
           <>
-            <div className="flex flex-wrap items-start justify-between gap-6">
+            <div className="grid items-end gap-x-12 gap-y-6 lg:grid-cols-[minmax(0,1fr)_22rem]">
               <div>
                 <Eyebrow>Sign up</Eyebrow>
                 <SplitHeading
                   text="Register with us now"
                   className="text-[clamp(2.2rem,5.2vw,4.75rem)] font-semibold leading-[1.02] tracking-tighter"
                 />
+                <Reveal delay={0.15}>
+                  <p className="mt-5 max-w-2xl text-lg leading-relaxed text-white/75">
+                    Get the benefits of our global airline and hotel partners, with agency pricing like never before.
+                  </p>
+                </Reveal>
               </div>
-              <p className="max-w-xs text-sm leading-relaxed text-white/70 md:pt-14 md:text-right">
-                For any queries regarding agency registration, please contact us at{" "}
-                <a href="mailto:hello@flyingcarpet.travel" className="font-semibold text-white underline-offset-4 hover:underline">
-                  hello@flyingcarpet.travel
-                </a>
-              </p>
-            </div>
-            <Reveal delay={0.15}>
-              <p className="mt-5 max-w-2xl text-lg leading-relaxed text-white/75">
-                Get the benefits of our global airline and hotel partners with the agency pricing like never before
-              </p>
-            </Reveal>
-
-            <form onSubmit={submit} className="glass mt-10 rounded-[1.75rem] p-5 sm:p-8">
-              <Section title="Primary Contact Details">
-                <div className={grid}>
-                  <Select label="Title" name="title" options={titles} />
-                  <Text label="First Name" name="first_name" autoComplete="given-name" />
-                  <Text label="Last Name" name="last_name" autoComplete="family-name" />
-                  <Text label="Agency Name" name="agency_name" autoComplete="organization" />
-                  <Text label="Email" name="email" type="email" autoComplete="email" />
-                  <Text label="Street Address" name="street_address" autoComplete="street-address" />
-                  <Select label="Country" name="country" options={countries} />
-                  <Text label="State" name="state" maxLength={20} />
-                  <Text label="City" name="city" maxLength={30} />
-                  <Phone label="Phone Number" name="phone_number" />
-                  <Phone label="Office Number" name="office_number" />
-                  <Text label="Postal Code / Zip Code" name="zipcode" autoComplete="postal-code" />
-                </div>
-                <p className="mb-3 mt-6 text-sm font-medium text-white/70">
-                  Contacting from <span className="text-accent">*</span>
+              <div className="glass rounded-3xl p-5 text-sm leading-relaxed text-white/75">
+                <p className="flex items-start gap-3">
+                  <FileText className="mt-0.5 size-4 shrink-0 text-accent" />
+                  Have a PDF of your business registration or government ID ready (up to 500KB).
                 </p>
-                <div className="flex flex-wrap gap-x-8 gap-y-3">
+                <p className="mt-3 flex items-start gap-3 border-t border-white/10 pt-3">
+                  <Mail className="mt-0.5 size-4 shrink-0 text-accent" />
+                  <span>
+                    Questions about registration?{" "}
+                    <a
+                      href="mailto:hello@flyingcarpet.travel"
+                      className="font-semibold text-white underline-offset-4 hover:underline"
+                    >
+                      hello@flyingcarpet.travel
+                    </a>
+                  </span>
+                </p>
+              </div>
+            </div>
+
+            <form
+              onSubmit={submit}
+              noValidate
+              data-submitted={submitted}
+              className="group/form glass mt-10 rounded-[1.75rem] p-5 sm:p-8 lg:p-10"
+            >
+              <Section step={1} title="Primary contact" hint="The person registering the agency. All fields are required.">
+                <div className={grid}>
+                  <Select label="Title" name="title" options={titles} className="sm:col-span-2" />
+                  <Text label="First name" name="first_name" autoComplete="given-name" className="sm:col-span-2" />
+                  <Text label="Last name" name="last_name" autoComplete="family-name" className="sm:col-span-2" />
+                  <Text label="Agency name" name="agency_name" autoComplete="organization" className="sm:col-span-3" />
+                  <Text label="Email" name="email" type="email" autoComplete="email" placeholder="name@agency.com" className="sm:col-span-3" />
+                  <Phone label="Phone number" name="phone_number" className="sm:col-span-3" />
+                  <Phone label="Office number" name="office_number" className="sm:col-span-3" />
+                  <Text label="Street address" name="street_address" autoComplete="street-address" className="sm:col-span-6" />
+                  <Select label="Country" name="country" options={countries} placeholder="Select country" className="sm:col-span-3" />
+                  <Text label="State" name="state" maxLength={20} autoComplete="address-level1" className="sm:col-span-3" />
+                  <Text label="City" name="city" maxLength={30} autoComplete="address-level2" className="sm:col-span-3" />
+                  <Text label="Postal / zip code" name="zipcode" autoComplete="postal-code" className="sm:col-span-3" />
+                </div>
+                <SubLabel>Contacting from</SubLabel>
+                <div role="radiogroup" aria-label="Contacting from" className={choices}>
                   <Choice type="radio" name="contacting_from" value="Main Office" required>
-                    Main Office
+                    Main office
                   </Choice>
                   <Choice type="radio" name="contacting_from" value="Branch Office" required>
-                    Branch Office
+                    Branch office
                   </Choice>
                 </div>
               </Section>
 
-              <Section title="Accreditation" hint="Atleast one information is mandatory">
-                <div className="grid gap-4 sm:grid-cols-2">
+              <Section step={2} title="Accreditation" hint="Select every number you hold and enter it. At least one is required.">
+                <div className={choices}>
                   {accreditations.map((a) => {
                     const on = checked.includes(a.id);
                     return (
-                      <div key={a.id}>
-                        <Choice
-                          type="checkbox"
-                          name={`${a.id}_checked`}
-                          checked={on}
-                          onChange={() => {
-                            setNoAccreditation(false);
-                            setChecked((c) => (on ? c.filter((x) => x !== a.id) : [...c, a.id]));
-                          }}
-                        >
-                          {a.label}
-                        </Choice>
-                        {on && (
-                          <input
-                            name={a.id}
-                            required
-                            placeholder={a.placeholder}
-                            aria-label={a.label}
-                            className={`${control} mt-2`}
-                          />
-                        )}
-                      </div>
+                      <Choice
+                        key={a.id}
+                        type="checkbox"
+                        name={`${a.id}_checked`}
+                        checked={on}
+                        onChange={() => {
+                          setNoAccreditation(false);
+                          setChecked((c) => (on ? c.filter((x) => x !== a.id) : [...c, a.id]));
+                        }}
+                      >
+                        {a.label}
+                      </Choice>
                     );
                   })}
-                </div>
-                <div className="mt-4">
                   <Choice
                     type="checkbox"
                     name="no_accreditation"
@@ -331,74 +428,98 @@ export default function Signup() {
                     I don't have one
                   </Choice>
                 </div>
+                {checked.length > 0 && (
+                  <div className="mt-6 grid gap-x-4 gap-y-5 sm:grid-cols-2">
+                    {accreditations
+                      .filter((a) => checked.includes(a.id))
+                      .map((a) => (
+                        <Text
+                          key={a.id}
+                          label={a.label}
+                          name={a.id}
+                          placeholder={a.placeholder}
+                          className={a.id === "others" ? "sm:col-span-2" : ""}
+                        />
+                      ))}
+                  </div>
+                )}
+                {accreditationMissing && (
+                  <FieldError>Select at least one accreditation, or “I don't have one”.</FieldError>
+                )}
               </Section>
 
-              <Section title="Additional Details">
+              <Section step={3} title="Company details" hint="The legal entity and who signs on its behalf.">
                 <div className={grid}>
-                  <Text label="Legal Company Name" name="legal_company_name" />
-                  <Text label="Signatory Name" name="signatory_name" />
-                  <Text label="Signatory Designation" name="signatory_designation" />
+                  <Text label="Legal company name" name="legal_company_name" className="sm:col-span-6" />
+                  <Text label="Signatory name" name="signatory_name" className="sm:col-span-3" />
+                  <Text label="Signatory designation" name="signatory_designation" className="sm:col-span-3" />
                 </div>
-                <p className="mb-3 mt-6 text-sm font-medium text-white/70">Registered Company Address</p>
-                <div className="flex flex-wrap gap-x-8 gap-y-3">
+                <SubLabel>Registered company address</SubLabel>
+                <div role="radiogroup" aria-label="Registered company address" className={choices}>
                   <Choice type="radio" name="companyAddress" value="same" required checked={address === "same"} onChange={() => setAddress("same")}>
-                    Same As Primary Contact Details
+                    Same as primary contact
                   </Choice>
                   <Choice type="radio" name="companyAddress" value="different" required checked={address === "different"} onChange={() => setAddress("different")}>
-                    Different Details
+                    A different address
                   </Choice>
                 </div>
                 {address === "different" && (
-                  <div className={`mt-5 ${grid}`}>
-                    <Select label="Country" name="company_country" options={countries} />
-                    <Text label="State" name="company_state" maxLength={20} />
-                    <Text label="City" name="company_city" maxLength={30} />
-                    <Text label="Street Address" name="company_street_address" />
-                    <Text label="Zip Code" name="company_zip_code" />
+                  <div className={`mt-6 ${grid}`}>
+                    <Text label="Street address" name="company_street_address" className="sm:col-span-6" />
+                    <Select label="Country" name="company_country" options={countries} placeholder="Select country" className="sm:col-span-3" />
+                    <Text label="State" name="company_state" maxLength={20} className="sm:col-span-3" />
+                    <Text label="City" name="company_city" maxLength={30} className="sm:col-span-3" />
+                    <Text label="Postal / zip code" name="company_zip_code" className="sm:col-span-3" />
                   </div>
                 )}
               </Section>
 
-              <Section title="Point of Contact Details">
-                <div className="flex flex-wrap gap-x-8 gap-y-3">
+              <Section step={4} title="Point of contact" hint="Who we should reach for day-to-day matters.">
+                <div role="radiogroup" aria-label="Point of contact" className={choices}>
                   <Choice type="radio" name="pocStatus" value="same" required checked={poc === "same"} onChange={() => setPoc("same")}>
-                    Same As Primary Contact Details
+                    Same as primary contact
                   </Choice>
                   <Choice type="radio" name="pocStatus" value="different" required checked={poc === "different"} onChange={() => setPoc("different")}>
-                    Different Details
+                    Someone else
                   </Choice>
                 </div>
                 {poc === "different" && <Person prefix="poc" />}
               </Section>
 
-              <Section title="Financial Controller Information">
-                <div className="flex flex-wrap gap-x-8 gap-y-3">
+              <Section step={5} title="Financial controller" hint="Who handles payments and invoices.">
+                <div role="radiogroup" aria-label="Financial controller" className={choices}>
                   <Choice type="radio" name="financeStatus" value="admin" checked={finance === "admin"} onChange={() => setFinance("admin")}>
-                    Same As Primary Contact Details
+                    Same as primary contact
                   </Choice>
                   <Choice type="radio" name="financeStatus" value="poc" checked={finance === "poc"} onChange={() => setFinance("poc")}>
-                    Same as Above Point of contact information details
+                    Same as point of contact
                   </Choice>
                   <Choice type="radio" name="financeStatus" value="different" checked={finance === "different"} onChange={() => setFinance("different")}>
-                    Different Details
+                    Someone else
                   </Choice>
                 </div>
                 {finance === "different" && <Person prefix="finance" />}
               </Section>
 
               <Section
-                title="Business Verification Documents"
-                hint="Upload Business (or) Commercial (or) Tax Registration (or) Government ID"
+                step={6}
+                title="Business verification"
+                hint="Upload your business, commercial or tax registration, or a government ID."
               >
                 {doc ? (
-                  <div className="flex max-w-md items-center gap-3 rounded-2xl border border-white/15 bg-white/[0.05] p-4">
-                    <FileText className="size-6 shrink-0 text-accent" />
-                    <p className="min-w-0 flex-1 truncate text-sm font-medium">{doc.name}</p>
+                  <div className="flex items-center gap-4 rounded-2xl border border-white/15 bg-white/[0.06] p-4">
+                    <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-accent/15 ring-1 ring-accent/30">
+                      <FileText className="size-5 text-accent" />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-semibold">{doc.name}</p>
+                      <p className="text-xs text-white/55">PDF · {Math.max(1, Math.round(doc.size / 1024))} KB</p>
+                    </div>
                     <button
                       type="button"
                       aria-label="Remove document"
                       onClick={() => setDoc(null)}
-                      className="grid size-8 place-items-center rounded-full transition-colors hover:bg-white/10"
+                      className="grid size-9 place-items-center rounded-full text-white/70 transition-colors hover:bg-white/10 hover:text-white"
                     >
                       <X className="size-4" />
                     </button>
@@ -410,10 +531,15 @@ export default function Signup() {
                       e.preventDefault();
                       pickDoc(e.dataTransfer.files[0]);
                     }}
-                    className="flex max-w-md cursor-pointer flex-col items-center gap-2 rounded-2xl border border-dashed border-white/25 bg-white/[0.04] px-6 py-8 text-sm font-medium text-white/80 transition-colors hover:border-white/50"
+                    className={`flex cursor-pointer flex-col items-center gap-1.5 rounded-2xl border border-dashed bg-white/[0.04] px-6 py-9 text-center transition-colors hover:border-accent hover:bg-white/[0.07] focus-within:border-accent focus-within:ring-4 focus-within:ring-accent/20 ${docMissing || docError ? "border-red-400/80" : "border-white/25"}`}
                   >
-                    <Upload className="size-6 text-accent" />
-                    Click to upload
+                    <span className="mb-2 grid size-11 place-items-center rounded-full bg-accent/15 ring-1 ring-accent/30">
+                      <Upload className="size-5 text-accent" />
+                    </span>
+                    <span className="text-sm font-semibold">
+                      Drop your PDF here, or <span className="text-accent">browse</span>
+                    </span>
+                    <span className="text-xs text-white/55">PDF only, up to 500KB</span>
                     <input
                       type="file"
                       accept="application/pdf,.pdf"
@@ -425,32 +551,25 @@ export default function Signup() {
                     />
                   </label>
                 )}
-                <p className="mt-2 text-xs text-white/55">Supported file format: PDF | Max file size: 500KB</p>
-                {docError && <p className="mt-2 text-sm font-medium text-orange-300">{docError}</p>}
+                {docError && <FieldError>{docError}</FieldError>}
+                {docMissing && <FieldError>A business verification document is required.</FieldError>}
               </Section>
 
-              <Section title="How did you hear about us?">
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  <select
+              <Section step={7} title="How did you hear about us?">
+                <div className="grid gap-x-4 gap-y-5 sm:grid-cols-2">
+                  <SelectBox
                     name="agency_source"
-                    required
+                    options={sources}
+                    placeholder="Select an option"
                     value={source}
                     onChange={(e) => setSource(e.target.value)}
                     aria-label="How did you hear about us?"
-                    className={control}
-                  >
-                    <option value="" disabled>
-                      Select
-                    </option>
-                    {sources.map((s) => (
-                      <option key={s}>{s}</option>
-                    ))}
-                  </select>
+                  />
                   {sourcesWithDetails.includes(source) && (
                     <input
                       name="agency_source_details"
                       maxLength={20}
-                      placeholder="Enter details"
+                      placeholder="Tell us where (optional)"
                       aria-label="Details"
                       className={control}
                     />
@@ -458,38 +577,33 @@ export default function Signup() {
                 </div>
               </Section>
 
-              <div className="border-t border-white/10 pt-7">
-                <Choice type="checkbox" name="terms" checked={terms} onChange={() => setTerms((t) => !t)}>
-                  <span>
-                    I agree to{" "}
-                    <a
-                      href="https://www.flyingcarpet.travel/terms-of-service"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-semibold text-white underline underline-offset-4"
-                    >
-                      terms and conditions
-                    </a>{" "}
-                    of Flying Carpet
-                  </span>
-                </Choice>
-                {error && (
-                  <p role="alert" className="mt-4 text-sm font-medium text-orange-300">
-                    {error}
-                  </p>
-                )}
-                <div className="mt-5">
-                  <button
-                    type="submit"
-                    disabled={!terms}
-                    className="group inline-flex items-center gap-2.5 rounded-full bg-accent py-2.5 pl-6 pr-2.5 text-sm font-semibold text-white shadow-[0_10px_30px_-10px_rgb(232_101_37/0.9)] transition-all duration-300 hover:brightness-110 disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-white/45 disabled:shadow-none"
-                  >
-                    Submit
-                    <span className="grid size-6 place-items-center rounded-full bg-white/20 transition-transform duration-300 group-hover:translate-x-0.5 group-disabled:translate-x-0">
-                      <ArrowRight className="size-3.5" />
+              <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-5 border-t border-white/10 pt-8">
+                <div className="min-w-0">
+                  <Choice type="checkbox" name="terms" required>
+                    <span>
+                      I agree to the{" "}
+                      <a
+                        href="https://www.flyingcarpet.travel/terms-of-service"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="relative font-semibold text-white underline underline-offset-4"
+                      >
+                        terms and conditions
+                      </a>{" "}
+                      of Flying Carpet
                     </span>
-                  </button>
+                  </Choice>
+                  {error && <FieldError>{error}</FieldError>}
                 </div>
+                <button
+                  type="submit"
+                  className="group inline-flex h-13 w-full items-center justify-center gap-3 rounded-full bg-accent pl-8 pr-2.5 text-[0.95rem] font-bold tracking-tight text-white shadow-[0_14px_36px_-12px_rgb(232_101_37/0.9)] transition-all duration-300 hover:brightness-110 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/40 sm:w-auto"
+                >
+                  Submit registration
+                  <span className="grid size-8 place-items-center rounded-full bg-white/20 transition-transform duration-300 group-hover:translate-x-0.5">
+                    <ArrowRight className="size-4" />
+                  </span>
+                </button>
               </div>
             </form>
           </>
@@ -502,7 +616,7 @@ export default function Signup() {
           />
           <Reveal delay={0.15}>
             <p className="mt-5 max-w-2xl text-lg leading-relaxed text-white/75">
-              Get the benefits of our global airline and hotel partners with the agency pricing like never before
+              What you get as a Flying Carpet agency partner.
             </p>
           </Reveal>
           <div className="mt-10 grid gap-6 sm:grid-cols-3">
@@ -517,9 +631,14 @@ export default function Signup() {
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.4s] ease-out group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-linear-to-t from-brand/70 via-transparent to-transparent" />
-                  <p className="glass-strong absolute inset-x-4 bottom-4 z-2 rounded-3xl px-5 py-4 text-sm font-semibold uppercase tracking-[0.14em]">
-                    {b.title}
-                  </p>
+                  {/* Same caption as the home page's "Partner with us" cards: label, headline figure, unit. */}
+                  <div className="glass-strong absolute inset-x-4 bottom-4 z-2 flex items-end justify-between rounded-3xl px-5 py-4">
+                    <div>
+                      <p className="text-sm font-medium text-white/70">{b.title}</p>
+                      <p className="text-[clamp(1.9rem,3vw,2.25rem)] font-semibold tracking-tighter">{b.stat}</p>
+                    </div>
+                    <p className="pb-1 text-sm font-semibold text-white/80">{b.unit}</p>
+                  </div>
                 </div>
               </Reveal>
             ))}

@@ -9,7 +9,7 @@ import Gallery from "./Gallery";
 import {
   carRentalHero,
   carRentalPhotos,
-  carTypePhotos,
+  carPhoto,
   companyLogos,
   mobility,
   transferHero,
@@ -166,7 +166,7 @@ export function CarRentalInfo({ d, info, onBack }: Props) {
             >
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
                 {m.carTypes.map((t, i) => (
-                  <Tile key={t} img={carTypePhotos[t]} label={t} i={i} cutout />
+                  <Tile key={t} img={carPhoto(d.id, t)} label={t} i={i} cutout />
                 ))}
               </div>
             </Section>
