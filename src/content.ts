@@ -5,7 +5,7 @@ export const nav = [
   { label: "Partner With Us", href: "#journeys" },
   { label: "About us", href: "#about" },
   { label: "Destinations", href: "#destinations" },
-  { label: "Why Choose Us", href: "#why-us" },
+  { label: "Partners", href: "#partners" },
   { label: "Contacts", href: "#contact" },
 ];
 

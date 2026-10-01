@@ -1,6 +1,7 @@
 import { MapPin, Plane, Quote, Star } from 'lucide-react'
 import { useState } from 'react'
 import { testimonialStats, testimonials } from '../content'
+import { LucidWave } from '../effects/LucidLine'
 import { Eyebrow, Reveal, SplitHeading } from '../effects/motion'
 
 type T = (typeof testimonials)[number]
@@ -11,6 +12,8 @@ export default function Testimonials() {
 
   return (
     <section id="testimonials" className="relative px-4 py-28 md:px-8 md:py-40">
+      {/* Lucid Line across the gap above (Platform's bottom padding + this section's top padding) */}
+      <LucidWave shape="rise" mirror className="absolute inset-x-0 -top-28 -z-1 h-56 md:-top-40 md:h-80" />
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-8 md:grid-cols-2 md:items-end">
           <div>
@@ -68,6 +71,7 @@ function Card({ t, tall, open, onToggle }: { t: T; tall: boolean; open: boolean;
         src={t.tripImg}
         alt=""
         loading="lazy"
+        decoding="async"
         draggable={false}
         className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-110"
       />

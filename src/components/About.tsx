@@ -1,6 +1,7 @@
 import { animate, motion, useInView, useScroll, useTransform } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import { stats } from '../content'
+import { LucidWave } from '../effects/LucidLine'
 import { Eyebrow, Reveal, SplitHeading } from '../effects/motion'
 
 function Counter({ to, suffix }: { to: number; suffix: string }) {
@@ -23,14 +24,17 @@ export default function About() {
 
   return (
     <section id="about" ref={ref} className="relative px-4 py-16 md:px-8 md:py-24">
+      {/* Lucid Line across the gap above (Offers' bottom padding + this section's top padding) */}
+      <LucidWave shape="rise" className="absolute inset-x-0 -top-28 -z-1 h-44 md:-top-40 md:h-64" />
       <div className="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[1.1fr_1fr]">
         <motion.div style={{ clipPath: clip }} className="relative aspect-[4/5] overflow-hidden md:aspect-[5/6]">
           <motion.img
             style={{ y: imgY, scale: 1.25 }}
-            src="/images/global.jpg"
+            src="/images/global.webp"
             alt="Lantern-lit lanes in a Moroccan medina at dusk"
             loading="lazy"
-            className="absolute inset-0 h-full w-full object-cover"
+            decoding="async"
+            className="absolute inset-0 h-full w-full object-cover will-change-transform"
           />
           {/* floating liquid orbs over the image */}
           <div className="blob absolute -left-10 top-10 size-40 bg-accent/40 blur-2xl" />

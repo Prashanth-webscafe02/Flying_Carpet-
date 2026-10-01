@@ -2,6 +2,7 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import { Mail, Phone } from 'lucide-react'
 import { useRef } from 'react'
 import { footerImg } from '../content'
+import { LucidCorner, LucidWave } from '../effects/LucidLine'
 import { Reveal } from '../effects/motion'
 
 export default function Footer() {
@@ -17,9 +18,13 @@ export default function Footer() {
         src={footerImg}
         alt="Sunlit mountain ridges above a still alpine lake"
         loading="lazy"
-        className="absolute inset-0 h-[120%] w-full object-cover"
+        decoding="async"
+        className="absolute inset-0 h-[120%] w-full object-cover will-change-transform"
       />
       <div className="absolute inset-0 bg-gradient-to-b from-brand via-brand/30 to-brand/70" />
+      {/* Lucid Line over the photo above the card, plus the corner sign-off */}
+      <LucidWave shape="fall" className="absolute inset-x-0 top-0 h-48 md:h-72" />
+      <LucidCorner className="absolute bottom-0 left-0" />
 
       <div className="relative mx-auto max-w-7xl px-4 pb-8 pt-48 md:px-8 md:pt-72">
         <Reveal className="glass-strong rounded-[2.5rem] p-7 md:p-12">

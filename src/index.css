@@ -96,6 +96,8 @@ html.lenis, html.lenis body { height: auto; }
   50% { transform: translate(6vw, -4vh) scale(1.15); }
 }
 .blob { animation: morph 14s ease-in-out infinite, drift 22s ease-in-out infinite; }
+/* Shape morph only, for things that must stay put (the cursor orb): no drift. */
+.blob-morph { animation: morph 14s ease-in-out infinite; }
 
 @keyframes marquee { to { transform: translateX(-50%); } }
 .marquee { animation: marquee 40s linear infinite; }
@@ -106,7 +108,7 @@ html.lenis, html.lenis body { height: auto; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .blob, .marquee { animation: none; }
+  .blob, .blob-morph, .marquee { animation: none; }
 }
 
 /* Choice list inside the get-started panel */

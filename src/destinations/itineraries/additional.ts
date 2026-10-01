@@ -1,0 +1,229 @@
+import type { Itinerary } from "./types";
+
+// Long-form stops for destinations added after the Asia and West itineraries.
+export const additional: Record<string, Itinerary> = {
+  "Mount Fuji & Hakone Day Trip": [
+    [
+      "Mount Fuji 5th Station",
+      "Travel up the mountain road to the fifth station, where the landscape opens onto views of Fuji’s broad volcanic slopes. The stop gives your clients time to take photographs, browse the small shops and adjust to the altitude. Access depends on weather, road conditions and the season, so the coach may use another viewpoint if the station is closed.",
+    ],
+    [
+      "Lake Ashi",
+      "Continue into the Hakone area for a cruise across Lake Ashi, a crater lake formed by volcanic activity. From the water, clients can see the surrounding forested hills and, on clear days, Mount Fuji in the distance. The boat ride offers a slower change of pace after the mountain drive, with sheltered seating and open decks for photos.",
+    ],
+    [
+      "Hakone Ropeway and Owakudani",
+      "Ride the ropeway over Hakone’s volcanic valley, where steam vents and mineral-rich ground show that the landscape remains geothermally active. At Owakudani, clients can walk around the viewing area and sample local snacks if time allows. The route and operating hours can change with volcanic activity or weather, and the guide will advise on the day.",
+    ],
+  ],
+  "Asakusa & Senso-ji Tour": [
+    [
+      "Kaminarimon",
+      "Meet the guide at Kaminarimon, the Thunder Gate that marks the entrance to Asakusa’s temple district. Its enormous red lantern and guardian statues make a memorable first stop and an easy landmark for finding the group. The guide introduces the area’s history and explains how this gateway leads into one of Tokyo’s best-known traditional shopping streets.",
+    ],
+    [
+      "Nakamise-dori",
+      "Walk along Nakamise-dori, a lively approach lined with small shops selling local snacks, sweets and traditional crafts. The guide can point out regional favourites and explain which treats are best enjoyed fresh as you browse. It is a busy pedestrian street, so the group keeps together and allows time for photos and short shopping stops.",
+    ],
+    [
+      "Senso-ji",
+      "Explore Senso-ji, Tokyo’s oldest Buddhist temple, with its main hall, incense burner and five-storey pagoda. The guide explains the temple’s place in local religious life and the customs visitors may observe, including how to approach the offering area respectfully. After the visit, clients can continue exploring Asakusa’s lanes or ask the guide for nearby food recommendations.",
+    ],
+  ],
+  "Shibuya & Harajuku Walk": [
+    [
+      "Shibuya Crossing",
+      "Start at Shibuya Crossing, where streams of pedestrians move across the intersection from every direction when the signals change. The guide shares how the district grew into a centre for shopping, nightlife and youth culture, then points out nearby landmarks such as the Hachiko statue. There is time to watch the crossing and take photos from a safe viewpoint.",
+    ],
+    [
+      "Takeshita Street",
+      "Continue to Takeshita Street in Harajuku, a narrow shopping lane known for bold fashion, accessories and colourful dessert shops. The guide gives context on the trends that shape the neighbourhood and allows time to browse at a comfortable pace. It can be crowded, especially on weekends, so the group may use quieter side streets between stops.",
+    ],
+    [
+      "Meiji Shrine",
+      "Leave the busy streets for the wooded approach to Meiji Shrine, a Shinto sanctuary set within a broad forested grounds. Walk beneath the torii gates and learn about the shrine’s history and visitor customs from the guide. The peaceful paths provide a striking contrast to Shibuya and Harajuku, before the tour concludes near convenient rail connections.",
+    ],
+  ],
+  "teamLab Planets": [
+    [
+      "teamLab Planets Toyosu",
+      "Enter the immersive exhibition in timed groups and follow its route through large-scale digital art environments. Several rooms involve walking barefoot, and some have shallow water, reflective surfaces or changing light, so clients should follow the venue’s instructions and use the lockers provided. Allow time to move slowly through each installation, as the experience is designed for participation rather than a quick gallery visit.",
+    ],
+  ],
+  "Tram 28 & Alfama Walk": [
+    [
+      "Tram 28",
+      "Board the historic yellow tram for a ride through Lisbon’s older districts, where the route climbs steep streets and passes close to tiled façades and small squares. The guide points out neighbourhood landmarks along the way and helps the group manage busy stops. Trams can be crowded, and the exact boarding point or ride segment may vary with service conditions.",
+    ],
+    [
+      "Lisbon Cathedral",
+      "Visit Lisbon Cathedral, a landmark whose sturdy exterior reflects centuries of rebuilding and changing architectural styles. The guide introduces its role in the city’s history and highlights details around the entrance and interior where access permits. This stop offers a quieter pause before continuing through Alfama’s steep lanes and historic residential streets.",
+    ],
+    [
+      "Miradouro de Santa Luzia",
+      "Finish at the Santa Luzia viewpoint, where a terrace looks across Alfama’s rooftops towards the Tagus River. Decorative tile panels and flowering pergolas make this a popular place to pause, take photographs and get a sense of the neighbourhood’s layout. From here, clients can continue exploring nearby lanes or follow the guide’s directions back towards the centre.",
+    ],
+  ],
+  "Belém Monuments Tour": [
+    [
+      "Jerónimos Monastery",
+      "Explore the monastery’s celebrated stonework and cloister, built during Portugal’s Age of Discovery. The guide explains how maritime trade and royal patronage shaped the site, while pointing out carved details inspired by the sea and distant lands. Entry arrangements and access to specific rooms can vary, and the visit follows the route available on the day.",
+    ],
+    [
+      "Belém Tower",
+      "See Belém Tower from the riverside and learn how it once formed part of Lisbon’s system for guarding the harbour entrance. Its balconies, turrets and sculpted stone details reflect the Manueline style associated with the period. If interior admission is not part of the booked option, the guide describes the exterior and allows time for photographs along the waterfront.",
+    ],
+    [
+      "Pastéis de Belém",
+      "Pause at the historic bakery associated with Lisbon’s custard tart, where clients can taste a warm pastel de nata if included in their tour. The guide shares how the pastry became a local favourite and suggests the traditional way to enjoy it with coffee or cinnamon. Queues can form at busy times, so the stop may be adjusted to fit the schedule.",
+    ],
+  ],
+  "Sintra Palaces Day Trip": [
+    [
+      "Pena Palace",
+      "Visit the colourful palace above Sintra, where Romantic architecture combines towers, terraces and decorative details from several styles. The guide explains its history as a royal retreat and helps clients navigate the hilltop grounds. Timed entry and vehicle access can affect the order of stops, and comfortable shoes are useful on the sloping paths.",
+    ],
+    [
+      "Sintra town",
+      "Spend time in Sintra’s historic centre, a compact town of tiled façades, pastry shops and lanes beneath the surrounding hills. The guide points out local landmarks and leaves room to browse or sample a regional sweet such as travesseiro, subject to the tour schedule. The pace is relaxed, with time to regroup before continuing through the area.",
+    ],
+    [
+      "Cabo da Roca",
+      "Reach Cabo da Roca, the rugged headland known as mainland Europe’s westernmost point. A marked viewpoint looks over cliffs and the Atlantic, with a stone monument identifying the location. Wind and sea conditions can be strong, so clients should stay behind barriers and wear an extra layer before the return journey to Lisbon.",
+    ],
+  ],
+  "Fado Dinner Show": [
+    [
+      "Fado house",
+      "Settle into a traditional Bairro Alto restaurant for a Portuguese meal accompanied by live fado, a music style known for intimate vocals and expressive guitar. Performances are usually arranged in short sets between courses, giving guests time to dine and listen. Menus and drink inclusions depend on the selected package, and the room is kept quiet during each performance.",
+    ],
+  ],
+  "Table Mountain Cableway": [
+    [
+      "Lower cable station",
+      "Arrive at the lower cable station and board a rotating cable car that turns during the ascent, giving passengers changing views across Cape Town. The ride is short, but queues and wind can affect departure times. The cableway may close in poor weather, so clients should check operating status and follow staff guidance before travelling.",
+    ],
+    [
+      "Table Mountain summit",
+      "At the top, follow marked paths between viewpoints overlooking Cape Town, the coastline and the surrounding mountain range. The summit terrain is uneven and conditions can be cooler or windier than in the city, so sturdy shoes and a light layer are recommended. Clients can explore independently within the open areas before taking the cable car back down.",
+    ],
+  ],
+  "Cape Peninsula & Boulders Penguins": [
+    [
+      "Chapman’s Peak Drive",
+      "Follow the coastal road between steep mountain slopes and the Atlantic, stopping at designated viewpoints when conditions allow. The guide shares context about the peninsula and helps clients take in the scenery without rushing. Road access can be affected by weather or maintenance, so the route may use an alternative coastal road if a section is closed.",
+    ],
+    [
+      "Cape Point and the Cape of Good Hope",
+      "Explore the Cape Point area, where footpaths lead to dramatic cliffs and views across the meeting waters of the Atlantic and Indian oceans. Clients can walk towards the lighthouse or use the available funicular at their own cost, depending on the tour. Stay on marked paths and allow extra time for the exposed, sometimes windy terrain.",
+    ],
+    [
+      "Boulders Beach",
+      "Visit the protected penguin colony at Boulders, observing the African penguins from boardwalks designed to keep people and wildlife at a respectful distance. The guide explains the colony’s conservation work and the pressures facing the species. Sightings are common but wildlife remains unpredictable, and visitors should not feed or approach the birds.",
+    ],
+  ],
+  "Winelands Tasting Day": [
+    [
+      "Stellenbosch",
+      "Explore the Stellenbosch wine region, known for historic Cape Dutch buildings, oak-lined streets and vineyards set against mountain scenery. At the selected estate, clients sample wines with guidance from the tasting staff and learn about the grapes and local conditions. Tastings and estate visits vary by itinerary, and additional purchases are at the client’s discretion.",
+    ],
+    [
+      "Franschhoek",
+      "Continue to Franschhoek, a valley with a strong food and wine tradition shaped by its early French settlers. The visit may include a boutique winery, a town-centre stroll or another tasting, depending on the booked route. Clients can enjoy the scenery between stops, while the guide keeps the schedule coordinated for the return drive to Cape Town.",
+    ],
+  ],
+  "Robben Island Tour": [
+    [
+      "Nelson Mandela Gateway",
+      "Check in at the Nelson Mandela Gateway at the V&A Waterfront before boarding the scheduled ferry. Security and departure procedures take time, so clients should arrive at the time confirmed with their ticket. The crossing offers views across the harbour towards Table Mountain, although sea conditions can make the ride choppy.",
+    ],
+    [
+      "Robben Island",
+      "On arrival, explore the island by guided bus and visit the former prison, where political prisoners including Nelson Mandela were held. Some tours include a former prisoner as a guide, sharing first-hand context about incarceration and resistance. The visit follows the operator’s route and ferry schedule, and clients should remain with the group throughout.",
+    ],
+  ],
+  "Bran Castle & Râșnov Fortress": [
+    [
+      "Râșnov Fortress",
+      "Explore the hilltop citadel above Râșnov, whose walls and towers once helped protect local communities and trade routes. The guide describes daily life in the fortress and points out views over the surrounding Transylvanian landscape. Access to the upper site can depend on restoration work or local transport, so the visit may focus on accessible areas.",
+    ],
+    [
+      "Bran Castle",
+      "Walk through Bran Castle’s rooms and stairways while the guide separates its documented history from the later Dracula associations. The castle’s position above the valley and its preserved interiors make the visit especially atmospheric. The route includes narrow passages and stairs, and entry queues can affect the time available for browsing the exhibits.",
+    ],
+  ],
+  "Old Town Walking Tour": [
+    [
+      "Council Square",
+      "Begin in Council Square, the open centre of Brașov’s old town, surrounded by colourful façades and the former council building. The guide introduces the city’s Saxon heritage and points out streets leading to its main landmarks. It is an easy place to orient yourself before continuing on foot through the historic centre.",
+    ],
+    [
+      "Black Church",
+      "Visit the Black Church, a landmark Gothic church whose name comes from the darkened stone following a historic fire. The guide highlights its architecture and, where open, features such as the collection of Anatolian carpets inside. Opening hours and services can limit interior access, so the exterior remains part of the walk in any case.",
+    ],
+    [
+      "Rope Street",
+      "Walk through Rope Street, a narrow passage between buildings that offers a quick look at the compact layout of the old town. The guide shares how the lane fits into the city’s medieval street network and helps the group move through respectfully when it is busy. The tour can then continue towards nearby squares, cafés and pedestrian streets.",
+    ],
+  ],
+  "Libearty Bear Sanctuary": [
+    [
+      "Libearty Bear Sanctuary",
+      "Join a scheduled guided visit through the forested sanctuary, which provides rescued bears with spacious natural enclosures. The guide explains the animals’ backgrounds and the care programme while visitors observe from designated paths. Visits follow strict rules to protect both guests and bears; sightings and activity vary, and touching or feeding the animals is not permitted.",
+    ],
+  ],
+  "Peleș Castle Day Trip": [
+    [
+      "Peleș Castle",
+      "Tour the former royal residence in Sinaia, set among wooded slopes of the Carpathians. Inside, the guide draws attention to richly decorated rooms, carved wood, stained glass and collections gathered for the Romanian royal family. Entry is timed and some rooms may close for maintenance, so the route follows the access available on the day.",
+    ],
+    [
+      "Sinaia Monastery",
+      "Continue to Sinaia Monastery, a historic religious complex whose name later became the name of the surrounding mountain town. The guide introduces its role in the area and points out architectural details in the church and courtyard where access permits. This quieter stop balances the palace visit before the group returns through the mountain scenery.",
+    ],
+  ],
+  "Sydney Opera House Tour": [
+    [
+      "Sydney Opera House",
+      "Join a guided visit through selected foyers and performance spaces to learn how the building was designed and brought to life on the harbour. The guide shares stories about its architecture, acoustics and role in Sydney’s cultural scene. Rehearsals and events can affect room access, so the route and spaces visited may vary on the day.",
+    ],
+  ],
+  "Harbour Bridge Climb": [
+    [
+      "BridgeClimb base, The Rocks",
+      "Check in at the climbing centre in The Rocks, store personal belongings and complete the safety briefing before being fitted with a climb suit and harness. Guides explain the route, communication signals and procedures for moving together on the bridge. Cameras and loose items are not permitted on the climb, but an official group photo is available.",
+    ],
+    [
+      "Bridge summit",
+      "Climb the bridge’s steel arches with the guide, pausing at platforms to hear about its construction and take in views of the harbour. The guided route reaches a high point above the water, where clients can see the Opera House, the city and the surrounding bays. The climb takes several hours and requires reasonable mobility and comfort with heights.",
+    ],
+  ],
+  "Blue Mountains Day Trip": [
+    [
+      "Echo Point",
+      "Stop at Echo Point for a broad view of the Three Sisters rock formation and the valleys of the Blue Mountains. The guide explains the landscape and local Aboriginal cultural significance, while pointing out walking tracks and viewpoints nearby. Visibility changes with weather, and clients should remain behind barriers along the exposed lookout.",
+    ],
+    [
+      "Scenic World",
+      "At Scenic World, ride the included railway, cableway or skyway according to the selected ticket and operating schedule. The routes reveal rainforest, sandstone cliffs and valley views from different angles, with walking paths available at the lower station. Some rides involve steep gradients, so clients can choose the options that suit their comfort and mobility.",
+    ],
+    [
+      "Featherdale Wildlife Park",
+      "If the itinerary includes Featherdale, spend time observing native Australian animals such as kangaroos and koalas in a wildlife park setting. Staff provide information about the species and conservation, and any close-up encounters follow the park’s rules. This optional stop depends on the tour chosen, traffic and the day’s schedule before returning to Sydney.",
+    ],
+  ],
+  "Bondi to Coogee Coastal Walk": [
+    [
+      "Bondi Beach",
+      "Meet the guide at Bondi Beach, where the group gets an overview of the coastal route and checks the day’s conditions. Walk past the beach and its ocean pool, with time to see the surf culture and cliffside scenery. The full path includes stairs and uneven sections, so comfortable shoes, water and sun protection are important.",
+    ],
+    [
+      "Bronte",
+      "Continue along the coastal path to Bronte, passing ocean views, rock platforms and smaller beaches along the way. At Bronte, the guide can point out the ocean pool and park, a popular place for locals to swim and picnic. The stop offers a chance to rest and take photographs before the final stretch towards Coogee.",
+    ],
+    [
+      "Coogee Beach",
+      "Finish at Coogee Beach, a sheltered curve of sand with cafés and coastal parks nearby. The guide shares options for swimming, lunch or continuing to explore the neighbourhood after the walk. The route and duration depend on group pace and weather, and clients can arrange their own transport back from Coogee.",
+    ],
+  ],
+};
