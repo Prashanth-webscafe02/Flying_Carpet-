@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
 import { platform } from '../content'
 import { Eyebrow, Reveal, SplitHeading, ease } from '../effects/motion'
+import { LucidWave } from '../effects/LucidLine'
 
 // Liquid accordion: the hovered/tapped panel expands fluidly and the others compress.
 export default function Platform() {
@@ -9,12 +10,14 @@ export default function Platform() {
 
   return (
     <section id="products" className="relative px-4 py-28 md:px-8 md:py-40">
+      {/* Lucid Line in the gap after the destination cards, above the eyebrow */}
+      <LucidWave shape="swell" mirror className="absolute inset-x-0 -top-10 -z-1 h-38 md:h-50" />
       <div className="mx-auto max-w-7xl">
         <Reveal><Eyebrow>The platform</Eyebrow></Reveal>
         <div className="grid items-end gap-6 md:grid-cols-[1.4fr_1fr]">
           <SplitHeading
             text="Flights, hotels, experiences, and transfers"
-            className="text-[clamp(2.2rem,5.2vw,4.75rem)] font-semibold leading-[1.02] tracking-[-0.05em]"
+            className="text-[clamp(2.2rem,5.2vw,4.75rem)] font-semibold leading-[1.02] tracking-tighter"
           />
           <Reveal delay={0.15}>
             <p className="text-lg leading-relaxed text-white/75">
@@ -23,7 +26,7 @@ export default function Platform() {
           </Reveal>
         </div>
 
-        <div className="mt-14 flex flex-col gap-3 md:h-[560px] md:flex-row">
+        <div className="mt-14 flex flex-col gap-3 md:h-140 md:flex-row">
           {platform.map((p, i) => {
             const on = i === active
             return (
@@ -34,8 +37,8 @@ export default function Platform() {
                 onFocus={() => setActive(i)}
                 onClick={() => setActive(i)}
                 transition={{ layout: { duration: 0.8, ease } }}
-                className={`group relative overflow-hidden rounded-[2rem] text-left outline-none focus-visible:ring-2 focus-visible:ring-accent ${
-                  on ? 'h-[420px] md:h-auto md:flex-[4]' : 'h-24 md:h-auto md:flex-[1]'
+                className={`group relative overflow-hidden rounded-4xl text-left outline-none focus-visible:ring-2 focus-visible:ring-accent ${
+                  on ? 'h-105 md:h-auto md:flex-4' : 'h-24 md:h-auto md:flex-1'
                 }`}
               >
                 <motion.img
@@ -47,14 +50,14 @@ export default function Platform() {
                 />
                 <div className={`absolute inset-0 transition-colors duration-700 ${on ? 'bg-brand/10' : 'bg-brand/55'}`} />
 
-                <span className="glass absolute left-4 top-4 z-[2] rounded-full px-3 py-1 text-xs font-bold">{p.n}</span>
+                <span className="glass absolute left-4 top-4 z-2 rounded-full px-3 py-1 text-xs font-bold">{p.n}</span>
 
                 {!on && (
-                  <span className="absolute bottom-6 left-1/2 z-[2] hidden -translate-x-1/2 whitespace-nowrap text-lg font-semibold [writing-mode:vertical-rl] rotate-180 md:block">
+                  <span className="absolute bottom-6 left-1/2 z-2 hidden -translate-x-1/2 whitespace-nowrap text-lg font-semibold [writing-mode:vertical-rl] rotate-180 md:block">
                     {p.title}
                   </span>
                 )}
-                {!on && <span className="absolute left-16 top-5 z-[2] text-lg font-semibold md:hidden">{p.title}</span>}
+                {!on && <span className="absolute left-16 top-5 z-2 text-lg font-semibold md:hidden">{p.title}</span>}
 
                 <AnimatePresence>
                   {on && (
@@ -63,7 +66,7 @@ export default function Platform() {
                       animate={{ opacity: 1, y: 0, filter: 'blur(0px)', transitionEnd: { filter: 'none' } }}
                       exit={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
                       transition={{ duration: 0.6, delay: 0.25, ease }}
-                      className="glass-strong absolute inset-x-4 bottom-4 z-[2] rounded-3xl p-5 md:inset-x-6 md:bottom-6 md:max-w-md md:p-6"
+                      className="glass-strong absolute inset-x-4 bottom-4 z-2 rounded-3xl p-5 md:inset-x-6 md:bottom-6 md:max-w-md md:p-6"
                     >
                       <h3 className="text-3xl font-semibold tracking-[-0.04em]">{p.title}</h3>
                       <p className="mt-2 text-white/80">{p.text}</p>

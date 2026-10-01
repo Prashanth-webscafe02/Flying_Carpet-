@@ -9,9 +9,8 @@ export const nav = [
   { label: "Contacts", href: "#contact" },
 ];
 
-// Where every "Register free" button goes. The campaign's final microsite / registration address
-// isn't confirmed yet (the ads use flyingcarpet.travel as a placeholder): swap it here when it is.
-export const REGISTER_URL = "/get-started/market";
+// The header's "Sign Up" button: the agency registration form (src/signup).
+export const REGISTER_URL = "/partner-with-us";
 
 // Reason-to-believe line used in the ads (campaign deck, "Gives a reason to believe").
 export const proofLine =

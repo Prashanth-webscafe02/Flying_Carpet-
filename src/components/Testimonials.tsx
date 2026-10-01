@@ -2,6 +2,7 @@ import { MapPin, Plane, Quote, Star } from 'lucide-react'
 import { useState } from 'react'
 import { testimonialStats, testimonials } from '../content'
 import { Eyebrow, Reveal, SplitHeading } from '../effects/motion'
+import { LucidWave } from '../effects/LucidLine'
 
 type T = (typeof testimonials)[number]
 
@@ -11,13 +12,15 @@ export default function Testimonials() {
 
   return (
     <section id="testimonials" className="relative px-4 py-28 md:px-8 md:py-40">
+      {/* Lucid Line across the gap above (Platform's bottom padding + this section's top padding) */}
+      <LucidWave shape="rise" mirror className="absolute inset-x-0 -top-28 -z-1 h-56 md:-top-40 md:h-80" />
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-8 md:grid-cols-2 md:items-end">
           <div>
             <Reveal><Eyebrow>Testimonials</Eyebrow></Reveal>
             <SplitHeading
               text="Loved by agents, remembered by travellers"
-              className="text-[clamp(2.2rem,5.2vw,4.75rem)] font-semibold leading-[1.02] tracking-[-0.05em]"
+              className="text-[clamp(2.2rem,5.2vw,4.75rem)] font-semibold leading-[1.02] tracking-tighter"
             />
           </div>
           <Reveal delay={0.15}>
@@ -45,7 +48,7 @@ export default function Testimonials() {
         <div className="mt-16 grid gap-4 sm:grid-cols-3 md:gap-6">
           {testimonialStats.map((s, i) => (
             <Reveal key={s.label} delay={i * 0.1} className="glass rounded-[1.75rem] px-6 py-6 md:px-8 md:py-8">
-              <p className="text-[clamp(2.25rem,4vw,3.5rem)] font-semibold leading-none tracking-[-0.05em]">
+              <p className="text-[clamp(2.25rem,4vw,3.5rem)] font-semibold leading-none tracking-tighter">
                 {s.value}<span className="text-accent">{s.suffix}</span>
               </p>
               <p className="mt-2 text-white/70">{s.label}</p>
@@ -62,7 +65,7 @@ function Card({ t, tall, open, onToggle }: { t: T; tall: boolean; open: boolean;
     <article
       tabIndex={0}
       onClick={onToggle}
-      className={`group relative cursor-pointer overflow-hidden rounded-[2rem] ring-1 ring-white/15 outline-none focus-visible:ring-2 focus-visible:ring-accent ${tall ? 'aspect-[4/5]' : 'aspect-[5/4]'}`}
+      className={`group relative cursor-pointer overflow-hidden rounded-4xl ring-1 ring-white/15 outline-none focus-visible:ring-2 focus-visible:ring-accent ${tall ? 'aspect-4/5' : 'aspect-5/4'}`}
     >
       <img
         src={t.tripImg}
@@ -71,7 +74,7 @@ function Card({ t, tall, open, onToggle }: { t: T; tall: boolean; open: boolean;
         draggable={false}
         className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-110"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-brand/90 via-brand/20 to-transparent" />
+      <div className="absolute inset-0 bg-linear-to-t from-brand/90 via-brand/20 to-transparent" />
 
       <span className="glass absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-semibold">
         <Plane className="size-3.5 text-accent" /> {t.trip}

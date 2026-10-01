@@ -78,7 +78,7 @@ export default function Hero() {
         mx.set(e.clientX / window.innerWidth - 0.5)
         my.set(e.clientY / window.innerHeight - 0.5)
       }}
-      className="relative h-[100svh] min-h-[640px] overflow-hidden"
+      className="relative h-svh min-h-160 overflow-hidden"
     >
       {/* Sky */}
       <motion.div style={{ y: bgY, scale: bgScale, x: bgX, translateY: bgMY }} className="absolute inset-0">
@@ -96,7 +96,7 @@ export default function Hero() {
       </motion.div>
 
       {/* Headline sits between sky and foreground */}
-      <motion.div style={{ y: textY, opacity: textOpacity, x: textX, top: fit.top }} className="absolute inset-x-0 z-[2] flex justify-center">
+      <motion.div style={{ y: textY, opacity: textOpacity, x: textX, top: fit.top }} className="absolute inset-x-0 z-2 flex justify-center">
         <h1 style={{ fontSize: fit.font || undefined }} className="flex overflow-hidden text-[clamp(3.5rem,min(22vw,32vh),15rem)] font-semibold leading-none tracking-[-0.07em] text-white drop-shadow-[0_6px_24px_rgba(0,0,0,0.28)]">
           {'Unlock'.split('').map((c, i) => (
             <motion.span
@@ -113,7 +113,7 @@ export default function Hero() {
       </motion.div>
 
       {/* Foreground landscape */}
-      <motion.div style={{ y: fgY, x: fgX, bottom: -fit.drop }} className="pointer-events-none absolute inset-x-[-3%] bottom-0 z-[3]">
+      <motion.div style={{ y: fgY, x: fgX, bottom: -fit.drop }} className="pointer-events-none absolute inset-x-[-3%] bottom-0 z-3">
         <picture>
           <source media={MOBILE_MQ} srcSet="/banner-top-mobile.webp" />
           <motion.img
@@ -128,14 +128,14 @@ export default function Hero() {
       </motion.div>
 
       {/* Bottom fade into the fluid page background */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[4] h-40 bg-gradient-to-t from-brand/80 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-4 h-40 bg-linear-to-t from-brand/80 to-transparent" />
 
       {/* Glass info card */}
       <motion.div
         initial={{ opacity: 0, y: 40, filter: 'blur(12px)' }}
         animate={{ opacity: 1, y: 0, filter: 'blur(0px)', transitionEnd: { filter: 'none' } }}
         transition={{ duration: 1.2, delay: 1, ease }}
-        className="glass-orange absolute bottom-8 left-4 right-4 z-[5] rounded-[2rem] p-6 md:bottom-14 md:left-10 md:right-auto md:max-w-md md:p-7"
+        className="glass-orange absolute bottom-8 left-4 right-4 z-5 rounded-4xl p-6 md:bottom-14 md:left-10 md:right-auto md:max-w-md md:p-7"
       >
         <p className="mb-5 text-[clamp(1.125rem,1.65vw,1.6rem)] font-semibold leading-[1.3] tracking-[-0.03em]">
           Exclusive inventory, Higher commissions, and Seamless technology
@@ -148,7 +148,7 @@ export default function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.6 }}
-        className="glass absolute bottom-14 right-10 z-[5] hidden items-center gap-3 rounded-full py-2 pl-5 pr-2 text-sm font-semibold md:flex"
+        className="glass absolute bottom-14 right-10 z-5 hidden items-center gap-3 rounded-full py-2 pl-5 pr-2 text-sm font-semibold md:flex"
       >
         Learn More
         <span className="grid size-8 place-items-center rounded-full bg-white/15">

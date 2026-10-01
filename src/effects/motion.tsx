@@ -112,8 +112,8 @@ export function PillButton({ href, children, variant = 'cream' }: { href: string
   return (
     <Magnetic>
       <a href={href} className={`${base} ${skin}`}>
-        <span className="relative z-[2]">{children}</span>
-        <span className="relative z-[2] grid size-8 place-items-center rounded-full bg-accent text-white transition-transform duration-500 group-hover:rotate-45">
+        <span className="relative z-2">{children}</span>
+        <span className="relative z-2 grid size-8 place-items-center rounded-full bg-accent text-white transition-transform duration-500 group-hover:rotate-45">
           <ArrowUpRight className="size-4" strokeWidth={2.4} />
         </span>
       </a>

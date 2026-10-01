@@ -2,6 +2,7 @@ import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion
 import { useRef } from 'react'
 import { destinations } from '../content'
 import { Eyebrow, PillButton, Reveal, SplitHeading } from '../effects/motion'
+import { LucidWave } from '../effects/LucidLine'
 
 type D = (typeof destinations)[number]
 
@@ -15,12 +16,12 @@ function Card({ d, i, total, progress }: { d: D; i: number; total: number; progr
   const top = `calc(5.5rem + ${i * 14}px)`
 
   return (
-    <div className="sticky top-0 flex h-[100svh] items-start justify-center px-4 md:px-8" style={{ paddingTop: top }}>
+    <div className="sticky top-0 flex h-svh items-start justify-center px-4 md:px-8" style={{ paddingTop: top }}>
       <motion.article
         style={{ scale, height: `min(calc(100svh - ${top} - 1.5rem), 640px)` }}
-        className="glass-solid relative grid w-full max-w-6xl origin-top grid-rows-[auto_minmax(0,1fr)] overflow-hidden rounded-[2rem] md:grid-cols-2 md:grid-rows-1 md:rounded-[2.5rem]"
+        className="glass-solid relative grid w-full max-w-6xl origin-top grid-rows-[auto_minmax(0,1fr)] overflow-hidden rounded-4xl md:grid-cols-2 md:grid-rows-1 md:rounded-[2.5rem]"
       >
-        <div className="relative z-[1] flex min-h-0 flex-col justify-between gap-5 p-6 md:gap-6 md:p-12">
+        <div className="relative z-1 flex min-h-0 flex-col justify-between gap-5 p-6 md:gap-6 md:p-12">
           <div className="min-h-0">
             <p className="mb-2 text-sm font-semibold text-accent md:mb-3">0{i + 1} / 0{total}</p>
             <h3 className="text-[clamp(2.25rem,6vw,5.5rem)] font-semibold leading-none tracking-[-0.06em]">{d.name}</h3>
@@ -30,9 +31,9 @@ function Card({ d, i, total, progress }: { d: D; i: number; total: number; progr
         </div>
         <div className="relative min-h-0 overflow-hidden">
           <img src={d.img} alt={d.name} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-r from-brand/40 to-transparent md:from-brand/30" />
+          <div className="absolute inset-0 bg-linear-to-r from-brand/40 to-transparent md:from-brand/30" />
         </div>
-        <motion.div aria-hidden style={{ opacity: dim }} className="pointer-events-none absolute inset-0 z-[3] bg-brand" />
+        <motion.div aria-hidden style={{ opacity: dim }} className="pointer-events-none absolute inset-0 z-3 bg-brand" />
       </motion.article>
     </div>
   )
@@ -44,6 +45,8 @@ export default function Destinations() {
 
   return (
     <section id="destinations" className="relative">
+      {/* Lucid Line across the gap above (About's bottom padding + this section's top padding) */}
+      <LucidWave shape="fall" className="absolute inset-x-0 -top-16 -z-1 h-44 md:-top-24 md:h-64" />
       {/* Same width + gutters as the cards, so heading and copy line up with the card and its image column. */}
       <div className="px-4 pt-28 md:px-8 md:pt-40">
         <div className="mx-auto max-w-6xl">

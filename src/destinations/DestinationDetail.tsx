@@ -104,8 +104,8 @@ export default function DestinationDetail({
             transition={{ duration: 1.8, ease }}
             className="absolute inset-0 h-full w-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-brand via-brand/80 to-brand/25" />
-          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-brand/80 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-r from-brand via-brand/80 to-brand/25" />
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-linear-to-t from-brand/80 to-transparent" />
           <LucidWave
             shape="lift"
             draw="intro"
@@ -127,10 +127,10 @@ export default function DestinationDetail({
               transition={{ duration: 1, delay: 0.15, ease }}
               className="max-w-3xl"
             >
-              <h1 className="text-[clamp(2.6rem,6vw,5rem)] font-bold leading-[0.98] tracking-[-0.05em]">
+              <h1 className="text-[clamp(2.6rem,6vw,5rem)] font-bold leading-[0.98] tracking-tighter">
                 {name}
               </h1>
-              <p className="mt-3 bg-gradient-to-r from-[#ffb68c] to-accent bg-clip-text text-[clamp(1.25rem,2.2vw,1.75rem)] font-semibold tracking-[-0.03em] text-transparent">
+              <p className="mt-3 bg-linear-to-r from-[#ffb68c] to-accent bg-clip-text text-[clamp(1.25rem,2.2vw,1.75rem)] font-semibold tracking-[-0.03em] text-transparent">
                 {info.subtitle}
               </p>
               <p className="mt-4 max-w-xl text-base leading-relaxed text-white/75 md:text-lg">
@@ -177,7 +177,7 @@ export default function DestinationDetail({
             <LayoutGroup id="detail-tabs">
               <nav
                 aria-label={`${d.city} sections`}
-                className="flex min-w-0 flex-1 gap-1 overflow-x-auto [mask-image:linear-gradient(to_right,#000_85%,transparent)] [scrollbar-width:none] lg:[mask-image:none] [&::-webkit-scrollbar]:hidden"
+                className="flex min-w-0 flex-1 gap-1 overflow-x-auto mask-[linear-gradient(to_right,#000_85%,transparent)] scrollbar-none lg:mask-none [&::-webkit-scrollbar]:hidden"
               >
                 {tabs.map((t) => {
                   const on = tab === t.id;
@@ -226,10 +226,10 @@ export default function DestinationDetail({
               </nav>
             </LayoutGroup>
             <a
-              href="/get-started/market"
+              href="/partner-with-us"
               className="hidden shrink-0 items-center gap-2 rounded-full bg-cream px-5 py-2.5 text-sm font-bold text-ink transition-transform duration-300 hover:scale-[1.03] lg:inline-flex"
             >
-              Get Agency access
+              Sign Up
             </a>
           </div>
         </div>
@@ -386,7 +386,7 @@ function HelpCard({
   href: string;
 }) {
   return (
-    <div className="relative overflow-hidden rounded-[1.75rem] bg-gradient-to-br from-[#1d1a63] to-brand p-6 ring-1 ring-white/15">
+    <div className="relative overflow-hidden rounded-[1.75rem] bg-linear-to-br from-[#1d1a63] to-brand p-6 ring-1 ring-white/15">
       <LucidCorner className="absolute -bottom-2 -right-6 rotate-180 opacity-60" />
       <p className="text-lg font-semibold leading-snug tracking-tight">
         {title}
@@ -454,7 +454,7 @@ function CategoryChip({
       type="button"
       aria-pressed={on}
       onClick={onClick}
-      className={`inline-flex shrink-0 items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-colors ${on ? "border-accent bg-accent text-white" : "border-white/15 bg-white/[0.06] text-white/75 hover:border-white/30 hover:text-white"}`}
+      className={`inline-flex shrink-0 items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-colors ${on ? "border-accent bg-accent text-white" : "border-white/15 bg-white/6 text-white/75 hover:border-white/30 hover:text-white"}`}
     >
       {label}
       {mine && !on && (
@@ -548,15 +548,7 @@ function Overview({
     <div className="grid gap-8 lg:grid-cols-[minmax(0,2fr)_19rem]">
       <div className="min-w-0 space-y-14">
         <div>
-          <h2 className="text-[clamp(1.6rem,2.6vw,2.25rem)] font-semibold tracking-[-0.04em]">
-            Featured for you in {d.city}
-          </h2>
-          <p className="mt-1 text-white/60">
-            {mySpecialise.length
-              ? "A curated selection based on your preferences."
-              : `Everything you can offer your clients in ${d.city}.`}
-          </p>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-2">
             {featured.map((p, i) => {
               const c = copy[p];
               const mine = mySpecialise.includes(p);
@@ -569,7 +561,7 @@ function Overview({
                   initial={{ opacity: 0, y: 24 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: i * 0.07, ease }}
-                  className={`group glass-solid relative flex flex-col overflow-hidden rounded-[1.5rem] ${isOpen(p) ? "cursor-pointer ring-white/25 transition-shadow hover:ring-1" : ""} ${wide ? "sm:col-span-2 sm:flex-row" : ""} ${mine ? "ring-1 ring-accent/60" : ""}`}
+                  className={`group glass-solid relative flex flex-col overflow-hidden rounded-3xl ${isOpen(p) ? "cursor-pointer ring-white/25 transition-shadow hover:ring-1" : ""} ${wide ? "sm:col-span-2 sm:flex-row" : ""} ${mine ? "ring-1 ring-accent/60" : ""}`}
                 >
                   <div
                     className={`relative h-44 shrink-0 overflow-hidden ${wide ? "sm:h-auto sm:min-h-44 sm:w-1/2" : ""}`}
@@ -630,9 +622,9 @@ function Overview({
         </div>
 
         {/* Journeys prompt */}
-        {/* <div className="relative overflow-hidden rounded-[2rem] ring-1 ring-white/15">
+        {/* <div className="relative overflow-hidden rounded-4xl ring-1 ring-white/15">
           <img src={big(d.img)} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-r from-brand/95 via-brand/75 to-brand/20" />
+          <div className="absolute inset-0 bg-linear-to-r from-brand/95 via-brand/75 to-brand/20" />
           <LucidWave shape="rise" className="absolute inset-0 hidden sm:block" />
           <div className="relative max-w-lg p-8 md:p-10">
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-accent">More than a destination</p>
@@ -649,7 +641,7 @@ function Overview({
           <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {guide.map((g) => (
               <button key={g.title} type="button" disabled={!isOpen('travel-guide')} onClick={() => onTab('travel-guide')} className="group text-left disabled:cursor-default">
-                <div className="relative aspect-[4/3] overflow-hidden rounded-[1.25rem] ring-1 ring-white/10">
+                <div className="relative aspect-4/3 overflow-hidden rounded-[1.25rem] ring-1 ring-white/10">
                   <img src={g.img} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.2s] group-hover:scale-110" />
                 </div>
                 <p className="mt-3 font-semibold tracking-tight">{g.title}</p>
@@ -674,7 +666,7 @@ function Overview({
             href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(nameOf(d))}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-5 flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/[0.05] py-6 text-sm font-semibold text-white/80 transition-colors hover:bg-white/10"
+            className="mt-5 flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 py-6 text-sm font-semibold text-white/80 transition-colors hover:bg-white/10"
           >
             <MapPin className="size-4 text-accent" /> View on map
           </a>
@@ -744,7 +736,7 @@ function Flights({
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.97 }}
                   transition={{ duration: 0.4, ease }}
-                  className={`glass-solid rounded-[1.5rem] p-5 ${a.i === 0 ? "ring-1 ring-accent/60" : ""}`}
+                  className={`glass-solid rounded-3xl p-5 ${a.i === 0 ? "ring-1 ring-accent/60" : ""}`}
                 >
                   <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
                     <div className="w-full min-w-0 sm:w-40">
@@ -757,7 +749,7 @@ function Flights({
                         {a.name}
                       </p>
                     </div>
-                    <div className="flex min-w-[14rem] flex-1 items-center gap-3">
+                    <div className="flex min-w-56 flex-1 items-center gap-3">
                       <span className="text-lg font-semibold tabular-nums">
                         {origin?.code ?? "ANY"}
                       </span>
@@ -939,7 +931,7 @@ function Hotels({
       <div
         role="group"
         aria-label="Hotel category"
-        className="-mx-4 mb-6 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] md:mx-0 md:flex-wrap md:px-0 [&::-webkit-scrollbar]:hidden"
+        className="-mx-4 mb-6 flex gap-2 overflow-x-auto px-4 pb-1 scrollbar-none md:mx-0 md:flex-wrap md:px-0 [&::-webkit-scrollbar]:hidden"
       >
         <CategoryChip
           label="All hotels"
@@ -979,13 +971,13 @@ function Hotels({
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.97 }}
                   transition={{ duration: 0.4, ease }}
-                  className="group glass-solid relative flex cursor-pointer flex-col overflow-hidden rounded-[1.5rem] ring-white/25 transition-shadow hover:ring-1 sm:flex-row"
+                  className="group glass-solid relative flex cursor-pointer flex-col overflow-hidden rounded-3xl ring-white/25 transition-shadow hover:ring-1 sm:flex-row"
                 >
                   <a
                     href={hotelUrl(h.name)}
                     onClick={linkTo(hotelUrl(h.name))}
                     aria-label={h.name}
-                    className="relative block aspect-[16/10] shrink-0 overflow-hidden sm:aspect-auto sm:w-56"
+                    className="relative block aspect-16/10 shrink-0 overflow-hidden sm:aspect-auto sm:w-56"
                   >
                     <img
                       src={hotelImages[h.i % hotelImages.length]}
@@ -1132,9 +1124,9 @@ function Experiences({
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: i * 0.07, ease }}
-            className="group glass-solid relative flex cursor-pointer flex-col overflow-hidden rounded-[1.5rem] ring-white/25 transition-shadow hover:ring-1"
+            className="group glass-solid relative flex cursor-pointer flex-col overflow-hidden rounded-3xl ring-white/25 transition-shadow hover:ring-1"
           >
-            <div className="relative aspect-[4/3] overflow-hidden">
+            <div className="relative aspect-4/3 overflow-hidden">
               <img
                 src={e.img ?? pool[i % pool.length]}
                 alt={e.title}
@@ -1205,7 +1197,7 @@ function Experiences({
 //           <p className="max-w-2xl text-lg leading-relaxed text-white/80">{info.intro}</p>
 //           <div className="mt-8 grid gap-4 sm:grid-cols-2">
 //             {guideCards(d, info).map((g, i) => (
-//               <motion.div key={g.title} initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: i * 0.07, ease }} className="glass-solid overflow-hidden rounded-[1.5rem]">
+//               <motion.div key={g.title} initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: i * 0.07, ease }} className="glass-solid overflow-hidden rounded-3xl">
 //                 <img src={g.img} alt="" loading="lazy" decoding="async" className="aspect-[16/9] w-full object-cover" />
 //                 <div className="p-5">
 //                   <p className="font-semibold tracking-tight">{g.title}</p>

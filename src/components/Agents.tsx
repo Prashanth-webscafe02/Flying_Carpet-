@@ -2,6 +2,7 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import { useRef } from 'react'
 import { agentsImg } from '../content'
 import { Eyebrow, PillButton, Reveal, SplitHeading } from '../effects/motion'
+import { LucidWave } from '../effects/LucidLine'
 
 const regions = ['India', 'South Africa', 'North America', 'Flights', 'Hotels', 'Experiences', 'Transfers']
 
@@ -22,14 +23,16 @@ export default function Agents() {
           loading="lazy"
           className="absolute inset-0 h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-brand/60 via-brand/20 to-accent/30" />
+        <div className="absolute inset-0 bg-linear-to-br from-brand/60 via-brand/20 to-accent/30" />
+        {/* Lucid Line over the photo, passing behind the card (stops above the marquee ribbon) */}
+        <LucidWave shape="lift" className="absolute inset-x-0 top-0 bottom-15 hidden md:block" />
 
-        <div className="relative grid min-h-[640px] items-center p-4 md:p-12">
+        <div className="relative grid min-h-160 items-center p-4 md:p-12">
           <div className="glass-strong max-w-2xl rounded-[2.5rem] p-7 md:p-12">
             <Eyebrow>For agents</Eyebrow>
             <SplitHeading
               text="Where agents access more value"
-              className="text-[clamp(2.2rem,5vw,4.5rem)] font-semibold leading-[1.02] tracking-[-0.05em]"
+              className="text-[clamp(2.2rem,5vw,4.5rem)] font-semibold leading-[1.02] tracking-tighter"
             />
             <Reveal delay={0.15}>
               <p className="mt-5 text-lg leading-relaxed text-white/80">
