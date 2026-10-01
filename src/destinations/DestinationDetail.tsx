@@ -21,21 +21,20 @@ import { REGISTER_URL } from "../content";
 import { loadAnswers } from "../get-started/answers";
 import { steps } from "../get-started/steps";
 import ChatFab from "./ChatFab";
+import FlightsInfo from "./FlightsInfo";
 import { productsOf, whatsapp, type Destination, type ProductId } from "./data";
 import {
   categoryLabel,
   details,
   hotelImages,
   images,
-  origins,
   type Detail,
   type HotelCategory,
 } from "./details";
 import { mobility } from "./mobility";
 import { CarRentalInfo, TransfersInfo } from "./MobilityViews";
-import ProductInfoPanel from "./ProductInfoPanel";
 import { linkTo, slug } from "./navigate";
-import { flightOptionsEnabled, isOpen, tabs, type Tab } from "./tabs";
+import { isOpen, tabs, type Tab } from "./tabs";
 
 const big = (src: string) => src.replace("w=900", "w=1800");
 const nameOf = (d: Destination) =>
@@ -86,7 +85,6 @@ export default function DestinationDetail({
 
   const enquire = (what: string) =>
     whatsapp(`Hi! I'd like ${what} in ${name} for my clients.`);
-  const origin = origins[answers.market[0]];
   const marketTitle = steps[0].choices
     .find((c) => c.id === answers.market[0])
     ?.title.trim();
@@ -252,16 +250,7 @@ export default function DestinationDetail({
                 />
               )}
               {tab === "flights" && (
-                <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1.3fr)_minmax(20rem,0.7fr)] lg:gap-12">
-                  <Flights
-                    d={d}
-                    info={info}
-                    origin={origin}
-                    onBack={() => go(null)}
-                    enquire={enquire}
-                  />
-                  <ProductInfoPanel product="flights" />
-                </div>
+                <FlightsInfo d={d} onBack={() => go(null)} />
               )}
               {tab === "hotels" && (
                 <Hotels
@@ -340,32 +329,6 @@ function ViewHead({
 // either would shrink the ::after back to the button.
 const stretched =
   "after:absolute after:inset-0 after:rounded-[inherit] after:content-['']";
-
-function Cta({
-  href,
-  children,
-  variant = "accent",
-  stretch = false,
-}: {
-  href: string;
-  children: ReactNode;
-  variant?: "accent" | "ghost";
-  stretch?: boolean;
-}) {
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={`group/cta inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full py-2 pl-4 pr-2 text-sm font-semibold transition ${variant === "accent" ? `bg-accent shadow-[0_10px_30px_-10px_rgb(232_101_37/0.9)] hover:bg-[#f0763a] ${stretch ? "group-hover:bg-[#f0763a]" : ""}` : "glass hover:bg-white/15"} ${stretch ? stretched : ""}`}
-    >
-      {children}
-      <span className="grid size-6 place-items-center rounded-full bg-white/20 transition-transform duration-300 group-hover/cta:translate-x-0.5">
-        <ArrowRight className="size-3.5" />
-      </span>
-    </a>
-  );
-}
 
 function Chip({ children, on = false }: { children: ReactNode; on?: boolean }) {
   return (
@@ -679,153 +642,6 @@ function Overview({
         />
       </div>
     </div>
-  );
-}
-
-/* ---------- flights ---------- */
-
-function Flights({
-  d,
-  info,
-  origin,
-  onBack,
-  enquire,
-}: {
-  d: Destination;
-  info: Detail;
-  origin?: { city: string; code: string };
-  onBack: () => void;
-  enquire: Enquire;
-}) {
-  const [sort, setSort] = useState<"recommended" | "az">("recommended");
-  const list = useMemo(() => {
-    const l = info.airlines.map((a, i) => ({ ...a, i }));
-    return sort === "az"
-      ? [...l].sort((a, b) => a.name.localeCompare(b.name))
-      : l;
-  }, [info, sort]);
-  const from = origin ? `${origin.city} (${origin.code})` : "Your city";
-
-  return (
-    <>
-      <ViewHead
-        d={d}
-        onBack={onBack}
-        title={`Flights to ${d.city}`}
-        sub={`Access a wide range of airlines, routes and flexible options to get your clients to ${d.city} and beyond.`}
-      />
-      <div className="grid gap-6">
-        <div className="min-w-0">
-          <ResultsBar
-            count={list.length}
-            noun="airline"
-            note={`${from} → ${d.city} (${info.airport}) · fares confirmed by our team`}
-            sorts={[
-              ["recommended", "Recommended"],
-              ["az", "A–Z"],
-            ]}
-            sort={sort}
-            onSort={(s) => setSort(s as typeof sort)}
-          />
-          <motion.div layout className="space-y-3">
-            <AnimatePresence mode="popLayout" initial={false}>
-              {list.map((a) => (
-                <motion.article
-                  key={a.name}
-                  layout
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.97 }}
-                  transition={{ duration: 0.4, ease }}
-                  className={`glass-solid rounded-3xl p-5 ${a.i === 0 ? "ring-1 ring-accent/60" : ""}`}
-                >
-                  <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
-                    <div className="w-full min-w-0 sm:w-40">
-                      {a.i === 0 && (
-                        <span className="mb-1.5 inline-block rounded-full bg-accent px-2 py-0.5 text-[0.62rem] font-bold uppercase tracking-[0.08em]">
-                          Recommended
-                        </span>
-                      )}
-                      <p className="text-lg font-semibold tracking-tight">
-                        {a.name}
-                      </p>
-                    </div>
-                    <div className="flex min-w-56 flex-1 items-center gap-3">
-                      <span className="text-lg font-semibold tabular-nums">
-                        {origin?.code ?? "ANY"}
-                      </span>
-                      <div className="relative flex-1 text-center">
-                        <div className="h-px bg-white/25" />
-                        <Plane className="absolute -top-2 left-1/2 size-4 -translate-x-1/2 bg-transparent text-accent" />
-                        <p className="mt-3 text-xs text-white/60">
-                          {a.via
-                            ? `1 stop · ${a.via}`
-                            : "Direct & network routes"}
-                        </p>
-                      </div>
-                      <span className="text-lg font-semibold tabular-nums">
-                        {info.airport}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-4 sm:ml-auto">
-                      <div className="text-right">
-                        <p className="text-xs text-white/50">Fares</p>
-                        <p className="text-sm font-semibold">Agent rates</p>
-                      </div>
-                      {flightOptionsEnabled ? (
-                        <Cta
-                          href={enquire(
-                            `${a.name} flight options${origin ? ` from ${origin.city}` : ""}`,
-                          )}
-                        >
-                          View options
-                        </Cta>
-                      ) : (
-                        <span
-                          aria-disabled="true"
-                          title="Coming soon"
-                          className="inline-flex shrink-0 cursor-not-allowed items-center gap-2 whitespace-nowrap rounded-full bg-white/10 py-2 pl-4 pr-2 text-sm font-semibold text-white/40"
-                        >
-                          View options
-                          <span className="grid size-6 place-items-center rounded-full bg-white/10">
-                            <ArrowRight className="size-3.5" />
-                          </span>
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                  <div className="mt-4 flex flex-wrap gap-1.5 border-t border-white/10 pt-3">
-                    {[
-                      "Baggage options",
-                      "In-flight meals",
-                      "Flexible fares",
-                    ].map((t) => (
-                      <Chip key={t}>{t}</Chip>
-                    ))}
-                  </div>
-                </motion.article>
-              ))}
-            </AnimatePresence>
-          </motion.div>
-        </div>
-
-        <div className="space-y-4 lg:sticky lg:top-28 lg:self-start">
-          <WhyCard
-            title="Why book flights with Flying Carpet?"
-            points={[
-              "Wide choice of global airlines",
-              "Competitive fares and flexible options",
-              "Easy add-ons with hotels, experiences, transfers and car rentals",
-              "Dedicated agent support",
-            ]}
-          />
-          <HelpCard
-            title="Need help finding the right flight?"
-            href={REGISTER_URL}
-          />
-        </div>
-      </div>
-    </>
   );
 }
 

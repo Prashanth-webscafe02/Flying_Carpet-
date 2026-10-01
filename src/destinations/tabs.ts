@@ -23,7 +23,7 @@ export const tabs: {
   icon: LucideIcon;
   disabled?: boolean;
 }[] = [
-  { id: "flights", label: "Flights", icon: Plane, disabled: true },
+  { id: "flights", label: "Flights", icon: Plane },
   { id: "hotels", label: "Hotels", icon: BedDouble },
   { id: "experiences", label: "Experiences", icon: Ticket },
   { id: "transfers", label: "Transfers", icon: CarFront, disabled: false },
@@ -33,6 +33,3 @@ export const isTab = (t?: string): t is Tab => tabs.some((x) => x.id === t);
 /** A tab that exists and is switched on. */
 export const isOpen = (t?: string): t is Tab =>
   tabs.some((x) => x.id === t && !x.disabled);
-
-// Flights: the per-airline "View options" button is switched off for now.
-export const flightOptionsEnabled = false;

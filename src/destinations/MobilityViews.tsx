@@ -15,6 +15,7 @@ import {
   transferHero,
   vehiclePhotos,
 } from "./mobility";
+import LogoMarquee from "./LogoMarquee";
 import ProductInfoPanel from "./ProductInfoPanel";
 
 type Props = {
@@ -158,7 +159,7 @@ export function CarRentalInfo({ d, info, onBack }: Props) {
               title="Rental car companies"
               note={`${m.companies.length} in ${d.city}`}
             >
-              <LogoMarquee companies={m.companies} />
+              <LogoMarquee names={m.companies} logos={companyLogos} label="Rental car companies" />
             </Section>
             <Section
               title="Car types"
@@ -284,53 +285,5 @@ function Tile({
       </div>
       <p className="px-4 py-3 font-semibold tracking-tight">{label}</p>
     </motion.div>
-  );
-}
-
-// Rental company logos gliding past in an endless loop. The list is repeated until one lap is long
-// enough to fill the row, then doubled so the loop has no seam.
-function LogoMarquee({ companies }: { companies: string[] }) {
-  const lap = Array.from(
-    { length: Math.ceil(10 / companies.length) },
-    () => companies,
-  ).flat();
-  const fade =
-    "linear-gradient(to right, transparent, #000 8%, #000 92%, transparent)";
-  return (
-    <div
-      className="overflow-hidden"
-      style={{ maskImage: fade, WebkitMaskImage: fade }}
-    >
-      <ul className="sr-only">
-        {companies.map((c) => (
-          <li key={c}>{c}</li>
-        ))}
-      </ul>
-      <div
-        aria-hidden
-        className="marquee flex w-max hover:[animation-play-state:paused]"
-      >
-        {[...lap, ...lap].map((c, i) => (
-          <span
-            key={i}
-            className="mr-3 grid h-20 w-40 shrink-0 place-items-center rounded-2xl bg-white px-5"
-          >
-            {companyLogos[c] ? (
-              <img
-                src={companyLogos[c]}
-                alt=""
-                loading="lazy"
-                decoding="async"
-                className="max-h-10 w-full object-contain"
-              />
-            ) : (
-              <span className="text-center text-sm font-extrabold uppercase leading-tight tracking-[0.04em] text-ink">
-                {c}
-              </span>
-            )}
-          </span>
-        ))}
-      </div>
-    </div>
   );
 }

@@ -64,10 +64,22 @@ function load(): { answers: Answers; visited: StepId[] } {
   return { answers: empty, visited: [] };
 }
 
+// The site's buttons all link to the first step. Coming back with saved progress, pick up at the
+// first step not yet completed instead of starting over (or go straight to the destinations when
+// every step is done). A link to a specific step, such as "Edit" on the destinations page, is kept.
+const ALL_DONE = -1;
+function resumeIndex(visited: StepId[]) {
+  const i = indexFromPath();
+  if (i !== 0 || window.location.search || !visited.length) return i;
+  const next = steps.findIndex((s) => !visited.includes(s.id));
+  return next === -1 ? ALL_DONE : next;
+}
+
 export default function GetStarted() {
-  const [index, setIndex] = useState(indexFromPath);
-  const [dir, setDir] = useState(1);
   const [{ answers, visited }, setState] = useState(load);
+  const [resume] = useState(() => resumeIndex(visited));
+  const [index, setIndex] = useState(resume === ALL_DONE ? 0 : resume);
+  const [dir, setDir] = useState(1);
 
   useEffect(() => {
     try {
@@ -79,6 +91,10 @@ export default function GetStarted() {
 
   // Normalise the URL on first load and follow browser back/forward.
   useEffect(() => {
+    if (resume === ALL_DONE) {
+      window.location.replace("/destinations");
+      return;
+    }
     if (window.location.pathname !== pathFor(index))
       window.history.replaceState(null, "", pathFor(index));
     const onPop = () => setIndex(indexFromPath());

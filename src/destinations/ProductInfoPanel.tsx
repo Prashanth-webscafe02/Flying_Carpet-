@@ -1,7 +1,7 @@
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 
-const products = [
+export const products = [
   {
     id: "flights",
     title: "Flights",
