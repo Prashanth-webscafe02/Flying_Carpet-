@@ -270,6 +270,7 @@ export default function DestinationDetail({
                   myHotels={answers.hotels}
                   market={marketTitle}
                   onBack={() => go(null)}
+                  enquire={enquire}
                 />
               )}
               {tab === "experiences" && (
@@ -398,7 +399,7 @@ function HelpCard({
         href={href}
         className="mt-5 inline-flex items-center gap-2 rounded-full bg-cream px-4 py-2 text-sm font-bold text-ink transition-transform duration-300 hover:scale-[1.03]"
       >
-        <ArrowRight className="size-4 text-accent" /> Chat with Us
+        <ArrowRight className="size-4 text-accent" /> Get Agency Access
       </a>
     </div>
   );
@@ -893,12 +894,14 @@ function Hotels({
   myHotels,
   market,
   onBack,
+  enquire,
 }: {
   d: Destination;
   info: Detail;
   myHotels: string[];
   market?: string;
   onBack: () => void;
+  enquire: Enquire;
 }) {
   const [cats, setCats] = useState<string[]>([]);
   const available = (Object.keys(categoryLabel) as HotelCategory[]).filter(
@@ -917,7 +920,6 @@ function Hotels({
   }, [info, cats, myHotels]);
   const hotelUrl = (name: string) =>
     `/destinations/${d.id}/hotels/${slug(name)}`;
-  const experiencesUrl = `/destinations/${d.id}/experiences`;
 
   return (
     <>
@@ -1079,11 +1081,12 @@ function Hotels({
                 Turn stays into bigger journeys.
               </p>
               <a
-                href={experiencesUrl}
-                onClick={linkTo(experiencesUrl)}
+                href={enquire("a package with flights and hotels")}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-accent"
               >
-                Experiences <ArrowRight className="size-4" />
+                Explore packages <ArrowRight className="size-4" />
               </a>
             </div>
           </div>

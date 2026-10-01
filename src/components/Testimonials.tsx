@@ -1,8 +1,8 @@
 import { MapPin, Plane, Quote, Star } from 'lucide-react'
 import { useState } from 'react'
 import { testimonialStats, testimonials } from '../content'
-import { Eyebrow, Reveal, SplitHeading } from '../effects/motion'
 import { LucidWave } from '../effects/LucidLine'
+import { Eyebrow, Reveal, SplitHeading } from '../effects/motion'
 
 type T = (typeof testimonials)[number]
 
@@ -71,6 +71,7 @@ function Card({ t, tall, open, onToggle }: { t: T; tall: boolean; open: boolean;
         src={t.tripImg}
         alt=""
         loading="lazy"
+        decoding="async"
         draggable={false}
         className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-110"
       />
