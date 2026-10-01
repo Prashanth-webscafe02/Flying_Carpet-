@@ -167,6 +167,7 @@ export default function FlightsInfo({
           </div>
           <a
             href={REGISTER_URL}
+            target="_blank"
             className="inline-flex shrink-0 items-center gap-3 self-start rounded-full bg-cream py-1.5 pl-5 pr-1.5 font-bold tracking-tight text-ink shadow-[0_10px_40px_-8px_rgb(232_101_37/0.7)] transition-transform duration-500 hover:scale-[1.04] md:self-auto"
           >
             Sign Up

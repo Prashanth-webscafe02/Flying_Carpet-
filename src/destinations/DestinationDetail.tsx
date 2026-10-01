@@ -224,7 +224,8 @@ export default function DestinationDetail({
               </nav>
             </LayoutGroup>
             <a
-              href="/partner-with-us"
+              href={REGISTER_URL}
+              target="_blank"
               className="hidden shrink-0 items-center gap-2 rounded-full bg-cream px-5 py-2.5 text-sm font-bold text-ink transition-transform duration-300 hover:scale-[1.03] lg:inline-flex"
             >
               Sign Up
@@ -360,6 +361,7 @@ function HelpCard({
       )}
       <a
         href={href}
+        target="_blank"
         className="mt-5 inline-flex items-center gap-2 rounded-full bg-cream px-4 py-2 text-sm font-bold text-ink transition-transform duration-300 hover:scale-[1.03]"
       >
         <ArrowRight className="size-4 text-accent" /> Get Agency Access

@@ -111,6 +111,7 @@ export function CarRentalInfo({ d, info, onBack }: Props) {
           </p>
           <a
             href={REGISTER_URL}
+            target="_blank"
             className="mt-6 inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold transition hover:bg-[#f0763a]"
           >
             <ArrowRight className="size-4" /> Get Agency Access

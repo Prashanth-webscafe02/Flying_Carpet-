@@ -10,7 +10,7 @@ export const nav = [
 ];
 
 // The header's "Sign Up" button: the agency registration form (src/signup).
-export const REGISTER_URL = "/partner-with-us";
+export const REGISTER_URL = "https://www.flyingcarpet.travel/partner-with-us";
 
 // Reason-to-believe line used in the ads (campaign deck, "Gives a reason to believe").
 export const proofLine =

@@ -104,14 +104,14 @@ export function Magnetic({ children, strength = 0.3 }: { children: ReactNode; st
 }
 
 // Pill CTA from the original (label + round arrow chip), rendered as liquid glass or solid cream.
-export function PillButton({ href, children, variant = 'cream' }: { href: string; children: ReactNode; variant?: 'cream' | 'glass' }) {
+export function PillButton({ href, children, variant = 'cream', target }: { href: string; children: ReactNode; variant?: 'cream' | 'glass'; target?: string }) {
   const base = 'group inline-flex items-center gap-3 rounded-full py-1.5 pl-6 pr-1.5 text-[0.95rem] font-bold tracking-tight whitespace-nowrap transition-transform duration-500 hover:scale-[1.04]'
   const skin = variant === 'cream'
     ? 'bg-cream text-ink shadow-[0_10px_40px_-8px_rgb(232_101_37/0.7)]'
     : 'glass-strong sheen text-white'
   return (
     <Magnetic>
-      <a href={href} className={`${base} ${skin}`}>
+      <a href={href} target={target} className={`${base} ${skin}`}>
         <span className="relative z-2">{children}</span>
         <span className="relative z-2 grid size-8 place-items-center rounded-full bg-accent text-white transition-transform duration-500 group-hover:rotate-45">
           <ArrowUpRight className="size-4" strokeWidth={2.4} />
