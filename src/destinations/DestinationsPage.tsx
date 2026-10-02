@@ -399,6 +399,7 @@ export default function DestinationsPage() {
                   </p>
                   <a
                     href={REGISTER_URL}
+                    target="_blank"
                     className="mt-6 inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold transition hover:brightness-110"
                   >
                     <ArrowRight className="size-4" /> Get Agency Access
@@ -447,6 +448,7 @@ export default function DestinationsPage() {
                 </p>
                 <a
                   href={REGISTER_URL}
+                  target="_blank"
                   className="group mt-7 inline-flex items-center gap-3 rounded-full bg-cream py-1.5 pl-5 pr-1.5 font-bold tracking-tight text-ink shadow-[0_10px_40px_-8px_rgb(232_101_37/0.7)] transition-transform duration-500 hover:scale-[1.04]"
                 >
                   Get Agency Access

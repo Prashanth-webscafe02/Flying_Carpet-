@@ -75,7 +75,7 @@ export default function Header() {
             Login
           </a>
           <div className="hidden sm:block">
-            <PillButton href={REGISTER_URL}>Sign Up</PillButton>
+            <PillButton href={REGISTER_URL} target="_blank">Sign Up</PillButton>
           </div>
         </div>
 
@@ -117,7 +117,7 @@ export default function Header() {
               </motion.a>
             ))}
             <div className="mt-2 flex items-center gap-2 border-t border-white/10 px-1 pt-3">
-              <a href={REGISTER_URL} className="flex-1 rounded-full bg-cream px-4 py-3 text-center font-bold text-ink">
+              <a href={REGISTER_URL} target="_blank" className="flex-1 rounded-full bg-cream px-4 py-3 text-center font-bold text-ink">
                 Sign Up
               </a>
               <a href={`${home}#`} onClick={() => setOpen(false)} className="rounded-full px-5 py-3 font-semibold ring-1 ring-white/20">
