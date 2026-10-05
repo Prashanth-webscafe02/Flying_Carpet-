@@ -49,7 +49,7 @@ import ProductInfoPanel from "./ProductInfoPanel";
 import { bigPhoto, countryName, type Destination } from "./data";
 import {
   categoryLabel,
-  details,
+  detailFor,
   hotelImages,
   images,
   type Detail,
@@ -275,7 +275,7 @@ export default function HotelDetail({
   d: Destination;
   hotel: Hotel;
 }) {
-  const info = details[d.id];
+  const info = detailFor(d.id);
   const index = info.hotels.indexOf(hotel);
   const country = countryName(d.country);
   const facts = hotelFacts[hotel.name] ?? {};

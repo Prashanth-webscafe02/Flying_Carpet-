@@ -28,7 +28,7 @@ import EmptyCategory from "./EmptyCategory";
 import { linesFor } from "./lines";
 import {
   categoryLabel,
-  details,
+  detailFor,
   hotelImages,
   images,
   type Detail,
@@ -52,7 +52,7 @@ export default function DestinationDetail({
   d: Destination;
   initialTab: Tab | null;
 }) {
-  const info = details[d.id];
+  const info = detailFor(d.id);
   const [{ answers }] = useState(loadAnswers);
   const [tab, setTab] = useState<Tab | null>(initialTab);
   const tabsRef = useRef<HTMLDivElement>(null);
@@ -151,10 +151,9 @@ export default function DestinationDetail({
               className="mt-7 flex flex-wrap gap-2"
             >
               {[
-                {
-                  icon: Plane,
-                  text: `${info.airlines.length} airlines into ${info.airport}`,
-                },
+                ...(info.airlines.length
+                  ? [{ icon: Plane, text: `${info.airlines.length} airlines into ${info.airport}` }]
+                  : []),
                 { icon: BedDouble, text: "Hotels from luxury to value" },
                 { icon: Sparkles, text: "Tours and activities" },
                 { icon: CarFront, text: "Airport transfers" },

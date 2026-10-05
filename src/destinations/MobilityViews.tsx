@@ -30,6 +30,14 @@ type Props = {
 // (No search, price filter, categories, transfer types, fares, result cards or Book Now.)
 export function TransfersInfo({ d, info, onBack }: Props) {
   const m = mobility[d.id];
+  if (!m) {
+    return (
+      <>
+        <Head d={d} onBack={onBack} title={`Transfers in ${d.city}`} />
+        <EmptyCategory id="transfers" city={d.city} />
+      </>
+    );
+  }
   const sea = info.transferMode === "sea";
   const minibusImage =
     "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&w=900&q=80";

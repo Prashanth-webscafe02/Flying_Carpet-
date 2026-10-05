@@ -42,6 +42,7 @@ import {
   type Destination,
   type ProductId,
 } from "./data";
+import { linesFor } from "./lines";
 import { linkTo } from "./navigate";
 
 const PAGE = 8;
@@ -510,7 +511,7 @@ function Card({
       <div className="flex flex-1 flex-col p-5">
         <h3 className="text-xl font-semibold tracking-tight">{name}</h3>
         <p className="mt-1 text-sm leading-relaxed text-white/65">
-          {d.tagline}
+          {linesFor(d.id)?.[0] ?? d.tagline}
         </p>
         <ul className="mt-4 flex flex-wrap gap-1.5">
           {productsOf(d).map((p) => {

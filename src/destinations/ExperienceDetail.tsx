@@ -24,7 +24,7 @@ import { SectionTabs, SectionTitle } from "./AgentRates";
 import Gallery from "./Gallery";
 import ProductInfoPanel from "./ProductInfoPanel";
 import { bigPhoto, countryName, type Destination } from "./data";
-import { details, images, type Experience } from "./details";
+import { detailFor, images, type Experience } from "./details";
 import {
   defaultLanguages,
   defaultTicket,
@@ -46,7 +46,7 @@ export default function ExperienceDetail({
   d: Destination;
   experience: Experience;
 }) {
-  const info = details[d.id];
+  const info = detailFor(d.id);
   const index = info.experiences.indexOf(e);
   const content = experienceInfo[e.title];
   const country = countryName(d.country);

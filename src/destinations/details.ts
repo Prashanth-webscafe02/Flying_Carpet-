@@ -58,6 +58,10 @@ const dubai = 'Dubai (DXB)'
 const istanbul = 'Istanbul (IST)'
 const singapore = 'Singapore (SIN)'
 
+/** Details for a destination, or an empty set while it has no page content yet (new destinations). */
+export const detailFor = (id: string): Detail =>
+  details[id] ?? { subtitle: '', intro: '', airport: '', airportName: '', airlines: [], areas: [], hotels: [], experiences: [], bestTime: '' }
+
 export const details: Record<string, Detail> = {
   dubai: {
     subtitle: 'A city of possibilities',
