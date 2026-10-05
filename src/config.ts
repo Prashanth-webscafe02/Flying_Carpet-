@@ -8,8 +8,12 @@ export const PLACEHOLDER = "#";
 export const REGISTER_URL = "https://www.flyingcarpet.travel/partner-with-us";
 /** Login page on the platform. */
 export const LOGIN_URL = PLACEHOLDER;
-/** WhatsApp customer care number, digits only with country code (e.g. 27…). Empty until the client sends it. */
-export const WHATSAPP_NUMBER = "";
+/**
+ * WhatsApp customer care number, digits only with country code (e.g. 27…).
+ * DUMMY for now: +1 555 010 0100 is in the US range reserved for fiction, so the chat links open
+ * WhatsApp but reach nobody. Replace it with the client's number before going live (G17).
+ */
+export const WHATSAPP_NUMBER = "15550100100";
 /** Freshdesk live chat details for the WhatsApp line. Null until the client sends them. */
 export const FRESHDESK: { url: string } | null = null;
 export const TERMS_URL = PLACEHOLDER;
