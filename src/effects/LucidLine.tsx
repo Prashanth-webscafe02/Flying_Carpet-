@@ -27,6 +27,10 @@ const GLINT_PERIOD = 7; // seconds between glints
 const GLINT_TRAVEL = 3.2; // seconds a glint takes to cross
 
 // Layout-space box of `el` inside `root` (offsets ignore transforms, so parallax can't skew it).
+// The Lucid Line's colours (G13, the client's visual identity): gold first, light gold for dots and glints.
+const GOLD = "#e8b04b";
+const GOLD_LIGHT = "#f6d98b";
+
 function boxWithin(el: HTMLElement, root: HTMLElement): Box {
   let top = 0;
   let left = 0;
@@ -253,23 +257,23 @@ function LucidPath({
         ref={shadeRef}
         fill="none"
         stroke="rgb(11 9 69)"
-        strokeOpacity={0.16}
-        strokeWidth={4}
+        strokeOpacity={0.32}
+        strokeWidth={5}
         style={{ visibility: "hidden" }}
       />
       <path
         ref={lineRef}
         fill="none"
-        stroke="white"
-        strokeOpacity={0.9}
-        strokeWidth={1.25}
+        stroke={GOLD}
+        strokeOpacity={0.95}
+        strokeWidth={1.6}
         style={{ visibility: "hidden" }}
       />
       <path
         ref={haloRef}
         fill="none"
-        stroke="white"
-        strokeOpacity={0.22}
+        stroke={GOLD}
+        strokeOpacity={0.28}
         strokeWidth={7}
         strokeLinecap="round"
         style={{ opacity: 0 }}
@@ -277,7 +281,7 @@ function LucidPath({
       <path
         ref={glintRef}
         fill="none"
-        stroke="white"
+        stroke={GOLD_LIGHT}
         strokeWidth={2}
         strokeLinecap="round"
         style={{ opacity: 0 }}
@@ -288,8 +292,11 @@ function LucidPath({
           ref={(el) => {
             dotRefs.current[k] = el;
           }}
-          r={3.4}
-          fill="white"
+          r={3.8}
+          fill={GOLD_LIGHT}
+          stroke="rgb(11 9 69)"
+          strokeOpacity={0.35}
+          strokeWidth={1.5}
           style={{ opacity: 0 }}
         />
       ))}
@@ -514,8 +521,8 @@ export function LucidCorner({ className = "" }: { className?: string }) {
       <motion.path
         d="M-2,12 A96,96 0 0 1 90,112"
         fill="none"
-        stroke="white"
-        strokeOpacity={0.85}
+        stroke={GOLD}
+        strokeOpacity={0.9}
         strokeWidth={1.25}
         initial={{ pathLength: reduce ? 1 : 0 }}
         whileInView={{ pathLength: 1 }}
@@ -525,8 +532,8 @@ export function LucidCorner({ className = "" }: { className?: string }) {
       <motion.circle
         cx={62}
         cy={40}
-        r={3.4}
-        fill="white"
+        r={3.6}
+        fill={GOLD_LIGHT}
         initial={reduce ? false : { scale: 0, opacity: 0 }}
         whileInView={{ scale: 1, opacity: 1 }}
         viewport={view}

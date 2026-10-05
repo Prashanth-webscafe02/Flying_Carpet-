@@ -4,8 +4,8 @@ import { useCallback, useEffect, useRef, useState, type PointerEvent } from "rea
 import { REGISTER_URL } from "../config";
 import { words } from "../market";
 
-const REVEAL_AT = 0.45; // share of the foil scratched off before it clears by itself
-const BRUSH = 26;
+const REVEAL_AT = 0.35; // share of the foil scratched off before it clears by itself
+const BRUSH = 32;
 
 /**
  * Scratch card in place of rates (L1). Drag on desktop, swipe on phones; Enter or Space reveals it
@@ -23,6 +23,9 @@ export default function ScratchCard({
   const canvas = useRef<HTMLCanvasElement>(null);
   const last = useRef<{ x: number; y: number } | null>(null);
   const strokes = useRef(0);
+  // Once the agent has started scratching, a resize must not repaint (and undo) the foil.
+  const touched = useRef(false);
+  const drawing = useRef(false);
   const [revealed, setRevealed] = useState(false);
   const label = `Scratch to see your ${words.agentRate}`;
 
@@ -30,7 +33,7 @@ export default function ScratchCard({
   const paint = useCallback(() => {
     const c = canvas.current;
     const w = wrap.current;
-    if (!c || !w) return;
+    if (!c || !w || touched.current) return;
     const { width, height } = w.getBoundingClientRect();
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     c.width = Math.round(width * dpr);
@@ -106,6 +109,7 @@ export default function ScratchCard({
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
     ctx.lineWidth = BRUSH;
+    touched.current = true;
     const from = last.current ?? to;
     ctx.beginPath();
     ctx.moveTo(from.x, from.y);
@@ -155,18 +159,27 @@ export default function ScratchCard({
             transition={{ duration: 0.45 }}
             onPointerDown={(e) => {
               e.stopPropagation();
-              e.currentTarget.setPointerCapture(e.pointerId);
+              drawing.current = true;
               last.current = null;
+              try {
+                // Keeps the stroke going if the finger or mouse slips past the edge; optional.
+                e.currentTarget.setPointerCapture(e.pointerId);
+              } catch {
+                /* not available for this pointer */
+              }
               scratch(point(e));
             }}
             onPointerMove={(e) => {
-              if (e.buttons || e.pointerType !== "mouse") {
-                if (e.currentTarget.hasPointerCapture(e.pointerId)) scratch(point(e));
-              }
+              if (drawing.current) scratch(point(e));
             }}
             onPointerUp={() => {
+              drawing.current = false;
               last.current = null;
               if (cleared() > REVEAL_AT) setRevealed(true);
+            }}
+            onPointerCancel={() => {
+              drawing.current = false;
+              last.current = null;
             }}
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") {

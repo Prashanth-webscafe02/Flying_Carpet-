@@ -2,6 +2,7 @@ import { motion, useMotionValue, useScroll, useSpring, useTransform } from 'fram
 import { useLayoutEffect, useRef, useState, type RefObject } from 'react'
 import { REGISTER_URL } from '../config'
 import { PillButton, ease } from '../effects/motion'
+import { LucidWave } from '../effects/LucidLine'
 import { words } from '../market'
 
 // Portrait phones get the tall cut-out; everything else (incl. landscape phones) the wide one.
@@ -22,8 +23,9 @@ const LINES = ['For everything', 'last minute.']
 const LEADING = 0.95
 
 // Fit the headline into the sky above the ridge: first sink the foreground (up to 40% of its height),
-// then shrink the headline, so wide but short screens never hide it behind the hills.
-function useHeroFit(ref: RefObject<HTMLElement | null>) {
+// then shrink the headline, so wide but short screens never hide it behind the hills. It also stays
+// clear of the glass card, so the card never covers "last minute." on short screens.
+function useHeroFit(ref: RefObject<HTMLElement | null>, cardRef: RefObject<HTMLElement | null>) {
   const [fit, setFit] = useState({ font: 0, top: 0, drop: 0 })
   useLayoutEffect(() => {
     const mq = window.matchMedia(MOBILE_MQ)
@@ -37,19 +39,22 @@ function useHeroFit(ref: RefObject<HTMLElement | null>) {
       // Position comes only from measured sizes (not font metrics or viewport units), so every browser
       // places it identically; it also always clears the fixed header.
       const headerH = document.querySelector('header')?.offsetHeight ?? 0
-      const top = Math.max(h * (w < 768 ? 0.3 : 0.25), headerH + 90)
+      const top = Math.max(h * (w < 768 ? 0.3 : 0.25), headerH + 70)
       const ideal = Math.min(w * 0.105, h * 0.15, 150)
       const above = LINES.length * LEADING - fg.tuck // em of headline that must sit above the ridge
       const drop = Math.min(Math.max(0, top + ideal * above - ridgeY), fgH * 0.4)
-      const font = Math.max(MIN_FONT, Math.min(ideal, (ridgeY + drop - top) / above))
+      const cardTop = cardRef.current?.offsetTop ?? h
+      const clearOfCard = (cardTop - 24 - top) / (LINES.length * LEADING)
+      const font = Math.max(MIN_FONT, Math.min(ideal, (ridgeY + drop - top) / above, clearOfCard))
       setFit({ font, top, drop })
     }
     measure()
     const ro = new ResizeObserver(measure)
     ro.observe(ref.current!)
+    if (cardRef.current) ro.observe(cardRef.current)
     mq.addEventListener('change', measure)
     return () => { ro.disconnect(); mq.removeEventListener('change', measure) }
-  }, [ref])
+  }, [ref, cardRef])
   return fit
 }
 
@@ -57,7 +62,8 @@ function useHeroFit(ref: RefObject<HTMLElement | null>) {
 // Each layer moves at its own depth on scroll and pointer for a parallax, "window" feel.
 export default function Hero() {
   const ref = useRef<HTMLElement>(null)
-  const fit = useHeroFit(ref)
+  const cardRef = useRef<HTMLDivElement>(null)
+  const fit = useHeroFit(ref, cardRef)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
 
   const mx = useMotionValue(0)
@@ -108,9 +114,11 @@ export default function Hero() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.3, ease }}
-            className="absolute bottom-full left-0 right-0 mb-3 text-center text-[clamp(0.7rem,1.1vw,0.9rem)] font-bold uppercase tracking-[0.2em] text-accent drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]"
+            className="absolute bottom-full left-1/2 mb-3 w-max -translate-x-1/2"
           >
-            The booking platform for {words.travelAgents}
+            <span className="inline-block whitespace-nowrap rounded-full bg-brand/70 px-4 py-1.5 text-[clamp(0.68rem,1vw,0.85rem)] font-bold uppercase tracking-[0.2em] text-accent ring-1 ring-white/10 backdrop-blur-md">
+              The booking platform for {words.travelAgents}
+            </span>
           </motion.p>
           <h1
             style={{ fontSize: fit.font || undefined, lineHeight: LEADING }}
@@ -136,6 +144,9 @@ export default function Hero() {
         </div>
       </motion.div>
 
+      {/* Lucid Line through the visual: in front of the sky, behind the hills (z-3) */}
+      <LucidWave shape="lift" draw="intro" className="absolute inset-x-0 top-[58%] bottom-[8%] z-2" />
+
       {/* Foreground landscape */}
       <motion.div style={{ y: fgY, x: fgX, bottom: -fit.drop }} className="pointer-events-none absolute inset-x-[-3%] bottom-0 z-3">
         <picture>
@@ -154,8 +165,12 @@ export default function Hero() {
       {/* Bottom fade into the fluid page background */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-4 h-40 bg-linear-to-t from-brand/80 to-transparent" />
 
+      {/* Second Lucid Line, flowing in towards the card and its Register free button (card is z-5) */}
+      <LucidWave shape="rise" mirror draw="intro" className="absolute bottom-6 left-0 z-4 hidden h-56 w-[62%] md:block" />
+
       {/* Glass info card */}
       <motion.div
+        ref={cardRef}
         initial={{ opacity: 0, y: 40, filter: 'blur(12px)' }}
         animate={{ opacity: 1, y: 0, filter: 'blur(0px)', transitionEnd: { filter: 'none' } }}
         transition={{ duration: 1.2, delay: 1, ease }}
