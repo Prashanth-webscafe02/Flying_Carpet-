@@ -40,7 +40,7 @@ export const experienceInfo: Record<string, ExperienceInfo> = {
   },
   'Burj Khalifa At The Top': {
     overview: 'Ride one of the world’s fastest lifts to the observation decks of the tallest building on Earth, with 360° views over Downtown Dubai, the desert and the Arabian Gulf, day or night.',
-    included: ['Entry to At The Top (levels 124 and 125)', 'Skip-the-line access at your time slot'],
+    included: ['Entry to At The Top (levels 124 and 125)', 'Skip the line access at your time slot'],
     excluded: ['Hotel transfers', 'Food and drinks', 'Access to level 148 (upgrade available)'],
     stops: [['The Dubai Mall entrance', 'Check in on the lower ground level of The Dubai Mall.'], ['At The Top, levels 124–125', 'Take in the views from the indoor and outdoor observation decks.']],
   },
@@ -51,10 +51,10 @@ export const experienceInfo: Record<string, ExperienceInfo> = {
     stops: [['Dubai Marina Walk', 'Board your dhow at the marina.'], ['Marina and JBR skyline', 'Sail past the towers of Dubai Marina and Jumeirah Beach Residence while dinner is served.']],
   },
   'Old Dubai Walking Tour': {
-    overview: 'Discover the Dubai that came before the skyscrapers: the wind-tower houses of Al Fahidi, an abra ride across Dubai Creek and the spice and gold souks of Deira.',
+    overview: 'Discover the Dubai that came before the skyscrapers: the wind tower houses of Al Fahidi, an abra ride across Dubai Creek and the spice and gold souks of Deira.',
     included: ['Professional guide', 'Abra (water taxi) ride', 'Arabic coffee and dates'],
     excluded: ['Hotel transfers', 'Lunch', 'Personal purchases in the souks'],
-    stops: [['Al Fahidi Historical Neighbourhood', 'Walk the narrow lanes and wind-tower houses of old Dubai.'], ['Dubai Creek', 'Cross the creek on a traditional abra.'], ['Spice and Gold Souks', 'Browse the aromatic spice stalls and glittering gold shops of Deira.']],
+    stops: [['Al Fahidi Historical Neighbourhood', 'Walk the narrow lanes and wind tower houses of old Dubai.'], ['Dubai Creek', 'Cross the creek on a traditional abra.'], ['Spice and Gold Souks', 'Browse the aromatic spice stalls and glittering gold shops of Deira.']],
   },
   // Maldives
   'Private Sandbank Picnic': {
@@ -64,7 +64,7 @@ export const experienceInfo: Record<string, ExperienceInfo> = {
     stops: [['Resort jetty', 'Board your boat at the resort.'], ['Private sandbank', 'Swim, snorkel and enjoy a picnic on your own strip of sand.']],
   },
   'Manta Ray Snorkelling': {
-    overview: 'Snorkel with manta rays in Hanifaru Bay, a UNESCO Biosphere Reserve where mantas gather to feed during the south-west monsoon (roughly June to November).',
+    overview: 'Snorkel with manta rays in Hanifaru Bay, a UNESCO Biosphere Reserve where mantas gather to feed during the south west monsoon (roughly June to November).',
     included: ['Return boat transfer', 'Marine guide', 'Snorkelling equipment', 'Hanifaru Bay entry fee'],
     excluded: ['Underwater photos', 'Personal expenses'],
     stops: [['Resort jetty', 'Depart by speedboat with your marine guide.'], ['Hanifaru Bay', 'Snorkel alongside feeding manta rays (sightings depend on the season and conditions).']],
@@ -79,18 +79,18 @@ export const experienceInfo: Record<string, ExperienceInfo> = {
     overview: 'Discover the colourful Maldivian capital on foot: the old Friday Mosque, the fish and fruit markets, and the island’s busy harbour.',
     included: ['Local guide', 'Walking tour', 'Bottled water'],
     excluded: ['Boat or seaplane transfer to Malé', 'Lunch', 'Personal purchases'],
-    stops: [['Malé Friday Mosque', 'See the 17th-century coral-stone mosque.'], ['Local markets', 'Walk through the lively fish and fruit markets.'], ['Republic Square', 'End by the harbour and the national flag.']],
+    stops: [['Malé Friday Mosque', 'See the 17th century coral stone mosque.'], ['Local markets', 'Walk through the lively fish and fruit markets.'], ['Republic Square', 'End by the harbour and the national flag.']],
   },
   // Singapore
   'Gardens by the Bay': {
     overview: 'Explore Singapore’s futuristic garden: the Flower Dome, the misty Cloud Forest with its indoor waterfall, and the iconic Supertree Grove.',
     included: ['Entry to Flower Dome and Cloud Forest'],
     excluded: ['OCBC Skyway (optional)', 'Hotel transfers', 'Food and drinks'],
-    stops: [['Flower Dome', 'Stroll through the world’s largest glass greenhouse.'], ['Cloud Forest', 'See the 35-metre indoor waterfall and mountain plants.'], ['Supertree Grove', 'Walk among the Supertrees, lit up each evening.']],
+    stops: [['Flower Dome', 'Stroll through the world’s largest glass greenhouse.'], ['Cloud Forest', 'See the 35 metre indoor waterfall and mountain plants.'], ['Supertree Grove', 'Walk among the Supertrees, lit up each evening.']],
   },
   'Universal Studios Singapore': {
-    overview: 'A full day of rides, shows and film-themed zones on Sentosa, from Hollywood and Madagascar to Jurassic Park and Transformers.',
-    included: ['One-day admission ticket'],
+    overview: 'A full day of rides, shows and film themed zones on Sentosa, from Hollywood and Madagascar to Jurassic Park and Transformers.',
+    included: ['One day admission ticket'],
     excluded: ['Express pass', 'Hotel transfers', 'Food and drinks'],
     stops: [['Hollywood', 'Enter under the famous globe.'], ['Themed zones', 'Explore the seven zones at your own pace.']],
   },
@@ -109,9 +109,9 @@ export const experienceInfo: Record<string, ExperienceInfo> = {
   // Bangkok
   'Grand Palace & Temples Tour': {
     overview: 'Visit Bangkok’s most sacred sites with a guide: the Grand Palace and the Temple of the Emerald Buddha, the giant Reclining Buddha at Wat Pho, and riverside Wat Arun.',
-    included: ['Professional guide', 'Entrance fees', 'Hotel pick-up and drop-off'],
+    included: ['Professional guide', 'Entrance fees', 'Hotel pick up and drop off'],
     excluded: ['Lunch', 'Tips', 'Personal expenses'],
-    stops: [['Grand Palace', 'Explore the royal complex and the Emerald Buddha.'], ['Wat Pho', 'See the 46-metre Reclining Buddha.'], ['Wat Arun', 'Cross the river to the Temple of Dawn.']],
+    stops: [['Grand Palace', 'Explore the royal complex and the Emerald Buddha.'], ['Wat Pho', 'See the 46 metre Reclining Buddha.'], ['Wat Arun', 'Cross the river to the Temple of Dawn.']],
   },
   'Floating Market Day Trip': {
     overview: 'Head out of the city to Damnoen Saduak, Thailand’s most famous floating market, and glide between boats piled with fruit, snacks and souvenirs.',
@@ -126,10 +126,10 @@ export const experienceInfo: Record<string, ExperienceInfo> = {
     stops: [['River pier', 'Board at the riverside pier.'], ['Grand Palace and Wat Arun', 'Cruise past Bangkok’s landmarks lit up at night.']],
   },
   'Tuk-Tuk Street Food Tour': {
-    overview: 'Zip through Bangkok by tuk-tuk after dark, tasting the city’s best street food in Chinatown and the flower market.',
+    overview: 'Zip through Bangkok by tuk tuk after dark, tasting the city’s best street food in Chinatown and the flower market.',
     included: ['Tuk-tuk transport', 'Local guide', 'Food tastings', 'Soft drinks'],
     excluded: ['Hotel transfers', 'Alcoholic drinks', 'Tips'],
-    stops: [['Yaowarat (Chinatown)', 'Taste noodles, seafood and desserts from street stalls.'], ['Pak Khlong Talat', 'Visit the 24-hour flower market.']],
+    stops: [['Yaowarat (Chinatown)', 'Taste noodles, seafood and desserts from street stalls.'], ['Pak Khlong Talat', 'Visit the 24 hour flower market.']],
   },
   // Bali
   'Mount Batur Sunrise Trek': {
@@ -142,11 +142,11 @@ export const experienceInfo: Record<string, ExperienceInfo> = {
     overview: 'A day in Bali’s cultural heart: the Tegallalang rice terraces, the Sacred Monkey Forest and the holy spring temple of Tirta Empul.',
     included: ['Private driver', 'Entrance fees'],
     excluded: ['Lunch', 'Tips', 'Personal expenses'],
-    stops: [['Tegallalang Rice Terraces', 'Walk among the emerald terraces.'], ['Sacred Monkey Forest', 'See the long-tailed macaques in the jungle sanctuary.'], ['Tirta Empul', 'Visit the temple of holy spring water.']],
+    stops: [['Tegallalang Rice Terraces', 'Walk among the emerald terraces.'], ['Sacred Monkey Forest', 'See the long tailed macaques in the jungle sanctuary.'], ['Tirta Empul', 'Visit the temple of holy spring water.']],
   },
   'Uluwatu Kecak Fire Dance': {
     overview: 'Watch the hypnotic Kecak fire dance at sunset on the clifftop of Uluwatu Temple, high above the Indian Ocean.',
-    included: ['Kecak dance ticket', 'Temple entrance', 'Hotel pick-up and drop-off'],
+    included: ['Kecak dance ticket', 'Temple entrance', 'Hotel pick up and drop off'],
     excluded: ['Dinner', 'Tips'],
     stops: [['Uluwatu Temple', 'Walk the clifftop temple before the show.'], ['Kecak amphitheatre', 'Watch the Kecak and fire dance as the sun sets.']],
   },
@@ -167,7 +167,7 @@ export const experienceInfo: Record<string, ExperienceInfo> = {
     overview: 'A guided walk through Byzantine and Ottoman Istanbul: Hagia Sophia, the Blue Mosque and the Hippodrome.',
     included: ['Professional guide', 'Entrance fees where applicable'],
     excluded: ['Hotel transfers', 'Lunch', 'Tips'],
-    stops: [['Hagia Sophia', 'Explore the great domed basilica turned mosque.'], ['Blue Mosque', 'See the famous blue Iznik tiles.'], ['Hippodrome', 'Walk the ancient chariot-racing arena.']],
+    stops: [['Hagia Sophia', 'Explore the great domed basilica turned mosque.'], ['Blue Mosque', 'See the famous blue Iznik tiles.'], ['Hippodrome', 'Walk the ancient chariot racing arena.']],
   },
   'Grand Bazaar & Spice Market Walk': {
     overview: 'Get lost in one of the world’s oldest covered markets, then taste your way through the aromatic Spice Bazaar.',
@@ -183,7 +183,7 @@ export const experienceInfo: Record<string, ExperienceInfo> = {
   },
   // London
   'London Eye Fast Track': {
-    overview: 'Skip the main queue for a 30-minute rotation on the London Eye, with views of Big Ben, St Paul’s and the Thames.',
+    overview: 'Skip the main queue for a 30 minute rotation on the London Eye, with views of Big Ben, St Paul’s and the Thames.',
     included: ['Fast-track entry ticket', '4D cinema experience'],
     excluded: ['Hotel transfers', 'Food and drinks'],
     stops: [['London Eye', 'Board at the South Bank for a full rotation.']],
@@ -295,7 +295,7 @@ export const experienceInfo: Record<string, ExperienceInfo> = {
     stops: [['Agafay desert', 'Camel ride and sunset over the desert.'], ['Desert camp', 'Dinner, music and stargazing.']],
   },
   'Jardin Majorelle Visit': {
-    overview: 'Visit the cobalt-blue garden created by Jacques Majorelle and restored by Yves Saint Laurent, along with the Berber Museum.',
+    overview: 'Visit the cobalt blue garden created by Jacques Majorelle and restored by Yves Saint Laurent, along with the Berber Museum.',
     included: ['Garden entrance ticket'],
     excluded: ['YSL Museum entry', 'Hotel transfers'],
     stops: [['Jardin Majorelle', 'Walk among cacti, bamboo and the blue villa.'], ['Pierre Bergé Museum of Berber Arts', 'See Berber jewellery and crafts.']],
@@ -314,14 +314,14 @@ export const experienceInfo: Record<string, ExperienceInfo> = {
     stops: [['Louvre Pyramid', 'Meet your guide and enter the museum.'], ['Mona Lisa', 'See Leonardo’s masterpiece.'], ['Winged Victory', 'Admire the Hellenistic sculpture.']],
   },
   'Seine Dinner Cruise': {
-    overview: 'Dine on a glass-roofed boat as you glide past Notre-Dame, the Louvre and the illuminated Eiffel Tower.',
-    included: ['Dinner cruise', 'Three-course meal'],
+    overview: 'Dine on a glass roofed boat as you glide past Notre-Dame, the Louvre and the illuminated Eiffel Tower.',
+    included: ['Dinner cruise', 'Three course meal'],
     excluded: ['Hotel transfers', 'Drinks not listed in the menu'],
     stops: [['Eiffel Tower pier', 'Board your boat.'], ['River Seine', 'Cruise past the city’s landmarks as night falls.']],
   },
   'Palace of Versailles Day Trip': {
     overview: 'Visit the royal palace of Louis XIV: the Hall of Mirrors, the King’s State Apartments and the vast formal gardens.',
-    included: ['Return transport from Paris', 'Skip-the-line palace entry', 'Guide'],
+    included: ['Return transport from Paris', 'Skip the line palace entry', 'Guide'],
     excluded: ['Lunch', 'Tips'],
     stops: [['Hall of Mirrors', 'Walk through the palace’s most famous room.'], ['Gardens of Versailles', 'Explore the fountains and formal gardens.']],
   },
@@ -364,14 +364,14 @@ export const experienceInfo: Record<string, ExperienceInfo> = {
     stops: [['Jerónimos Monastery', 'Admire the Manueline cloister.'], ['Belém Tower', 'See the riverside fortress.'], ['Pastéis de Belém', 'Taste the original custard tart.']],
   },
   'Sintra Palaces Day Trip': {
-    overview: 'Explore fairy-tale Sintra: the colourful Pena Palace, the historic town centre and the Atlantic cliffs of Cabo da Roca.',
+    overview: 'Explore fairy tale Sintra: the colourful Pena Palace, the historic town centre and the Atlantic cliffs of Cabo da Roca.',
     included: ['Return transport from Lisbon', 'Guide', 'Pena Palace entry'],
     excluded: ['Lunch', 'Tips'],
     stops: [['Pena Palace', 'Visit the hilltop Romanticist palace.'], ['Sintra town', 'Stroll the old centre.'], ['Cabo da Roca', 'Stand at mainland Europe’s westernmost point.']],
   },
   'Fado Dinner Show': {
     overview: 'An evening of fado, Portugal’s soulful music, with a traditional dinner in a Bairro Alto restaurant.',
-    included: ['Fado show', 'Three-course dinner'],
+    included: ['Fado show', 'Three course dinner'],
     excluded: ['Hotel transfers', 'Drinks'],
     stops: [['Fado house', 'Dinner and live fado performances.']],
   },
@@ -398,7 +398,7 @@ export const experienceInfo: Record<string, ExperienceInfo> = {
     overview: 'Take the ferry to Robben Island, where Nelson Mandela was imprisoned, with a tour led by a former political prisoner.',
     included: ['Return ferry', 'Guided island and prison tour'],
     excluded: ['Hotel transfers', 'Food and drinks'],
-    stops: [['Nelson Mandela Gateway', 'Board the ferry at the V&A Waterfront.'], ['Robben Island', 'Tour the island and the maximum-security prison.']],
+    stops: [['Nelson Mandela Gateway', 'Board the ferry at the V&A Waterfront.'], ['Robben Island', 'Tour the island and the maximum security prison.']],
   },
   // Brașov
   'Bran Castle & Râșnov Fortress': {
@@ -423,7 +423,7 @@ export const experienceInfo: Record<string, ExperienceInfo> = {
     overview: 'Travel to Sinaia to visit Peleș Castle, the ornate former royal summer residence in the Carpathian Mountains.',
     included: ['Return transport', 'Guide', 'Peleș Castle entry'],
     excluded: ['Lunch', 'Photo fee', 'Tips'],
-    stops: [['Peleș Castle', 'Tour the neo-Renaissance royal residence.'], ['Sinaia Monastery', 'Visit the historic monastery nearby.']],
+    stops: [['Peleș Castle', 'Tour the neo Renaissance royal residence.'], ['Sinaia Monastery', 'Visit the historic monastery nearby.']],
   },
   // Sydney
   'Sydney Opera House Tour': {

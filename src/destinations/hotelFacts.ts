@@ -64,9 +64,9 @@ export const hotelFacts: Record<string, HotelFacts> = {
     address: 'Corner Abu Bakker Al Siddique and Sallahuddin Road',
     opened: 2010,
     rooms: { total: 216, juniorSuites: 13, seniorSuites: 12, executive: 35, superior: 119, accessible: 2 },
-    strip: ['Restaurant', 'Wheelchair-accessible', '24-hour reception', 'Car park', 'Gym', 'Multilingual staff', 'Wi-Fi'],
+    strip: ['Restaurant', 'Wheelchair accessible', '24 hour reception', 'Car park', 'Gym', 'Multilingual staff', 'Wi-Fi'],
     facilities: [
-      { title: 'Amenities and Services', items: free('Wheelchair-accessible', 'Car park', '24-hour reception', 'Check-in hour from 15:00 to 05:30', 'Check-out hour from 12:00 to 12:00', 'Multilingual staff') },
+      { title: 'Amenities and Services', items: free('Wheelchair accessible', 'Car park', '24 hour reception', 'Check in hour from 15:00 to 05:30', 'Check out hour from 12:00 to 12:00', 'Multilingual staff') },
       { title: 'Restaurant Service', items: free('Café', 'Bar', 'Restaurant', 'Smoking area', 'Highchairs') },
       { title: 'Meals', items: free('Breakfast buffet', 'Buffet lunch', 'Buffet dinner') },
       { title: 'Business', items: [...free('Conference room (7)', 'Meeting room (7)'), paid('Projector'), paid('Printer'), paid('Photocopier')] },

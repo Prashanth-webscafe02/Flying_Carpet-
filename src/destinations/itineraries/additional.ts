@@ -13,13 +13,13 @@ export const additional: Record<string, Itinerary> = {
     ],
     [
       "Hakone Ropeway and Owakudani",
-      "Ride the ropeway over Hakone’s volcanic valley, where steam vents and mineral-rich ground show that the landscape remains geothermally active. At Owakudani, clients can walk around the viewing area and sample local snacks if time allows. The route and operating hours can change with volcanic activity or weather, and the guide will advise on the day.",
+      "Ride the ropeway over Hakone’s volcanic valley, where steam vents and mineral rich ground show that the landscape remains geothermally active. At Owakudani, clients can walk around the viewing area and sample local snacks if time allows. The route and operating hours can change with volcanic activity or weather, and the guide will advise on the day.",
     ],
   ],
   "Asakusa & Senso-ji Tour": [
     [
       "Kaminarimon",
-      "Meet the guide at Kaminarimon, the Thunder Gate that marks the entrance to Asakusa’s temple district. Its enormous red lantern and guardian statues make a memorable first stop and an easy landmark for finding the group. The guide introduces the area’s history and explains how this gateway leads into one of Tokyo’s best-known traditional shopping streets.",
+      "Meet the guide at Kaminarimon, the Thunder Gate that marks the entrance to Asakusa’s temple district. Its enormous red lantern and guardian statues make a memorable first stop and an easy landmark for finding the group. The guide introduces the area’s history and explains how this gateway leads into one of Tokyo’s best known traditional shopping streets.",
     ],
     [
       "Nakamise-dori",
@@ -27,7 +27,7 @@ export const additional: Record<string, Itinerary> = {
     ],
     [
       "Senso-ji",
-      "Explore Senso-ji, Tokyo’s oldest Buddhist temple, with its main hall, incense burner and five-storey pagoda. The guide explains the temple’s place in local religious life and the customs visitors may observe, including how to approach the offering area respectfully. After the visit, clients can continue exploring Asakusa’s lanes or ask the guide for nearby food recommendations.",
+      "Explore Senso-ji, Tokyo’s oldest Buddhist temple, with its main hall, incense burner and five storey pagoda. The guide explains the temple’s place in local religious life and the customs visitors may observe, including how to approach the offering area respectfully. After the visit, clients can continue exploring Asakusa’s lanes or ask the guide for nearby food recommendations.",
     ],
   ],
   "Shibuya & Harajuku Walk": [
@@ -47,7 +47,7 @@ export const additional: Record<string, Itinerary> = {
   "teamLab Planets": [
     [
       "teamLab Planets Toyosu",
-      "Enter the immersive exhibition in timed groups and follow its route through large-scale digital art environments. Several rooms involve walking barefoot, and some have shallow water, reflective surfaces or changing light, so clients should follow the venue’s instructions and use the lockers provided. Allow time to move slowly through each installation, as the experience is designed for participation rather than a quick gallery visit.",
+      "Enter the immersive exhibition in timed groups and follow its route through large scale digital art environments. Several rooms involve walking barefoot, and some have shallow water, reflective surfaces or changing light, so clients should follow the venue’s instructions and use the lockers provided. Allow time to move slowly through each installation, as the experience is designed for participation rather than a quick gallery visit.",
     ],
   ],
   "Tram 28 & Alfama Walk": [
@@ -125,11 +125,11 @@ export const additional: Record<string, Itinerary> = {
   "Winelands Tasting Day": [
     [
       "Stellenbosch",
-      "Explore the Stellenbosch wine region, known for historic Cape Dutch buildings, oak-lined streets and vineyards set against mountain scenery. At the selected estate, clients sample wines with guidance from the tasting staff and learn about the grapes and local conditions. Tastings and estate visits vary by itinerary, and additional purchases are at the client’s discretion.",
+      "Explore the Stellenbosch wine region, known for historic Cape Dutch buildings, oak lined streets and vineyards set against mountain scenery. At the selected estate, clients sample wines with guidance from the tasting staff and learn about the grapes and local conditions. Tastings and estate visits vary by itinerary, and additional purchases are at the client’s discretion.",
     ],
     [
       "Franschhoek",
-      "Continue to Franschhoek, a valley with a strong food and wine tradition shaped by its early French settlers. The visit may include a boutique winery, a town-centre stroll or another tasting, depending on the booked route. Clients can enjoy the scenery between stops, while the guide keeps the schedule coordinated for the return drive to Cape Town.",
+      "Continue to Franschhoek, a valley with a strong food and wine tradition shaped by its early French settlers. The visit may include a boutique winery, a town centre stroll or another tasting, depending on the booked route. Clients can enjoy the scenery between stops, while the guide keeps the schedule coordinated for the return drive to Cape Town.",
     ],
   ],
   "Robben Island Tour": [
@@ -139,7 +139,7 @@ export const additional: Record<string, Itinerary> = {
     ],
     [
       "Robben Island",
-      "On arrival, explore the island by guided bus and visit the former prison, where political prisoners including Nelson Mandela were held. Some tours include a former prisoner as a guide, sharing first-hand context about incarceration and resistance. The visit follows the operator’s route and ferry schedule, and clients should remain with the group throughout.",
+      "On arrival, explore the island by guided bus and visit the former prison, where political prisoners including Nelson Mandela were held. Some tours include a former prisoner as a guide, sharing first hand context about incarceration and resistance. The visit follows the operator’s route and ferry schedule, and clients should remain with the group throughout.",
     ],
   ],
   "Bran Castle & Râșnov Fortress": [
@@ -209,7 +209,7 @@ export const additional: Record<string, Itinerary> = {
     ],
     [
       "Featherdale Wildlife Park",
-      "If the itinerary includes Featherdale, spend time observing native Australian animals such as kangaroos and koalas in a wildlife park setting. Staff provide information about the species and conservation, and any close-up encounters follow the park’s rules. This optional stop depends on the tour chosen, traffic and the day’s schedule before returning to Sydney.",
+      "If the itinerary includes Featherdale, spend time observing native Australian animals such as kangaroos and koalas in a wildlife park setting. Staff provide information about the species and conservation, and any close up encounters follow the park’s rules. This optional stop depends on the tour chosen, traffic and the day’s schedule before returning to Sydney.",
     ],
   ],
   "Bondi to Coogee Coastal Walk": [

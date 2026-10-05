@@ -474,7 +474,7 @@ const productCopy = (
   },
   hotels: {
     title: "Hotels",
-    text: `From iconic luxury to great-value stays`,
+    text: `From iconic luxury to great value stays`,
     img: images.hotels,
     icon: BedDouble,
     chips: [...new Set(info.hotels.map((h) => categoryLabel[h.category]))],
@@ -498,7 +498,7 @@ const productCopy = (
   },
   "car-rentals": {
     title: "Car rentals",
-    text: `Self-drive cars to explore ${d.city} at your clients’ own pace`,
+    text: `Self drive cars to explore ${d.city} at your clients’ own pace`,
     img: images.chauffeur,
     icon: Car,
     chips: mobility[d.id]?.carTypes ?? [],

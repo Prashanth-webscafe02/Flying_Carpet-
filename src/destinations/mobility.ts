@@ -15,7 +15,7 @@ export type HeroPhoto = { src: string; label: string };
 export const transferHero: Record<"road" | "sea", HeroPhoto> = {
   road: {
     src: u("photo-1787028331201-75a0abb8ab0e", 1800),
-    label: "Shuttle van and SUV at an airport drop-off",
+    label: "Shuttle van and SUV at an airport drop off",
   },
   sea: {
     src: u("photo-1512100356356-de1b84283e18", 1800),
@@ -85,7 +85,7 @@ export const mobility: Record<string, Mobility> = {
     vehicles: road,
     port: "Dubai Harbour and Port Rashid cruise terminals",
     companies: ["Alamo", "Avis", "Budget", "Dollar", "Enterprise", "Europcar", "Hertz", "National", "Sixt", "Thrifty"],
-    carTypes: ["2/4 Door", "4-5 Door", "SUV", "Open Air all terrain", "Limousine", "Special", "2/3 Door", "Passenger Van", "Convertible"],
+    carTypes: ["2/4 Door", "4 to 5 Door", "SUV", "Open Air all terrain", "Limousine", "Special", "2/3 Door", "Passenger Van", "Convertible"],
   },
   maldives: {
     vehicles: ["Speedboat", "Seaplane", "Domestic flight"],
@@ -136,7 +136,7 @@ export const mobility: Record<string, Mobility> = {
     vehicles: road,
     port: "Civitavecchia cruise port",
     companies: ["Alamo", "Avis", "Budget", "Dollar", "Enterprise", "Europcar", "Hertz", "National", "Sixt", "Thrifty"],
-    carTypes: ["2/3 Door", "4-5 Door", "SUV", "Wagon/Estate", "Passenger Van", "Convertible", "Limousine", "Coupe", "2/4 Door"],
+    carTypes: ["2/3 Door", "4 to 5 Door", "SUV", "Wagon/Estate", "Passenger Van", "Convertible", "Limousine", "Coupe", "2/4 Door"],
   },
   marrakech: {
     vehicles: road,
@@ -146,13 +146,13 @@ export const mobility: Record<string, Mobility> = {
   paris: {
     vehicles: road,
     companies: ["Alamo", "Avis", "Budget", "Dollar", "Enterprise", "Europcar", "Hertz", "National", "Sixt", "Thrifty"],
-    carTypes: ["Passenger Van", "4-5 Door", "2/4 Door", "SUV", "2/3 Door", "Wagon/Estate", "Monospace", "Limousine"],
+    carTypes: ["Passenger Van", "4 to 5 Door", "2/4 Door", "SUV", "2/3 Door", "Wagon/Estate", "Monospace", "Limousine"],
   },
   tokyo: {
     vehicles: road,
     port: "Tokyo International Cruise Terminal",
     companies: ["Alamo", "Avis", "Budget", "Enterprise", "Europcar", "Hertz", "National", "Sixt"],
-    carTypes: ["2/4 Door", "SUV", "4-5 Door", "Wagon/Estate", "Passenger Van", "Monospace", "Pick Up Regular Cab"],
+    carTypes: ["2/4 Door", "SUV", "4 to 5 Door", "Wagon/Estate", "Passenger Van", "Monospace", "Pick Up Regular Cab"],
   },
   lisbon: {
     vehicles: road,
@@ -164,7 +164,7 @@ export const mobility: Record<string, Mobility> = {
     vehicles: road,
     port: "Cape Town Cruise Terminal (V&A Waterfront)",
     companies: ["Alamo", "Avis", "Budget", "Dollar", "Enterprise", "Europcar", "Hertz", "National", "Sixt", "Thrifty"],
-    carTypes: ["2/4 Door", "4-5 Door", "SUV", "Pick Up Regular Cab", "Passenger Van", "Pick Up extended Cab", "Special", "Monospace"],
+    carTypes: ["2/4 Door", "4 to 5 Door", "SUV", "Pick Up Regular Cab", "Passenger Van", "Pick Up extended Cab", "Special", "Monospace"],
   },
   brasov: {
     vehicles: ["Car", "SUV", "Minibus"],

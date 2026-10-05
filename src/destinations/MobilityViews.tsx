@@ -71,7 +71,7 @@ export function TransfersInfo({ d, info, onBack }: Props) {
               <p className="mt-4 max-w-4xl text-lg leading-relaxed text-white/80">
                 {sea
                   ? "The transfer is an important part of an island stay, connecting the international arrival with the resort itself. Share your clients’ resort, flight details, group size and luggage needs so our team can help match the connection to their journey. Planning both arrival and departure together helps build a clear picture of the time needed between the airport and the island."
-                  : `Whether your clients are travelling as a couple, a family or a larger group, the right transfer brings their arrival and onward plans together. Share their pickup and drop-off locations, arrival details, passenger numbers and luggage needs so our team can help select a suitable vehicle. Return transfers can be discussed alongside the arrival journey to keep their time in ${d.city} organised from start to finish.`}
+                  : `Whether your clients are travelling as a couple, a family or a larger group, the right transfer brings their arrival and onward plans together. Share their pickup and drop off locations, arrival details, passenger numbers and luggage needs so our team can help select a suitable vehicle. Return transfers can be discussed alongside the arrival journey to keep their time in ${d.city} organised from start to finish.`}
               </p>
               <Facts
                 items={[

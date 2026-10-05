@@ -363,14 +363,14 @@ export default function HotelDetail({
     {
       icon: CalendarCheck,
       label: "Opened",
-      value: roomFacts.opened ? String(roomFacts.opened) : "—",
+      value: roomFacts.opened ? String(roomFacts.opened) : "Not listed",
     },
     {
       icon: BedDouble,
       label: "Rooms",
       value: roomFacts.rooms?.total
         ? roomFacts.rooms.total.toLocaleString("en")
-        : "—",
+        : "Not listed",
     },
   ];
   // const mapQuery = encodeURIComponent(`${hotel.name}, ${address}`)
@@ -556,7 +556,7 @@ export default function HotelDetail({
                       <span
                         className={`text-xl font-semibold tabular-nums tracking-tight ${value === undefined ? "text-white/35" : ""}`}
                       >
-                        {value === undefined ? "—" : value.toLocaleString("en")}
+                        {value === undefined ? "Not listed" : value.toLocaleString("en")}
                       </span>
                     </li>
                   );
