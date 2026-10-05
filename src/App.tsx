@@ -4,6 +4,9 @@ import { useEffect } from "react";
 import About from "./components/About";
 import Agents from "./components/Agents";
 import Destinations from "./components/Destinations";
+// Destination browser (H6). To use it instead of the stacked cards, uncomment this import and
+// the <DestinationBrowser /> line below, and comment out <Destinations />.
+// import DestinationBrowser from "./components/DestinationBrowser";
 import Footer from "./components/Footer";
 import DestinationsRoute from "./destinations/DestinationsRoute";
 import GetStarted from "./get-started/GetStarted";
@@ -87,6 +90,7 @@ export default function App() {
         <About />
         <WhyUs />
         <Destinations />
+        {/* <DestinationBrowser /> */}
         <Platform />
         <Testimonials />
         <Agents />

@@ -1,234 +1,79 @@
-import { AnimatePresence, LayoutGroup, motion } from 'framer-motion'
-import { ArrowRight, BedDouble, Car, CarFront, Plane, Search, Ticket, X, type LucideIcon } from 'lucide-react'
-import { useMemo, useState } from 'react'
-import { destinations, productOrder, type Destination, type ProductId } from '../destinations/data'
-import { linesFor } from '../destinations/lines'
-import { allLists, marketLists, type RegionId } from '../destinations/markets'
-import { Eyebrow, PillButton, Reveal, SplitHeading, ease } from '../effects/motion'
+import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion'
+import { useRef } from 'react'
+import { destinations } from '../content'
+import { REGISTER_URL } from '../config'
+import { Eyebrow, PillButton, Reveal, SplitHeading } from '../effects/motion'
+import { marketName } from '../market'
 import { LucidWave } from '../effects/LucidLine'
-import { market, marketName } from '../market'
 
-const PAGE = 8
+type D = (typeof destinations)[number]
 
-const icons: Record<ProductId, { icon: LucideIcon; label: string }> = {
-  flights: { icon: Plane, label: 'Flights' },
-  hotels: { icon: BedDouble, label: 'Hotels' },
-  experiences: { icon: Ticket, label: 'Experiences' },
-  transfers: { icon: CarFront, label: 'Transfers' },
-  'car-rentals': { icon: Car, label: 'Car rentals' },
-}
+// Sticky stacking cards: each destination pins, then shrinks and dims as the next one slides over it.
+function Card({ d, i, total, progress }: { d: D; i: number; total: number; progress: MotionValue<number> }) {
+  const start = i / total
+  const scale = useTransform(progress, [start, 1], [1, 1 - (total - i) * 0.035])
+  const dim = useTransform(progress, [start, start + 1 / total], [0, i === total - 1 ? 0 : 0.45])
 
-const byId = new Map(destinations.map((d) => [d.id, d]))
-const pick = (ids: string[]) => ids.map((id) => byId.get(id)).filter((d): d is Destination => !!d)
-
-// Destination browser (H6): this market's list by default (Appendix A), grouped in region tabs in
-// the client's order; "See all destinations" opens all 79. Grid on desktop, swipe row on phones.
-export default function Destinations() {
-  const [everything, setEverything] = useState(false)
-  const [region, setRegion] = useState<RegionId | 'all'>('all')
-  const [query, setQuery] = useState('')
-  const [shown, setShown] = useState(PAGE)
-
-  const lists = everything ? allLists : marketLists[market]
-  const q = query.trim().toLowerCase()
-
-  const list = useMemo(() => {
-    // Search looks across every destination we cover, so an agent can always find a name.
-    if (q) return destinations.filter((d) => `${d.city} ${d.country}`.toLowerCase().includes(q))
-    const ids = region === 'all' ? lists.flatMap((r) => r.ids) : (lists.find((r) => r.region === region)?.ids ?? [])
-    return pick(ids)
-  }, [q, region, lists])
-
-  const reset = () => setShown(PAGE)
-  const chooseRegion = (r: RegionId | 'all') => {
-    setRegion(r)
-    reset()
-  }
-  const toggleEverything = () => {
-    setEverything((e) => !e)
-    setRegion('all')
-    reset()
-  }
+  // Every card gets a fixed, viewport-bound height so the next card never slides over unread content.
+  const top = `calc(5.5rem + ${i * 14}px)`
 
   return (
-    <section id="destinations" className="relative px-4 pt-28 md:px-8 md:pt-40">
-      {/* Lucid Line across the gap above (About's bottom padding + this section's top padding) */}
-      <LucidWave shape="fall" className="absolute inset-x-0 -top-16 -z-1 h-44 md:-top-24 md:h-64" />
-      <div className="mx-auto max-w-7xl">
-        <Reveal><Eyebrow>Destinations</Eyebrow></Reveal>
-        <div className="grid items-end gap-6 md:grid-cols-[1.4fr_1fr]">
-          <SplitHeading
-            text="The destinations your clients ask for most"
-            className="text-[clamp(2.2rem,5.2vw,4.75rem)] font-semibold leading-[1.02] tracking-tighter"
-          />
-          <Reveal delay={0.15}>
-            <p className="text-lg leading-relaxed text-white/75">
-              The top leisure destinations for clients travelling from {marketName}, with all five categories on one login.
-            </p>
-          </Reveal>
-        </div>
-
-        {/* Controls: region tabs, See all destinations, search */}
-        <div className="mt-12 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <LayoutGroup id="dest-tabs">
-            <div
-              role="tablist"
-              aria-label="Regions"
-              className="-mx-4 flex gap-1 overflow-x-auto px-4 pb-1 scrollbar-none lg:mx-0 lg:flex-wrap lg:px-0 [&::-webkit-scrollbar]:hidden"
-            >
-              {(['all', ...lists.map((r) => r.region)] as const).map((r) => {
-                const on = !q && region === r
-                const label = r === 'all' ? 'All' : lists.find((x) => x.region === r)!.name
-                return (
-                  <button
-                    key={r}
-                    type="button"
-                    role="tab"
-                    aria-selected={on}
-                    onClick={() => {
-                      setQuery('')
-                      chooseRegion(r)
-                    }}
-                    className={`relative shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition-colors ${on ? 'text-white' : 'text-white/65 hover:text-white'}`}
-                  >
-                    {on && (
-                      <motion.span
-                        layoutId="dest-tab"
-                        transition={{ type: 'spring', stiffness: 380, damping: 32 }}
-                        className="absolute inset-0 rounded-full border border-accent/60 bg-accent/20"
-                      />
-                    )}
-                    <span className="relative">{label}</span>
-                  </button>
-                )
-              })}
-            </div>
-          </LayoutGroup>
-
-          <div className="flex flex-wrap items-center gap-3">
-            <button
-              type="button"
-              role="switch"
-              aria-checked={everything}
-              onClick={toggleEverything}
-              className="glass inline-flex items-center gap-3 rounded-full py-1.5 pl-4 pr-1.5 text-sm font-semibold"
-            >
-              See all destinations
-              <span className={`relative h-6 w-10 rounded-full transition-colors ${everything ? 'bg-accent' : 'bg-white/15'}`}>
-                <motion.span
-                  layout
-                  transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                  className={`absolute top-1 size-4 rounded-full bg-white ${everything ? 'right-1' : 'left-1'}`}
-                />
-              </span>
-            </button>
-            <label className="glass flex min-w-0 flex-1 items-center gap-2 rounded-full px-4 py-2.5 focus-within:ring-2 focus-within:ring-accent/60 sm:w-64 sm:flex-none">
-              <Search className="size-4 shrink-0 text-white/55" />
-              <input
-                type="search"
-                value={query}
-                onChange={(e) => {
-                  setQuery(e.target.value)
-                  reset()
-                }}
-                placeholder="Search a destination"
-                aria-label="Search a destination"
-                className="w-full min-w-0 bg-transparent text-sm outline-none placeholder:text-white/50 [&::-webkit-search-cancel-button]:hidden"
-              />
-              {query && (
-                <button type="button" aria-label="Clear search" onClick={() => setQuery('')} className="text-white/60 hover:text-white">
-                  <X className="size-4" />
-                </button>
-              )}
-            </label>
+    <div className="sticky top-0 flex h-svh items-start justify-center px-4 md:px-8" style={{ paddingTop: top }}>
+      <motion.article
+        style={{ scale, height: `min(calc(100svh - ${top} - 1.5rem), 640px)` }}
+        className="glass-solid relative grid w-full max-w-6xl origin-top grid-rows-[auto_minmax(0,1fr)] overflow-hidden rounded-4xl md:grid-cols-2 md:grid-rows-1 md:rounded-[2.5rem]"
+      >
+        <div className="relative z-1 flex min-h-0 flex-col justify-between gap-5 p-6 md:gap-6 md:p-12">
+          <div className="min-h-0">
+            <p className="mb-2 text-sm font-semibold text-accent md:mb-3">0{i + 1} / 0{total}</p>
+            <h3 className="text-[clamp(2.25rem,6vw,5.5rem)] font-semibold leading-none tracking-[-0.06em]">{d.name}</h3>
+            <p className="mt-4 line-clamp-4 text-[0.95rem] leading-relaxed text-white/75 md:mt-5 md:line-clamp-6 md:text-base lg:line-clamp-none">{d.text}</p>
           </div>
+          <div><PillButton href={REGISTER_URL} target="_blank">Register free</PillButton></div>
         </div>
-
-        {/* Cards: a swipe row on phones, a grid from tablets up */}
-        {list.length ? (
-          <div className="-mx-4 mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 scrollbar-none md:mx-0 md:grid md:snap-none md:grid-cols-2 md:overflow-visible md:px-0 lg:grid-cols-3 xl:grid-cols-4 [&::-webkit-scrollbar]:hidden">
-            <AnimatePresence mode="popLayout" initial={false}>
-              {list.slice(0, shown).map((d, i) => (
-                <Card key={d.id} d={d} i={i} />
-              ))}
-            </AnimatePresence>
-          </div>
-        ) : (
-          <p className="glass mt-8 rounded-[1.75rem] px-6 py-10 text-center text-white/70">
-            No destination matches “{query}”.
-          </p>
-        )}
-
-        <div className="mt-8 flex flex-col items-center gap-4">
-          {shown < list.length && (
-            <button
-              type="button"
-              onClick={() => setShown((n) => n + PAGE)}
-              className="glass rounded-full px-6 py-3 text-sm font-semibold transition-colors hover:bg-white/15"
-            >
-              Show more <span className="text-white/55">({list.length - shown})</span>
-            </button>
-          )}
-          {/* Button under the section (H6): starts the questions */}
-          <PillButton href="/get-started" variant="glass">Explore destinations</PillButton>
+        <div className="relative min-h-0 overflow-hidden">
+          <img src={d.img} alt={d.name} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+          <div className="absolute inset-0 bg-linear-to-r from-brand/40 to-transparent md:from-brand/30" />
         </div>
-      </div>
-    </section>
+        <motion.div aria-hidden style={{ opacity: dim }} className="pointer-events-none absolute inset-0 z-3 bg-brand" />
+      </motion.article>
+    </div>
   )
 }
 
-function Card({ d, i }: { d: Destination; i: number }) {
-  const lines = linesFor(d.id)
-  const name = d.city === d.country ? d.city : `${d.city}, ${d.country}`
+export default function Destinations() {
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] })
+
   return (
-    <motion.article
-      layout
-      initial={{ opacity: 0, y: 24, scale: 0.98 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.96 }}
-      transition={{ duration: 0.5, delay: (i % PAGE) * 0.04, ease }}
-      className="group glass-solid relative flex w-[78vw] max-w-sm shrink-0 snap-start flex-col overflow-hidden rounded-[1.75rem] ring-white/25 transition-[box-shadow,transform] duration-500 hover:-translate-y-1 hover:ring-1 hover:shadow-[0_24px_60px_-24px_rgb(232_101_37/0.55)] md:w-auto md:max-w-none"
-    >
-      <div className="relative aspect-4/3 overflow-hidden">
-        <img
-          src={d.img}
-          alt={d.city}
-          loading="lazy"
-          decoding="async"
-          className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-110"
-        />
-        <div className="absolute inset-0 bg-linear-to-t from-brand/80 via-brand/10 to-transparent" />
-        <h3 className="absolute inset-x-5 bottom-4 text-xl font-bold tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.4)]">
-          {name}
-        </h3>
-      </div>
-      <div className="flex flex-1 flex-col p-5">
-        {lines && (
-          <>
-            <p className="text-[0.95rem] font-semibold leading-snug">{lines[0]}</p>
-            <p className="mt-2 text-sm leading-relaxed text-white/65">{lines[1]}</p>
-          </>
-        )}
-        <div className="mt-auto flex items-center justify-between gap-3 pt-5">
-          <ul className="flex gap-1.5" aria-label="All five categories">
-            {productOrder.map((p) => {
-              const { icon: Icon, label } = icons[p]
-              return (
-                <li key={p} title={label} className="grid size-8 place-items-center rounded-full bg-white/8 text-accent ring-1 ring-white/10">
-                  <Icon className="size-4" aria-label={label} />
-                </li>
-              )
-            })}
-          </ul>
-          {/* Stretched link: the whole card opens the destination. */}
-          <a
-            href={`/destinations/${d.id}`}
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent transition-[gap] after:absolute after:inset-0 after:content-[''] group-hover:gap-2.5"
-          >
-            Explore <ArrowRight className="size-4" />
-          </a>
+    <section id="destinations" className="relative">
+      {/* Lucid Line across the gap above (About's bottom padding + this section's top padding) */}
+      <LucidWave shape="fall" className="absolute inset-x-0 -top-16 -z-1 h-44 md:-top-24 md:h-64" />
+      {/* Same width + gutters as the cards, so heading and copy line up with the card and its image column. */}
+      <div className="px-4 pt-28 md:px-8 md:pt-40">
+        <div className="mx-auto max-w-6xl">
+          <Reveal><Eyebrow>Destinations</Eyebrow></Reveal>
+          <div className="grid items-end gap-6 md:grid-cols-2 md:gap-0">
+            <SplitHeading text="The destinations your clients ask for most" className="text-[clamp(2.2rem,5.2vw,4.75rem)] font-semibold leading-[1.02] tracking-tighter md:pr-10" />
+            <Reveal delay={0.15}>
+              <p className="max-w-md text-lg leading-relaxed text-white/75">
+                The top leisure destinations for clients travelling from {marketName}, with all five categories on one login.
+              </p>
+            </Reveal>
+          </div>
         </div>
       </div>
-    </motion.article>
+
+      <div ref={ref} className="relative mt-8">
+        {destinations.map((d, i) => (
+          <Card key={d.name} d={d} i={i} total={destinations.length} progress={scrollYProgress} />
+        ))}
+      </div>
+
+      {/* Button under the section (H6): starts the questions */}
+      <div className="mt-10 flex justify-center px-4">
+        <PillButton href="/get-started" variant="glass">Explore destinations</PillButton>
+      </div>
+    </section>
   )
 }
