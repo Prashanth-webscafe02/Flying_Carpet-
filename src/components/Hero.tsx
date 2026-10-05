@@ -144,9 +144,6 @@ export default function Hero() {
         </div>
       </motion.div>
 
-      {/* Lucid Line through the visual: in front of the sky, behind the hills (z-3) */}
-      <LucidWave shape="lift" draw="intro" className="absolute inset-x-0 top-[58%] bottom-[8%] z-2" />
-
       {/* Foreground landscape */}
       <motion.div style={{ y: fgY, x: fgX, bottom: -fit.drop }} className="pointer-events-none absolute inset-x-[-3%] bottom-0 z-3">
         <picture>
@@ -165,8 +162,11 @@ export default function Hero() {
       {/* Bottom fade into the fluid page background */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-4 h-40 bg-linear-to-t from-brand/80 to-transparent" />
 
-      {/* Second Lucid Line, flowing in towards the card and its Register free button (card is z-5) */}
-      <LucidWave shape="rise" mirror draw="intro" className="absolute bottom-6 left-0 z-4 hidden h-56 w-[62%] md:block" />
+      {/* Lucid Line through the visual: over the hills, under the card (z-5), below the headline */}
+      <LucidWave shape="lift" draw="intro" className="absolute inset-x-0 top-[60%] bottom-[6%] z-4" />
+
+      {/* Second Lucid Line: enters from the right edge and runs in behind the card (z-5) to its Register free button */}
+      <LucidWave shape="fall" mirror draw="intro" className="absolute bottom-10 left-[22%] right-0 z-4 hidden h-36 md:block" />
 
       {/* Glass info card */}
       <motion.div
