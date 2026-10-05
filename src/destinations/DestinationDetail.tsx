@@ -21,7 +21,12 @@ import { REGISTER_URL, pageTitle } from "../content";
 import { words } from "../market";
 import { loadAnswers } from "../get-started/answers";
 import FlightsInfo from "./FlightsInfo";
-import { productOrder, whatsapp, type Destination, type ProductId } from "./data";
+import {
+  productOrder,
+  whatsapp,
+  type Destination,
+  type ProductId,
+} from "./data";
 import { categoryById } from "../categories";
 import { ChatLink } from "./ChatFab";
 import EmptyCategory from "./EmptyCategory";
@@ -153,12 +158,20 @@ export default function DestinationDetail({
             >
               {[
                 ...(info.airlines.length
-                  ? [{ icon: Plane, text: `${info.airlines.length} airlines into ${info.airport}` }]
+                  ? [
+                      {
+                        icon: Plane,
+                        text: `${info.airlines.length} airlines into ${info.airport}`,
+                      },
+                    ]
                   : []),
                 { icon: BedDouble, text: "Hotels from luxury to value" },
                 { icon: Sparkles, text: "Tours and activities" },
                 { icon: CarFront, text: "Airport transfers" },
-                { icon: Car, text: "Self drive cars, zero booking fee. T&Cs apply." },
+                {
+                  icon: Car,
+                  text: "Self drive cars, zero booking fee. T&Cs apply.",
+                },
               ].map(({ icon: Icon, text }) => (
                 <li
                   key={text}
@@ -256,9 +269,12 @@ export default function DestinationDetail({
                 />
               )}
               {/* A category with no listings yet shows its Appendix C text (G4, D3). */}
-              {tab && tab !== "transfers" && tab !== "car-rentals" && !hasListings(tab) && (
-                <EmptyCategory id={tab as ProductId} city={d.city} />
-              )}
+              {tab &&
+                tab !== "transfers" &&
+                tab !== "car-rentals" &&
+                !hasListings(tab) && (
+                  <EmptyCategory id={tab as ProductId} city={d.city} />
+                )}
               {tab === "flights" && hasListings(tab) && (
                 <FlightsInfo d={d} onBack={() => go(null)} />
               )}
@@ -302,7 +318,6 @@ export default function DestinationDetail({
 
 /* ---------- shared bits ---------- */
 
-
 function ViewHead({
   d,
   title,
@@ -321,7 +336,7 @@ function ViewHead({
         onClick={onBack}
         className="-mt-2 mb-1 inline-flex items-center gap-2 py-2 text-sm font-medium text-white/65 transition-colors hover:text-white"
       >
-        <ArrowLeft className="size-4" /> Back to {d.city}
+        {/* <ArrowLeft className="size-4" /> Back to {d.city} */}
       </button>
       <h2 className="text-[clamp(1.8rem,3.2vw,2.75rem)] font-semibold leading-tight tracking-[-0.045em]">
         {title}
@@ -644,14 +659,14 @@ function Overview({
             "24/7 help, on weekends and public holidays too",
           ]}
         >
-          <a
+          {/* <a
             href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(nameOf(d))}`}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-5 flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 py-6 text-sm font-semibold text-white/80 transition-colors hover:bg-white/10"
           >
             <MapPin className="size-4 text-accent" /> View on map
-          </a>
+          </a> */}
         </WhyCard>
         <HelpCard
           title={`Need help with a booking for ${d.city}?`}
@@ -786,11 +801,7 @@ function Hotels({
       </div>
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_18rem]">
         <div className="min-w-0">
-          <ResultsBar
-            count={list.length}
-            noun="hotel"
-            note=""
-          />
+          <ResultsBar count={list.length} noun="hotel" note="" />
           <motion.div layout className="space-y-4">
             <AnimatePresence mode="popLayout" initial={false}>
               {list.map((h) => (
@@ -874,7 +885,9 @@ function Hotels({
         <div className="space-y-4 lg:sticky lg:top-28 lg:self-start">
           <WhyCard
             title="Why book hotels with Flying Carpet"
-            points={categoryById("hotels").points.map((p) => `${p.title}: ${p.text}`)}
+            points={categoryById("hotels").points.map(
+              (p) => `${p.title}: ${p.text}`,
+            )}
           />
           <div className="relative overflow-hidden rounded-[1.75rem] ring-1 ring-white/15">
             <img
@@ -890,10 +903,18 @@ function Hotels({
                 Add an airport transfer or an experience to the stay.
               </p>
               <div className="mt-3 flex gap-4 text-sm font-semibold text-accent">
-                <button type="button" onClick={() => onTab("transfers")} className="inline-flex items-center gap-1.5 hover:text-white">
+                <button
+                  type="button"
+                  onClick={() => onTab("transfers")}
+                  className="inline-flex items-center gap-1.5 hover:text-white"
+                >
                   Transfers <ArrowRight className="size-4" />
                 </button>
-                <button type="button" onClick={() => onTab("experiences")} className="inline-flex items-center gap-1.5 hover:text-white">
+                <button
+                  type="button"
+                  onClick={() => onTab("experiences")}
+                  className="inline-flex items-center gap-1.5 hover:text-white"
+                >
                   Experiences <ArrowRight className="size-4" />
                 </button>
               </div>

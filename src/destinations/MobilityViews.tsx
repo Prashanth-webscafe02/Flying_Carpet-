@@ -191,7 +191,7 @@ function Head({
         onClick={onBack}
         className="-mt-2 mb-1 inline-flex items-center gap-2 py-2 text-sm font-medium text-white/65 transition-colors hover:text-white"
       >
-        <ArrowLeft className="size-4" /> Back to {d.city}
+        {/* <ArrowLeft className="size-4" /> Back to {d.city} */}
       </button>
       <h2 className="text-[clamp(1.8rem,3.2vw,2.75rem)] font-semibold leading-tight tracking-[-0.045em]">
         {title}
