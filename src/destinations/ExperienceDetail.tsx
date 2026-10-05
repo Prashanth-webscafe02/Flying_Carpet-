@@ -18,12 +18,13 @@ import {
 import { useEffect, useState } from "react";
 import { LucidCorner } from "../effects/LucidLine";
 import { Reveal, ease } from "../effects/motion";
-import { REGISTER_URL } from "../content";
+import { REGISTER_URL, pageTitle } from "../content";
+import { words } from "../market";
 import { SectionTabs, SectionTitle } from "./AgentRates";
 import Gallery from "./Gallery";
 import ProductInfoPanel from "./ProductInfoPanel";
 import { bigPhoto, countryName, type Destination } from "./data";
-import { details, images, type Experience } from "./details";
+import { detailFor, images, type Experience } from "./details";
 import {
   defaultLanguages,
   defaultTicket,
@@ -45,7 +46,7 @@ export default function ExperienceDetail({
   d: Destination;
   experience: Experience;
 }) {
-  const info = details[d.id];
+  const info = detailFor(d.id);
   const index = info.experiences.indexOf(e);
   const content = experienceInfo[e.title];
   const country = countryName(d.country);
@@ -75,7 +76,7 @@ export default function ExperienceDetail({
     : `With a listed duration of ${e.duration.toLowerCase()}, this experience adds a focused visit to ${e.place} to your clients’ time in ${d.city}. Build it into their itinerary alongside time to explore and unwind, choosing a pace that reflects their interests.`;
 
   useEffect(() => {
-    document.title = `${e.title} · ${d.city} — Flying Carpet`;
+    document.title = pageTitle(e.title, d.city);
   }, [e.title, d.city]);
 
   const facts: { icon: LucideIcon; label: string; value: string }[] = [
@@ -276,7 +277,7 @@ export default function ExperienceDetail({
                     icon={Flag}
                     label={
                       pickup
-                        ? "Drop-off back at the hotel"
+                        ? "Drop off back at the hotel"
                         : "The experience ends here"
                     }
                     last
@@ -301,7 +302,7 @@ export default function ExperienceDetail({
           <div className="relative flex flex-col gap-6 p-8 md:flex-row md:items-center md:justify-between md:p-12">
             <div className="max-w-xl">
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-accent">
-                Special agent rates
+                Special {words.agent} rates
               </p>
               <h2 className="mt-2 text-[clamp(1.5rem,2.6vw,2.25rem)] font-semibold leading-tight tracking-[-0.04em]">
                 Add {e.title} to your client’s trip
@@ -316,7 +317,7 @@ export default function ExperienceDetail({
               target="_blank"
               className="inline-flex shrink-0 items-center gap-3 self-start rounded-full bg-cream py-1.5 pl-5 pr-1.5 font-bold tracking-tight text-ink shadow-[0_10px_40px_-8px_rgb(232_101_37/0.7)] transition-transform duration-500 hover:scale-[1.04] md:self-auto"
             >
-              Sign Up
+              Register free
               <span className="grid size-8 place-items-center rounded-full bg-accent text-white">
                 <ArrowRight className="size-4" />
               </span>

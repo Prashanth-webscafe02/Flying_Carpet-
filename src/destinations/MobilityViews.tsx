@@ -1,8 +1,7 @@
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, Check } from "lucide-react";
+import { ArrowLeft, Check } from "lucide-react";
 import type { ReactNode } from "react";
 import { ease } from "../effects/motion";
-import { REGISTER_URL } from "../content";
 import type { Destination } from "./data";
 import { images, type Detail } from "./details";
 import Gallery from "./Gallery";
@@ -16,6 +15,7 @@ import {
   vehiclePhotos,
 } from "./mobility";
 import LogoMarquee from "./LogoMarquee";
+import EmptyCategory from "./EmptyCategory";
 import ProductInfoPanel from "./ProductInfoPanel";
 
 type Props = {
@@ -30,6 +30,14 @@ type Props = {
 // (No search, price filter, categories, transfer types, fares, result cards or Book Now.)
 export function TransfersInfo({ d, info, onBack }: Props) {
   const m = mobility[d.id];
+  if (!m) {
+    return (
+      <>
+        <Head d={d} onBack={onBack} title={`Transfers in ${d.city}`} />
+        <EmptyCategory id="transfers" city={d.city} />
+      </>
+    );
+  }
   const sea = info.transferMode === "sea";
   const minibusImage =
     "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&w=900&q=80";
@@ -97,30 +105,15 @@ export function TransfersInfo({ d, info, onBack }: Props) {
 // (No search, driver's age, filters, result cards or Reserve.)
 export function CarRentalInfo({ d, info, onBack }: Props) {
   const m = mobility[d.id];
-  if (!m.companies.length) {
+  if (!m?.companies.length) {
     return (
       <>
         <Head d={d} onBack={onBack} title={`Car rentals in ${d.city}`} />
-        <div className="glass rounded-[1.75rem] px-6 py-12 text-center">
-          <p className="text-lg font-semibold tracking-tight">
-            Car rentals aren’t offered in {d.city}
-          </p>
-          <p className="mx-auto mt-2 max-w-md text-white/65">
-            Getting around is by speedboat, seaplane or domestic flight; see
-            Transfers.
-          </p>
-          <a
-            href={REGISTER_URL}
-            target="_blank"
-            className="mt-6 inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold transition hover:bg-[#f0763a]"
-          >
-            <ArrowRight className="size-4" /> Get Agency Access
-          </a>
-        </div>
+        <EmptyCategory id="car-rentals" city={d.city} />
       </>
     );
   }
-  const overview = `Explore ${d.city} at your clients’ own pace with self-drive car rental, giving them the freedom to plan their route, choose their stops and spend more time in the places that interest them. Browse ${m.companies.length} listed rental car companies and ${m.carTypes.length} car types, with airport pickup at ${info.airportName} (${info.airport}) or city collection to discuss as part of their travel plans.`;
+  const overview = `Explore ${d.city} at your clients’ own pace with self drive car rental, giving them the freedom to plan their route, choose their stops and spend more time in the places that interest them. Browse ${m.companies.length} listed rental car companies and ${m.carTypes.length} car types, with airport pickup at ${info.airportName} (${info.airport}) or city collection to discuss as part of their travel plans.`;
 
   return (
     <>
@@ -148,9 +141,9 @@ export function CarRentalInfo({ d, info, onBack }: Props) {
               </p>
               <Facts
                 items={[
-                  "No booking fee",
-                  "Your client pays at pick-up",
-                  "Free cancellation before pick-up*",
+                  "Zero booking fee. T&Cs apply.",
+                  "Your client pays at pick up",
+                  "Free cancellation before pick up*",
                   "Card held as a guarantee, nothing charged",
                 ]}
                 note="*Subject to the rental's cancellation policy."

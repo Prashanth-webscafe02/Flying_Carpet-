@@ -51,13 +51,16 @@ export const origins: Record<string, { city: string; code: string }> = {
   in: { city: 'Delhi', code: 'DEL' },
   za: { city: 'Johannesburg', code: 'JNB' },
   us: { city: 'New York', code: 'JFK' },
-  ca: { city: 'Toronto', code: 'YYZ' },
 }
 
 const doha = 'Doha (DOH)'
 const dubai = 'Dubai (DXB)'
 const istanbul = 'Istanbul (IST)'
 const singapore = 'Singapore (SIN)'
+
+/** Details for a destination, or an empty set while it has no page content yet (new destinations). */
+export const detailFor = (id: string): Detail =>
+  details[id] ?? { subtitle: '', intro: '', airport: '', airportName: '', airlines: [], areas: [], hotels: [], experiences: [], bestTime: '' }
 
 export const details: Record<string, Detail> = {
   dubai: {
@@ -67,7 +70,7 @@ export const details: Record<string, Detail> = {
     airlines: [{ name: 'Emirates' }, { name: 'flydubai' }, { name: 'Air India' }, { name: 'IndiGo' }, { name: 'Qatar Airways', via: doha }, { name: 'Etihad Airways', via: 'Abu Dhabi (AUH)' }],
     areas: ['Downtown Dubai', 'Dubai Marina', 'Palm Jumeirah', 'Jumeirah Beach', 'Deira'],
     hotels: [
-      { name: 'Atlantis The Palm', area: 'Palm Jumeirah', category: 'luxury', stars: 5, tag: 'Bestseller', text: 'A world-famous resort with exceptional dining, entertainment and beachfront experiences. Ideal for families and leisure travellers.', amenities: ['Pool', 'Spa', 'Family friendly', 'Multiple dining'] },
+      { name: 'Atlantis The Palm', area: 'Palm Jumeirah', category: 'luxury', stars: 5, text: 'A world-famous resort with exceptional dining, entertainment and beachfront experiences. Ideal for families and leisure travellers.', amenities: ['Pool', 'Spa', 'Family friendly', 'Multiple dining'] },
       { name: 'Address Downtown', area: 'Downtown Dubai', category: 'luxury', stars: 5, text: 'A premium city hotel with stunning views of the Burj Khalifa and Dubai Fountain. Ideal for business and leisure travellers.', amenities: ['Pool', 'Spa', 'Business facilities', 'Fine dining'] },
       { name: 'Jumeirah Beach Hotel', area: 'Jumeirah Beach', category: 'upscale', stars: 5, text: 'A stylish beachfront hotel with world-class amenities, ideal for families and couples.', amenities: ['Beach access', 'Pool', 'Spa', 'Family friendly'] },
       { name: 'JA Ocean View Hotel', area: 'Dubai Marina', category: 'upscale', stars: 4, text: 'A vibrant beachfront hotel with spacious rooms, popular with families and groups.', amenities: ['Pool', 'Family friendly', 'Water sports'] },
@@ -90,7 +93,7 @@ export const details: Record<string, Detail> = {
     airlines: [{ name: 'Air India' }, { name: 'IndiGo' }, { name: 'SriLankan Airlines', via: 'Colombo (CMB)' }, { name: 'Emirates', via: dubai }, { name: 'Qatar Airways', via: doha }, { name: 'Singapore Airlines', via: singapore }],
     areas: ['North Malé Atoll', 'South Malé Atoll', 'Baa Atoll', 'Ari Atoll'],
     hotels: [
-      { name: 'Soneva Fushi', area: 'Baa Atoll', category: 'luxury', stars: 5, tag: 'Bestseller', text: 'Barefoot luxury in a UNESCO biosphere reserve, with private villas, outdoor cinema and superb dining.', amenities: ['Private pools', 'Spa', 'Kids club', 'Snorkelling'] },
+      { name: 'Soneva Fushi', area: 'Baa Atoll', category: 'luxury', stars: 5, text: 'Barefoot luxury in a UNESCO biosphere reserve, with private villas, outdoor cinema and superb dining.', amenities: ['Private pools', 'Spa', 'Kids club', 'Snorkelling'] },
       { name: 'Kurumba Maldives', area: 'North Malé Atoll', category: 'upscale', stars: 5, text: 'A short speedboat ride from the airport, with eight restaurants and lush gardens. Great for short stays.', amenities: ['Beach access', 'Spa', 'Multiple dining'] },
       { name: 'Sun Siyam Olhuveli', area: 'South Malé Atoll', category: 'upscale', stars: 4, text: 'A lively resort with water villas, a long lagoon and plenty of activities for couples and families.', amenities: ['Water villas', 'Diving', 'Spa'] },
       { name: 'Adaaran Select Hudhuranfushi', area: 'North Malé Atoll', category: 'midscale', stars: 4, text: 'An all-inclusive favourite with a famous surf break and easy airport access.', amenities: ['All inclusive', 'Surfing', 'Pool'] },
@@ -111,7 +114,7 @@ export const details: Record<string, Detail> = {
     airlines: [{ name: 'Singapore Airlines' }, { name: 'Scoot' }, { name: 'Air India' }, { name: 'IndiGo' }, { name: 'Emirates', via: dubai }, { name: 'Qatar Airways', via: doha }],
     areas: ['Marina Bay', 'Orchard Road', 'Sentosa', 'Civic District', 'Kampong Glam'],
     hotels: [
-      { name: 'Marina Bay Sands', area: 'Marina Bay', category: 'luxury', stars: 5, tag: 'Bestseller', text: 'The iconic skyline resort with its famous rooftop infinity pool, shopping and dining.', amenities: ['Infinity pool', 'Spa', 'Casino', 'Fine dining'] },
+      { name: 'Marina Bay Sands', area: 'Marina Bay', category: 'luxury', stars: 5, text: 'The iconic skyline resort with its famous rooftop infinity pool, shopping and dining.', amenities: ['Infinity pool', 'Spa', 'Casino', 'Fine dining'] },
       { name: 'Raffles Singapore', area: 'Civic District', category: 'luxury', stars: 5, text: 'A legendary colonial-era hotel, home of the Singapore Sling, with all-suite accommodation.', amenities: ['Butler service', 'Spa', 'Heritage'] },
       { name: 'Shangri-La Rasa Sentosa', area: 'Sentosa', category: 'upscale', stars: 5, text: 'Singapore’s only beachfront resort, steps from Universal Studios. Perfect for families.', amenities: ['Beach access', 'Kids club', 'Pool'] },
       { name: 'Hotel Boss', area: 'Kampong Glam', category: 'midscale', stars: 3, text: 'Modern, great-value rooms near the MRT, the Arab Quarter and Little India.', amenities: ['Pool', 'Metro access', 'Free Wi-Fi'] },
@@ -131,7 +134,7 @@ export const details: Record<string, Detail> = {
     airlines: [{ name: 'Thai Airways' }, { name: 'Air India' }, { name: 'IndiGo' }, { name: 'Emirates', via: dubai }, { name: 'Qatar Airways', via: doha }],
     areas: ['Riverside', 'Sukhumvit', 'Siam', 'Silom'],
     hotels: [
-      { name: 'Mandarin Oriental Bangkok', area: 'Riverside', category: 'luxury', stars: 5, tag: 'Bestseller', text: 'A riverside legend for over a century, with celebrated dining and an award-winning spa.', amenities: ['River views', 'Spa', 'Fine dining'] },
+      { name: 'Mandarin Oriental Bangkok', area: 'Riverside', category: 'luxury', stars: 5, text: 'A riverside legend for over a century, with celebrated dining and an award-winning spa.', amenities: ['River views', 'Spa', 'Fine dining'] },
       { name: 'Siam Kempinski Hotel', area: 'Siam', category: 'luxury', stars: 5, text: 'A garden resort in the heart of the shopping district, next to Siam Paragon.', amenities: ['Pool', 'Spa', 'Shopping access'] },
       { name: 'Novotel Bangkok on Siam Square', area: 'Siam', category: 'midscale', stars: 4, text: 'Reliable comfort in a central location, close to the Skytrain.', amenities: ['Pool', 'Skytrain access', 'Family friendly'] },
       { name: 'ibis Bangkok Riverside', area: 'Riverside', category: 'budget', stars: 3, text: 'Great-value river-view rooms with a free shuttle boat.', amenities: ['Pool', 'Shuttle boat', 'Free Wi-Fi'] },
@@ -151,7 +154,7 @@ export const details: Record<string, Detail> = {
     airlines: [{ name: 'Garuda Indonesia' }, { name: 'Singapore Airlines', via: singapore }, { name: 'Malaysia Airlines', via: 'Kuala Lumpur (KUL)' }, { name: 'Emirates', via: dubai }, { name: 'Qatar Airways', via: doha }],
     areas: ['Seminyak', 'Ubud', 'Nusa Dua', 'Uluwatu', 'Canggu'],
     hotels: [
-      { name: 'The Mulia Bali', area: 'Nusa Dua', category: 'luxury', stars: 5, tag: 'Bestseller', text: 'A grand beachfront resort with some of the island’s best dining and spa facilities.', amenities: ['Beach access', 'Spa', 'Multiple pools'] },
+      { name: 'The Mulia Bali', area: 'Nusa Dua', category: 'luxury', stars: 5, text: 'A grand beachfront resort with some of the island’s best dining and spa facilities.', amenities: ['Beach access', 'Spa', 'Multiple pools'] },
       { name: 'Alila Villas Uluwatu', area: 'Uluwatu', category: 'luxury', stars: 5, text: 'Clifftop pool villas with dramatic ocean views and award-winning design.', amenities: ['Private pools', 'Spa', 'Ocean views'] },
       { name: 'COMO Uma Ubud', area: 'Ubud', category: 'boutique', stars: 5, text: 'A calm retreat above the Tjampuhan valley, perfect for wellness and culture.', amenities: ['Yoga', 'Spa', 'Valley views'] },
       { name: 'Courtyard by Marriott Bali Seminyak', area: 'Seminyak', category: 'upscale', stars: 4, text: 'A relaxed, family-friendly resort close to Seminyak’s beaches, cafés and boutiques.', amenities: ['Pool', 'Family friendly', 'Spa'] },
@@ -171,7 +174,7 @@ export const details: Record<string, Detail> = {
     airlines: [{ name: 'Turkish Airlines' }, { name: 'Pegasus Airlines' }, { name: 'IndiGo' }, { name: 'Emirates', via: dubai }, { name: 'Qatar Airways', via: doha }],
     areas: ['Sultanahmet', 'Beyoğlu', 'Beşiktaş', 'Kadıköy'],
     hotels: [
-      { name: 'Çırağan Palace Kempinski', area: 'Beşiktaş', category: 'luxury', stars: 5, tag: 'Bestseller', text: 'A restored Ottoman palace on the Bosphorus with an infinity pool at the water’s edge.', amenities: ['Bosphorus views', 'Spa', 'Pool'] },
+      { name: 'Çırağan Palace Kempinski', area: 'Beşiktaş', category: 'luxury', stars: 5, text: 'A restored Ottoman palace on the Bosphorus with an infinity pool at the water’s edge.', amenities: ['Bosphorus views', 'Spa', 'Pool'] },
       { name: 'Pera Palace Hotel', area: 'Beyoğlu', category: 'boutique', stars: 5, text: 'A historic 1892 hotel built for Orient Express passengers, full of old-world glamour.', amenities: ['Heritage', 'Spa', 'Fine dining'] },
       { name: 'Sura Hagia Sophia Hotel', area: 'Sultanahmet', category: 'midscale', stars: 4, text: 'Comfortable rooms steps from Hagia Sophia, the Blue Mosque and the Grand Bazaar.', amenities: ['Central location', 'Hammam', 'Free Wi-Fi'] },
     ],
@@ -190,7 +193,7 @@ export const details: Record<string, Detail> = {
     airlines: [{ name: 'British Airways' }, { name: 'Virgin Atlantic' }, { name: 'Air India' }, { name: 'Emirates', via: dubai }, { name: 'Qatar Airways', via: doha }],
     areas: ['Westminster', 'Covent Garden', 'South Bank', 'Marylebone', 'Kensington'],
     hotels: [
-      { name: 'The Savoy', area: 'Covent Garden', category: 'luxury', stars: 5, tag: 'Bestseller', text: 'London’s most famous hotel on the Strand, with Thames views and legendary afternoon tea.', amenities: ['River views', 'Spa', 'Fine dining'] },
+      { name: 'The Savoy', area: 'Covent Garden', category: 'luxury', stars: 5, text: 'London’s most famous hotel on the Strand, with Thames views and legendary afternoon tea.', amenities: ['River views', 'Spa', 'Fine dining'] },
       { name: 'The Langham, London', area: 'Marylebone', category: 'luxury', stars: 5, text: 'Grand Victorian elegance near Oxford Street and Regent’s Park.', amenities: ['Spa', 'Pool', 'Afternoon tea'] },
       { name: 'Park Plaza Westminster Bridge', area: 'South Bank', category: 'upscale', stars: 4, text: 'Modern rooms opposite Big Ben and next to the London Eye. Great for families.', amenities: ['Pool', 'Spa', 'Family friendly'] },
       { name: 'Premier Inn London County Hall', area: 'South Bank', category: 'budget', stars: 3, text: 'Reliable value right beside the London Eye and Westminster Bridge.', amenities: ['Central location', 'Family rooms'] },
@@ -210,7 +213,7 @@ export const details: Record<string, Detail> = {
     airlines: [{ name: 'Delta Air Lines' }, { name: 'American Airlines' }, { name: 'Air India' }, { name: 'Emirates', via: dubai }, { name: 'Qatar Airways', via: doha }],
     areas: ['Midtown', 'Times Square', 'Central Park', 'Meatpacking District'],
     hotels: [
-      { name: 'The Plaza', area: 'Central Park', category: 'luxury', stars: 5, tag: 'Bestseller', text: 'The legendary Fifth Avenue landmark overlooking Central Park.', amenities: ['Spa', 'Fine dining', 'Heritage'] },
+      { name: 'The Plaza', area: 'Central Park', category: 'luxury', stars: 5, text: 'The legendary Fifth Avenue landmark overlooking Central Park.', amenities: ['Spa', 'Fine dining', 'Heritage'] },
       { name: 'Lotte New York Palace', area: 'Midtown', category: 'luxury', stars: 5, text: 'Grand rooms opposite St Patrick’s Cathedral, close to Rockefeller Center.', amenities: ['Fitness centre', 'Fine dining', 'City views'] },
       { name: 'The Standard, High Line', area: 'Meatpacking District', category: 'boutique', stars: 4, text: 'Stylish rooms straddling the High Line with floor-to-ceiling views.', amenities: ['Rooftop bar', 'City views', 'Design'] },
       { name: 'citizenM New York Times Square', area: 'Times Square', category: 'midscale', stars: 4, text: 'Smart, compact rooms and a rooftop bar in the heart of the action.', amenities: ['Rooftop bar', 'Free Wi-Fi', 'Central location'] },
@@ -230,7 +233,7 @@ export const details: Record<string, Detail> = {
     airlines: [{ name: 'Air India' }, { name: 'IndiGo' }, { name: 'SpiceJet' }, { name: 'Air India Express' }, { name: 'Emirates', via: 'Delhi (DEL)' }],
     areas: ['Jaipur', 'Udaipur', 'Jodhpur', 'Jaisalmer'],
     hotels: [
-      { name: 'Rambagh Palace', area: 'Jaipur', category: 'luxury', stars: 5, tag: 'Bestseller', text: 'The former residence of the Maharaja of Jaipur, with peacock-filled gardens.', amenities: ['Heritage', 'Spa', 'Pool'] },
+      { name: 'Rambagh Palace', area: 'Jaipur', category: 'luxury', stars: 5, text: 'The former residence of the Maharaja of Jaipur, with peacock-filled gardens.', amenities: ['Heritage', 'Spa', 'Pool'] },
       { name: 'The Oberoi Udaivilas', area: 'Udaipur', category: 'luxury', stars: 5, text: 'Domes, courtyards and lake views on the banks of Lake Pichola.', amenities: ['Lake views', 'Spa', 'Private pools'] },
       { name: 'Umaid Bhawan Palace', area: 'Jodhpur', category: 'luxury', stars: 5, text: 'One of the world’s largest private residences, now a spectacular palace hotel.', amenities: ['Heritage', 'Spa', 'Pool'] },
       { name: 'Suryagarh', area: 'Jaisalmer', category: 'boutique', stars: 5, text: 'A golden-stone fortress hotel on the edge of the Thar desert.', amenities: ['Desert experiences', 'Spa', 'Pool'] },
@@ -251,7 +254,7 @@ export const details: Record<string, Detail> = {
     airlines: [{ name: 'ITA Airways' }, { name: 'Emirates', via: dubai }, { name: 'Qatar Airways', via: doha }, { name: 'Turkish Airlines', via: istanbul }, { name: 'Lufthansa', via: 'Frankfurt (FRA)' }],
     areas: ['Centro Storico', 'Spanish Steps', 'Vatican', 'Trastevere', 'Monti'],
     hotels: [
-      { name: 'Hotel Hassler Roma', area: 'Spanish Steps', category: 'luxury', stars: 5, tag: 'Bestseller', text: 'Family-run luxury at the top of the Spanish Steps with sweeping city views.', amenities: ['City views', 'Fine dining', 'Spa'] },
+      { name: 'Hotel Hassler Roma', area: 'Spanish Steps', category: 'luxury', stars: 5, text: 'Family-run luxury at the top of the Spanish Steps with sweeping city views.', amenities: ['City views', 'Fine dining', 'Spa'] },
       { name: 'Hotel de Russie', area: 'Spanish Steps', category: 'luxury', stars: 5, text: 'An elegant retreat with a secret terraced garden near Piazza del Popolo.', amenities: ['Garden', 'Spa', 'Fine dining'] },
       { name: 'Hotel Artemide', area: 'Monti', category: 'upscale', stars: 4, text: 'A welcoming Art Nouveau hotel on Via Nazionale, walkable to the main sights.', amenities: ['Rooftop terrace', 'Spa', 'Central location'] },
     ],
@@ -269,7 +272,7 @@ export const details: Record<string, Detail> = {
     airlines: [{ name: 'Royal Air Maroc', via: 'Casablanca (CMN)' }, { name: 'Turkish Airlines', via: istanbul }, { name: 'Emirates', via: 'Casablanca (CMN)' }],
     areas: ['Medina', 'Hivernage', 'Gueliz', 'Palmeraie'],
     hotels: [
-      { name: 'La Mamounia', area: 'Hivernage', category: 'luxury', stars: 5, tag: 'Bestseller', text: 'Marrakech’s legendary palace hotel, set in century-old gardens beside the Medina.', amenities: ['Gardens', 'Spa', 'Pool'] },
+      { name: 'La Mamounia', area: 'Hivernage', category: 'luxury', stars: 5, text: 'Marrakech’s legendary palace hotel, set in century-old gardens beside the Medina.', amenities: ['Gardens', 'Spa', 'Pool'] },
       { name: 'Royal Mansour', area: 'Medina', category: 'luxury', stars: 5, text: 'Private riads with rooftop plunge pools and extraordinary craftsmanship.', amenities: ['Private riads', 'Spa', 'Butler service'] },
       { name: 'Riad Kniza', area: 'Medina', category: 'boutique', stars: 4, text: 'An intimate 18th-century riad known for warm hospitality and courtyard dining.', amenities: ['Courtyard pool', 'Heritage', 'Rooftop'] },
     ],
@@ -288,7 +291,7 @@ export const details: Record<string, Detail> = {
     airlines: [{ name: 'Air France' }, { name: 'Air India' }, { name: 'Emirates', via: dubai }, { name: 'Qatar Airways', via: doha }],
     areas: ['Champs-Élysées', 'Louvre', 'Eiffel Tower', 'Canal Saint-Martin'],
     hotels: [
-      { name: 'The Peninsula Paris', area: 'Champs-Élysées', category: 'luxury', stars: 5, tag: 'Bestseller', text: 'A palace hotel near the Arc de Triomphe with a rooftop restaurant overlooking the city.', amenities: ['Spa', 'Pool', 'Rooftop dining'] },
+      { name: 'The Peninsula Paris', area: 'Champs-Élysées', category: 'luxury', stars: 5, text: 'A palace hotel near the Arc de Triomphe with a rooftop restaurant overlooking the city.', amenities: ['Spa', 'Pool', 'Rooftop dining'] },
       { name: 'Le Meurice', area: 'Louvre', category: 'luxury', stars: 5, text: 'Palace-hotel grandeur facing the Tuileries Garden, steps from the Louvre.', amenities: ['Fine dining', 'Spa', 'Garden views'] },
       { name: 'Pullman Paris Tour Eiffel', area: 'Eiffel Tower', category: 'upscale', stars: 4, text: 'Modern rooms, many with Eiffel Tower views, a short walk from the Seine.', amenities: ['Tower views', 'Family rooms', 'Bar'] },
       { name: 'Generator Paris', area: 'Canal Saint-Martin', category: 'budget', stars: 2, text: 'A design-led hostel-hotel with private rooms and a rooftop terrace.', amenities: ['Rooftop', 'Groups', 'Great value'] },
@@ -308,7 +311,7 @@ export const details: Record<string, Detail> = {
     airlines: [{ name: 'Japan Airlines' }, { name: 'ANA' }, { name: 'Air India' }, { name: 'Singapore Airlines', via: singapore }, { name: 'Emirates', via: dubai }],
     areas: ['Shinjuku', 'Shibuya', 'Ginza', 'Asakusa'],
     hotels: [
-      { name: 'Park Hyatt Tokyo', area: 'Shinjuku', category: 'luxury', stars: 5, tag: 'Bestseller', text: 'Sky-high rooms and the famous New York Bar with views to Mount Fuji.', amenities: ['City views', 'Pool', 'Spa'] },
+      { name: 'Park Hyatt Tokyo', area: 'Shinjuku', category: 'luxury', stars: 5, text: 'Sky-high rooms and the famous New York Bar with views to Mount Fuji.', amenities: ['City views', 'Pool', 'Spa'] },
       { name: 'The Peninsula Tokyo', area: 'Ginza', category: 'luxury', stars: 5, text: 'Refined luxury opposite the Imperial Palace gardens, close to Ginza’s shopping.', amenities: ['Spa', 'Pool', 'Fine dining'] },
       { name: 'Hotel Gracery Shinjuku', area: 'Shinjuku', category: 'midscale', stars: 3, text: 'Famous for its Godzilla head, with compact rooms in the heart of Shinjuku.', amenities: ['Central location', 'Family rooms', 'Free Wi-Fi'] },
     ],
@@ -327,7 +330,7 @@ export const details: Record<string, Detail> = {
     airlines: [{ name: 'TAP Air Portugal' }, { name: 'Emirates', via: dubai }, { name: 'Qatar Airways', via: doha }, { name: 'Turkish Airlines', via: istanbul }],
     areas: ['Baixa', 'Alfama', 'Chiado', 'Belém'],
     hotels: [
-      { name: 'Four Seasons Hotel Ritz Lisbon', area: 'Baixa', category: 'luxury', stars: 5, tag: 'Bestseller', text: 'Art-filled luxury above Eduardo VII Park with a celebrated rooftop running track.', amenities: ['Spa', 'Pool', 'City views'] },
+      { name: 'Four Seasons Hotel Ritz Lisbon', area: 'Baixa', category: 'luxury', stars: 5, text: 'Art-filled luxury above Eduardo VII Park with a celebrated rooftop running track.', amenities: ['Spa', 'Pool', 'City views'] },
       { name: 'Pestana Palace', area: 'Belém', category: 'upscale', stars: 5, text: 'A 19th-century palace with tropical gardens, close to Belém’s monuments.', amenities: ['Gardens', 'Pool', 'Heritage'] },
       { name: 'Memmo Alfama', area: 'Alfama', category: 'boutique', stars: 4, text: 'A design hotel with a rooftop pool overlooking the Tagus river and Alfama roofs.', amenities: ['Rooftop pool', 'River views', 'Design'] },
     ],
@@ -346,7 +349,7 @@ export const details: Record<string, Detail> = {
     airlines: [{ name: 'South African Airways' }, { name: 'Emirates', via: dubai }, { name: 'Qatar Airways', via: doha }, { name: 'Turkish Airlines', via: istanbul }],
     areas: ['V&A Waterfront', 'Camps Bay', 'City Bowl', 'Constantia'],
     hotels: [
-      { name: 'One&Only Cape Town', area: 'V&A Waterfront', category: 'luxury', stars: 5, tag: 'Bestseller', text: 'Island villas and Table Mountain views at the heart of the Waterfront.', amenities: ['Spa', 'Pool', 'Mountain views'] },
+      { name: 'One&Only Cape Town', area: 'V&A Waterfront', category: 'luxury', stars: 5, text: 'Island villas and Table Mountain views at the heart of the Waterfront.', amenities: ['Spa', 'Pool', 'Mountain views'] },
       { name: 'The Silo Hotel', area: 'V&A Waterfront', category: 'boutique', stars: 5, text: 'A converted grain silo with jewel-like windows above the Zeitz MOCAA museum.', amenities: ['Rooftop pool', 'Design', 'Art'] },
       { name: 'The Marly', area: 'Camps Bay', category: 'boutique', stars: 5, text: 'Stylish suites facing Camps Bay beach and the Twelve Apostles.', amenities: ['Beach views', 'Spa', 'Rooftop pool'] },
       { name: 'Southern Sun Waterfront', area: 'City Bowl', category: 'midscale', stars: 4, text: 'Comfortable, central and great value, with a shuttle to the Waterfront.', amenities: ['Pool', 'Shuttle', 'Family friendly'] },
@@ -385,7 +388,7 @@ export const details: Record<string, Detail> = {
     airlines: [{ name: 'Qantas' }, { name: 'Air India' }, { name: 'Singapore Airlines', via: singapore }, { name: 'Emirates', via: dubai }, { name: 'Qatar Airways', via: doha }],
     areas: ['The Rocks', 'Circular Quay', 'Darling Harbour', 'Bondi'],
     hotels: [
-      { name: 'Park Hyatt Sydney', area: 'The Rocks', category: 'luxury', stars: 5, tag: 'Bestseller', text: 'Front-row views of the Opera House from the water’s edge, with a rooftop pool.', amenities: ['Harbour views', 'Spa', 'Rooftop pool'] },
+      { name: 'Park Hyatt Sydney', area: 'The Rocks', category: 'luxury', stars: 5, text: 'Front-row views of the Opera House from the water’s edge, with a rooftop pool.', amenities: ['Harbour views', 'Spa', 'Rooftop pool'] },
       { name: 'Shangri-La Sydney', area: 'The Rocks', category: 'upscale', stars: 5, text: 'Panoramic harbour views from every room, close to Circular Quay.', amenities: ['Harbour views', 'Spa', 'Pool'] },
       { name: 'QT Sydney', area: 'Circular Quay', category: 'boutique', stars: 5, text: 'Playful design in two heritage buildings in the heart of the city.', amenities: ['Design', 'Spa', 'Bar'] },
       { name: 'ibis Sydney Darling Harbour', area: 'Darling Harbour', category: 'budget', stars: 3, text: 'Great-value rooms with harbour views close to attractions and dining.', amenities: ['Harbour views', 'Free Wi-Fi'] },

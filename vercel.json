@@ -1,7 +1,7 @@
 {
   "rewrites": [
+    { "source": "/get-started", "destination": "/index.html" },
     { "source": "/get-started/(.*)", "destination": "/index.html" },
-    { "source": "/partner-with-us", "destination": "/index.html" },
     { "source": "/destinations", "destination": "/index.html" },
     { "source": "/destinations/(.*)", "destination": "/index.html" }
   ]

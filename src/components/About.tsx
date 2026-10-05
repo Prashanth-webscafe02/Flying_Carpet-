@@ -1,6 +1,7 @@
 import { animate, motion, useInView, useScroll, useTransform } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import { stats } from '../content'
+import { isUS, words } from '../market'
 import { LucidWave } from '../effects/LucidLine'
 import { Eyebrow, Reveal, SplitHeading } from '../effects/motion'
 
@@ -31,7 +32,7 @@ export default function About() {
           <motion.img
             style={{ y: imgY, scale: 1.25 }}
             src="/images/global.webp"
-            alt="Lantern-lit lanes in a Moroccan medina at dusk"
+            alt="Lantern lit lanes in a Moroccan medina at dusk"
             loading="lazy"
             decoding="async"
             className="absolute inset-0 h-full w-full object-cover will-change-transform"
@@ -44,12 +45,14 @@ export default function About() {
         <div className="glass-strong relative rounded-[2.5rem] p-7 md:p-12 lg:-ml-32">
           <Eyebrow>About us</Eyebrow>
           <SplitHeading
-            text="Flying Carpet brings global distribution into one login"
+            text={`Built for ${words.travelAgents}, with real people behind every booking.`}
             className="text-[clamp(2rem,4.2vw,3.75rem)] font-semibold leading-[1.03] tracking-[-0.05em]"
           />
           <Reveal delay={0.2}>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/75">
-              We combine global procurement power with elite technology and live 24/7 backend support across North America, India, and Zambia—ensuring your agency stays moving, no matter the timezone.
+              {isUS
+                ? 'Flying Carpet is a booking platform for every kind of travel business: ARC and non ARC agencies, host agency advisors, leisure and corporate. You get global reach on one login, and teams in South Africa, India and North America with 24/7 help, so your agency keeps moving in every time zone.'
+                : 'Flying Carpet is a booking platform for every kind of travel business: IATA and non IATA agencies, leisure and corporate, TMCs and independent agents. You get global reach on one login, and teams in South Africa, India and North America with 24/7 help, so your agency keeps moving in every time zone.'}
             </p>
           </Reveal>
           <div className="mt-10 grid grid-cols-2 gap-4">

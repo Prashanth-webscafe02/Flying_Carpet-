@@ -14,6 +14,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { REGISTER_URL } from "../content";
+import { words } from "../market";
 import { LucidCorner } from "../effects/LucidLine";
 import { Reveal, ease } from "../effects/motion";
 import type { Destination } from "./data";
@@ -155,7 +156,7 @@ export default function FlightsInfo({
         <div className="relative flex flex-col gap-6 p-8 md:flex-row md:items-center md:justify-between md:p-12">
           <div className="max-w-xl">
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-accent">
-              Special agent fares
+              Special {words.agent} fares
             </p>
             <h2 className="mt-2 text-[clamp(1.5rem,2.6vw,2.25rem)] font-semibold leading-tight tracking-[-0.04em]">
               Want agency fares for your clients?
@@ -170,7 +171,7 @@ export default function FlightsInfo({
             target="_blank"
             className="inline-flex shrink-0 items-center gap-3 self-start rounded-full bg-cream py-1.5 pl-5 pr-1.5 font-bold tracking-tight text-ink shadow-[0_10px_40px_-8px_rgb(232_101_37/0.7)] transition-transform duration-500 hover:scale-[1.04] md:self-auto"
           >
-            Sign Up
+            Register free
             <span className="grid size-8 place-items-center rounded-full bg-accent text-white">
               <ArrowRight className="size-4" />
             </span>

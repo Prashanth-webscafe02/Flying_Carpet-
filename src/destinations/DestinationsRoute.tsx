@@ -4,7 +4,7 @@ import DestinationsPage from "./DestinationsPage";
 import ExperienceDetail from "./ExperienceDetail";
 import HotelDetail from "./HotelDetail";
 import { destinations } from "./data";
-import { details } from "./details";
+import { detailFor } from "./details";
 import { slug } from "./navigate";
 import { isOpen, isTab } from "./tabs";
 
@@ -23,11 +23,11 @@ export default function DestinationsRoute() {
   const d = destinations.find((x) => x.id === id);
   const hotel =
     d && tab === "hotels" && itemSlug
-      ? details[d.id].hotels.find((h) => slug(h.name) === itemSlug)
+      ? detailFor(d.id).hotels.find((h) => slug(h.name) === itemSlug)
       : undefined;
   const experience =
     d && tab === "experiences" && itemSlug
-      ? details[d.id].experiences.find((e) => slug(e.title) === itemSlug)
+      ? detailFor(d.id).experiences.find((e) => slug(e.title) === itemSlug)
       : undefined;
 
   // Unknown destination, hotel or experience: fall back to the nearest valid page with a clean URL.

@@ -4,15 +4,24 @@ import { steps, type StepId } from "./steps";
 export type Answers = Record<StepId, string[]>;
 export type Saved = { answers: Answers; visited: StepId[] };
 
-const STORAGE_KEY = "fct-get-started";
+// v2: the questions changed shape (no market or hotel steps), so earlier saved picks are dropped once.
+export const STORAGE_KEY = "fct-get-started-v2";
+const LEGACY_KEYS = ["fct-get-started"];
+try {
+  for (const k of LEGACY_KEYS) localStorage.removeItem(k);
+} catch {
+  /* storage blocked */
+}
 
 export const empty: Answers = {
-  market: [],
-  destinations: [],
-  specialise: [],
-  hotels: [],
+  regions: [],
+  categories: [],
 };
 
+/**
+ * Saved picks, filtered against this market's choices: a region the market does not list
+ * (for example after switching ?market= on a preview) is dropped.
+ */
 export function loadAnswers(): Saved {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);

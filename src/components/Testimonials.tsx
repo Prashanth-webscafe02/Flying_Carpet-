@@ -1,6 +1,7 @@
 import { MapPin, Plane, Quote, Star } from 'lucide-react'
 import { useState } from 'react'
-import { testimonialStats, testimonials } from '../content'
+import { testimonials } from '../content'
+import { words } from '../market'
 import { LucidWave } from '../effects/LucidLine'
 import { Eyebrow, Reveal, SplitHeading } from '../effects/motion'
 
@@ -17,15 +18,15 @@ export default function Testimonials() {
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-8 md:grid-cols-2 md:items-end">
           <div>
-            <Reveal><Eyebrow>Testimonials</Eyebrow></Reveal>
+            <Reveal><Eyebrow>From {words.agents}</Eyebrow></Reveal>
             <SplitHeading
-              text="Loved by agents, remembered by travellers"
+              text={`What ${words.travelAgents} tell us`}
               className="text-[clamp(2.2rem,5.2vw,4.75rem)] font-semibold leading-[1.02] tracking-tighter"
             />
           </div>
           <Reveal delay={0.15}>
             <p className="max-w-md text-lg leading-relaxed text-white/75 md:ml-auto">
-              Travel partners around the world use Flying Carpet to design journeys their clients never stop talking about. Hover a card to read their story.
+              {words.Agents} use Flying Carpet when a client needs an answer fast. Tap a card to read their story.
             </p>
           </Reveal>
         </div>
@@ -45,16 +46,6 @@ export default function Testimonials() {
           ))}
         </div>
 
-        <div className="mt-16 grid gap-4 sm:grid-cols-3 md:gap-6">
-          {testimonialStats.map((s, i) => (
-            <Reveal key={s.label} delay={i * 0.1} className="glass rounded-[1.75rem] px-6 py-6 md:px-8 md:py-8">
-              <p className="text-[clamp(2.25rem,4vw,3.5rem)] font-semibold leading-none tracking-tighter">
-                {s.value}<span className="text-accent">{s.suffix}</span>
-              </p>
-              <p className="mt-2 text-white/70">{s.label}</p>
-            </Reveal>
-          ))}
-        </div>
       </div>
     </section>
   )

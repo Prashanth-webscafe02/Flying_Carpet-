@@ -1,242 +1,100 @@
 import {
   BedDouble,
   Building2,
+  Car,
   CarFront,
   Castle,
-  Crown,
-  Gem,
   Landmark,
+  Leaf,
   Mountain,
   PawPrint,
   Plane,
-  Star,
   Sun,
   Ticket,
   TreePalm,
-  Wallet,
   Waves,
   type LucideIcon,
 } from "lucide-react";
+import { marketLists, type RegionId } from "../destinations/markets";
+import { market } from "../market";
 
 export type Choice = {
   id: string;
   title: string;
-  text: string;
+  /** Description under the title (categories only; Q2 drops the region descriptions). */
+  text?: string;
   /** Short label shown in the tile's badge (e.g. a country code); otherwise `icon` is used. */
   code?: string;
   icon?: LucideIcon;
   meta?: string;
 };
 
-export type StepId = "market" | "destinations" | "specialise" | "hotels";
+export type StepId = "regions" | "categories";
 
 export type Step = {
   id: StepId;
+  /** Progress bar label (Q5). */
   label: string;
+  /** Small label above the headline. */
   eyebrow: string;
   title: [string, string];
   intro: string;
+  /** Line at the bottom. */
   tagline: string;
   multi: boolean;
-  /** Set on optional steps: what happens if the agent skips. */
-  skipHint?: string;
+  /** Main button. */
   next: string;
   choices: Choice[];
 };
 
+const regionIcons: Record<RegionId, LucideIcon> = {
+  africa: PawPrint,
+  asia: TreePalm,
+  australasia: Waves,
+  caribbean: Sun,
+  "central-america": Leaf,
+  europe: Castle,
+  "middle-east": Landmark,
+  "north-america": Building2,
+  "south-america": Mountain,
+};
+
+const LINE = "Free to register. No fees, no minimum.";
+
+// The questions (Q2, Q3). The market comes from the site address (Q1), so there are two steps.
 export const steps: Step[] = [
   {
-    id: "market",
-    label: "Your market",
-    eyebrow: "Let's personalise your experience",
-    title: ["Choose your clients ", "home base country!"],
-    intro:
-      "This helps us show you the most relevant destinations, products and opportunities for your business.",
-    tagline: "Same world. More possibilities.",
-    multi: false,
+    id: "regions",
+    label: "Regions",
+    eyebrow: "Step 1 of 2",
+    title: ["Where do your clients", "travel most?"],
+    intro: "Pick the regions you sell. We'll show you the destinations that matter to your business.",
+    tagline: LINE,
+    multi: true,
     next: "Next",
-    choices: [
-      {
-        id: "in",
-        code: "IN",
-        title: "India to world ",
-        text: "Explore and make memories!",
-      },
-      {
-        id: "za",
-        code: "ZA",
-        title: "South Africa to World ",
-        text: "Unique destinations at your fingertips",
-      },
-      {
-        id: "us",
-        code: "US",
-        title: "United States to world ",
-        text: "Discover safe and exotic destinations!",
-      },
-      {
-        id: "ca",
-        code: "CA",
-        title: "Canada to World ",
-        text: "Far and near, experience enchanting escapes!",
-      },
-    ],
+    // That market's regions from Appendix A, in the client's order, with how many destinations each has.
+    choices: marketLists[market].map((r) => ({
+      id: r.region,
+      icon: regionIcons[r.region],
+      title: r.name,
+      meta: `${r.ids.length} destinations`,
+    })),
   },
   {
-    id: "destinations",
-    label: "Destinations",
-    eyebrow: "Let's personalise your experience",
-    title: ["Which regions", "do you sell most?"],
-    intro:
-      "Select all that apply. This helps us show you the most relevant destinations, products and opportunities.",
-    tagline: "Same world. More possibilities.",
+    id: "categories",
+    label: "Categories",
+    eyebrow: "Step 2 of 2",
+    title: ["Which categories", "do you sell most?"],
+    intro: "Pick as many as you like. We'll put them first on every destination.",
+    tagline: LINE,
     multi: true,
-    skipHint: "We'll show you popular destinations for your market",
-    next: "Next",
-    choices: [
-      {
-        id: "sea",
-        icon: TreePalm,
-        title: "Southeast Asia",
-        meta: "12 destinations",
-        text: "Beaches, culture, food and unforgettable experiences",
-      },
-      {
-        id: "me",
-        icon: Landmark,
-        title: "Middle East",
-        meta: "10 destinations",
-        text: "Modern cities, luxury and unique landscapes",
-      },
-      {
-        id: "eu",
-        icon: Castle,
-        title: "Europe",
-        meta: "20 destinations",
-        text: "History, art, and incredible diversity",
-      },
-      {
-        id: "af",
-        icon: PawPrint,
-        title: "Africa",
-        meta: "14 destinations",
-        text: "Wildlife, nature and extraordinary journeys",
-      },
-      {
-        id: "na",
-        icon: Building2,
-        title: "North America",
-        meta: "12 destinations",
-        text: "Iconic cities and breathtaking natural wonders",
-      },
-      {
-        id: "sa",
-        icon: Mountain,
-        title: "South America",
-        meta: "8 destinations",
-        text: "Vibrant cultures and extraordinary landscapes",
-      },
-      {
-        id: "oc",
-        icon: Waves,
-        title: "Oceania",
-        meta: "6 destinations",
-        text: "Stunning coastlines and unique adventures",
-      },
-      {
-        id: "is",
-        icon: Sun,
-        title: "Indian Subcontinent",
-        meta: "8 destinations",
-        text: "Rich culture, heritage and diverse experiences",
-      },
-    ],
-  },
-  {
-    id: "specialise",
-    label: "What you sell",
-    eyebrow: "Tailored for your business",
-    title: ["What do you", "specialise in?"],
-    intro:
-      "Choose all that apply. We'll show you destinations and products that match your expertise.",
-    tagline: "More ways to sell. More journeys to create.",
-    multi: true,
-    skipHint: "We'll show a mix of popular options",
-    next: "Next",
-    choices: [
-      {
-        id: "flights",
-        icon: Plane,
-        title: "Flights",
-        text: "International and domestic flight bookings",
-      },
-      {
-        id: "hotels",
-        icon: BedDouble,
-        title: "Hotels",
-        text: "Hotel bookings for leisure and business travel",
-      },
-      {
-        id: "experiences",
-        icon: Ticket,
-        title: "Experiences",
-        text: "Tours, activities and unique local experiences",
-      },
-      {
-        id: "transfers",
-        icon: CarFront,
-        title: "Transfers",
-        text: "Airport and local transfers",
-      },
-    ],
-  },
-  {
-    id: "hotels",
-    label: "Hotel category",
-    eyebrow: "Almost there",
-    title: ["Which hotels", "do you sell most?"],
-    intro:
-      "Choose all that apply. We'll tailor your recommendations to the hotels your travellers love.",
-    tagline: "Every traveller finds their perfect stay.",
-    multi: true,
-    skipHint: "We'll show a mix of hotel options",
     next: "Show my destinations",
     choices: [
-      {
-        id: "luxury",
-        icon: Crown,
-        title: "Luxury",
-        meta: "Ideal for high-value travellers",
-        text: "5-star and ultra-luxury properties, premium resorts and exclusive experiences.",
-      },
-      {
-        id: "upscale",
-        icon: Star,
-        title: "Upscale",
-        meta: "Perfect for business and leisure",
-        text: "4-star hotels with excellent amenities and popular brands.",
-      },
-      {
-        id: "midscale",
-        icon: Building2,
-        title: "Midscale",
-        meta: "Most popular worldwide",
-        text: "3-star hotels offering great comfort and value for a wide range of travellers.",
-      },
-      {
-        id: "boutique",
-        icon: Gem,
-        title: "Boutique & Heritage",
-        meta: "For one-of-a-kind stays",
-        text: "Unique, character-filled properties with local charm and authentic experiences.",
-      },
-      {
-        id: "budget",
-        icon: Wallet,
-        title: "Budget",
-        meta: "Great for groups and long stays",
-        text: "Reliable and comfortable stays for value-conscious travellers.",
-      },
+      { id: "flights", icon: Plane, title: "Flights", text: "400+ airlines, booked up to the day of departure" },
+      { id: "hotels", icon: BedDouble, title: "Hotels", text: "300,000+ hotels, with the total price shown upfront" },
+      { id: "experiences", icon: Ticket, title: "Experiences", text: "400,000+ tours, tickets and activities" },
+      { id: "transfers", icon: CarFront, title: "Transfers", text: "Airport, station, port and hotel transfers" },
+      { id: "car-rentals", icon: Car, title: "Car rentals", text: "Self drive cars from 11 global brands. Zero booking fee. T&Cs apply." },
     ],
   },
 ];

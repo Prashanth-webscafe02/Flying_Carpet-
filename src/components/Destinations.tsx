@@ -1,7 +1,9 @@
 import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion'
 import { useRef } from 'react'
 import { destinations } from '../content'
+import { REGISTER_URL } from '../config'
 import { Eyebrow, PillButton, Reveal, SplitHeading } from '../effects/motion'
+import { marketName } from '../market'
 import { LucidWave } from '../effects/LucidLine'
 
 type D = (typeof destinations)[number]
@@ -27,7 +29,7 @@ function Card({ d, i, total, progress }: { d: D; i: number; total: number; progr
             <h3 className="text-[clamp(2.25rem,6vw,5.5rem)] font-semibold leading-none tracking-[-0.06em]">{d.name}</h3>
             <p className="mt-4 line-clamp-4 text-[0.95rem] leading-relaxed text-white/75 md:mt-5 md:line-clamp-6 md:text-base lg:line-clamp-none">{d.text}</p>
           </div>
-          <div><PillButton href="/get-started/market">Get Agency Access</PillButton></div>
+          <div><PillButton href={REGISTER_URL} target="_blank">Register free</PillButton></div>
         </div>
         <div className="relative min-h-0 overflow-hidden">
           <img src={d.img} alt={d.name} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
@@ -52,10 +54,10 @@ export default function Destinations() {
         <div className="mx-auto max-w-6xl">
           <Reveal><Eyebrow>Destinations</Eyebrow></Reveal>
           <div className="grid items-end gap-6 md:grid-cols-2 md:gap-0">
-            <SplitHeading text="All Curated" className="text-[clamp(3rem,8vw,7.5rem)] font-semibold leading-[0.95] tracking-[-0.06em]" />
+            <SplitHeading text="The destinations your clients ask for most" className="text-[clamp(2.2rem,5.2vw,4.75rem)] font-semibold leading-[1.02] tracking-tighter md:pr-10" />
             <Reveal delay={0.15}>
               <p className="max-w-md text-lg leading-relaxed text-white/75">
-                Unlock elite destinations, seamless client experiences, and premier supplier networks designed to elevate your agency and inspire your travelers.
+                The top leisure destinations for clients travelling from {marketName}, with all five categories on one login.
               </p>
             </Reveal>
           </div>
@@ -66,6 +68,11 @@ export default function Destinations() {
         {destinations.map((d, i) => (
           <Card key={d.name} d={d} i={i} total={destinations.length} progress={scrollYProgress} />
         ))}
+      </div>
+
+      {/* Button under the section (H6): starts the questions */}
+      <div className="mt-10 flex justify-center px-4">
+        <PillButton href="/get-started" variant="glass">Explore destinations</PillButton>
       </div>
     </section>
   )

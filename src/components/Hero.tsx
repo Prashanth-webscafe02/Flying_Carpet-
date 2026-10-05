@@ -1,24 +1,28 @@
 import { motion, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion'
-import { ArrowDown } from 'lucide-react'
 import { useLayoutEffect, useRef, useState, type RefObject } from 'react'
+import { REGISTER_URL } from '../config'
 import { PillButton, ease } from '../effects/motion'
+import { words } from '../market'
 
 // Portrait phones get the tall cut-out; everything else (incl. landscape phones) the wide one.
 const MOBILE_MQ = '(max-width: 767px) and (orientation: portrait)'
 
 // Foreground cut-out geometry: aspect ratio, and the highest point of its ridge under the headline
-// (as a fraction of the image height, measured from the alpha channel), plus how much of the
-// headline (em, from its top) must stay above that ridge: desktop tucks the letter bottoms into
-// the hill, phones keep the whole word (down to the baseline) clear of it.
+// (as a fraction of the image height, measured from the alpha channel), plus how far (em) the bottom
+// of the headline may sink below that ridge: desktop tucks the letter bottoms into the hill, phones
+// keep the whole headline clear of it (a negative tuck leaves a small gap).
 const FG = {
-  desktop: { aspect: 1350 / 2899, ridge: 0.23, visible: 0.67 },
-  mobile: { aspect: 1026 / 750, ridge: 0.08, visible: 0.9 },
+  desktop: { aspect: 1350 / 2899, ridge: 0.23, tuck: 0.3 },
+  mobile: { aspect: 1026 / 750, ridge: 0.08, tuck: -0.06 },
 }
 const FG_BLEED = 1.06 // foreground is inset -3% on each side
-const MIN_FONT = 56
+const MIN_FONT = 36
+// The headline (H2) is two lines: "For everything" / "last minute."
+const LINES = ['For everything', 'last minute.']
+const LEADING = 0.95
 
-// Fit "Unlock" into the sky above the ridge: first sink the foreground (up to 40% of its height),
-// then shrink the headline, so wide-but-short screens never hide it behind the hills.
+// Fit the headline into the sky above the ridge: first sink the foreground (up to 40% of its height),
+// then shrink the headline, so wide but short screens never hide it behind the hills.
 function useHeroFit(ref: RefObject<HTMLElement | null>) {
   const [fit, setFit] = useState({ font: 0, top: 0, drop: 0 })
   useLayoutEffect(() => {
@@ -33,10 +37,11 @@ function useHeroFit(ref: RefObject<HTMLElement | null>) {
       // Position comes only from measured sizes (not font metrics or viewport units), so every browser
       // places it identically; it also always clears the fixed header.
       const headerH = document.querySelector('header')?.offsetHeight ?? 0
-      const top = Math.max(h * (w < 768 ? 0.36 : 0.32), headerH + 110)
-      const ideal = Math.min(w * 0.22, h * 0.32, 240)
-      const drop = Math.min(Math.max(0, top + ideal * fg.visible - ridgeY), fgH * 0.4)
-      const font = Math.max(MIN_FONT, Math.min(ideal, (ridgeY + drop - top) / fg.visible))
+      const top = Math.max(h * (w < 768 ? 0.3 : 0.25), headerH + 90)
+      const ideal = Math.min(w * 0.105, h * 0.15, 150)
+      const above = LINES.length * LEADING - fg.tuck // em of headline that must sit above the ridge
+      const drop = Math.min(Math.max(0, top + ideal * above - ridgeY), fgH * 0.4)
+      const font = Math.max(MIN_FONT, Math.min(ideal, (ridgeY + drop - top) / above))
       setFit({ font, top, drop })
     }
     measure()
@@ -48,7 +53,7 @@ function useHeroFit(ref: RefObject<HTMLElement | null>) {
   return fit
 }
 
-// Layered hero, like the original: sky layer → giant "Unlock" → foreground landscape cut-out.
+// Layered hero, like the original: sky layer, then the headline, then the foreground landscape cut-out.
 // Each layer moves at its own depth on scroll and pointer for a parallax, "window" feel.
 export default function Hero() {
   const ref = useRef<HTMLElement>(null)
@@ -96,21 +101,39 @@ export default function Hero() {
         </picture>
       </motion.div>
 
-      {/* Headline sits between sky and foreground */}
-      <motion.div style={{ y: textY, opacity: textOpacity, x: textX, top: fit.top }} className="absolute inset-x-0 z-2 flex justify-center">
-        <h1 style={{ fontSize: fit.font || undefined }} className="flex overflow-hidden text-[clamp(3.5rem,min(22vw,32vh),15rem)] font-semibold leading-none tracking-[-0.07em] text-white drop-shadow-[0_6px_24px_rgba(0,0,0,0.28)]">
-          {'Unlock'.split('').map((c, i) => (
-            <motion.span
-              key={i}
-              initial={{ y: '100%', opacity: 0 }}
-              animate={{ y: '0%', opacity: 1 }}
-              transition={{ duration: 1.2, delay: 0.4 + i * 0.07, ease }}
-              className="inline-block"
-            >
-              {c}
-            </motion.span>
-          ))}
-        </h1>
+      {/* Headline sits between sky and foreground; the small line floats just above it */}
+      <motion.div style={{ y: textY, opacity: textOpacity, x: textX, top: fit.top }} className="absolute inset-x-0 z-2 flex justify-center px-4">
+        <div className="relative">
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.3, ease }}
+            className="absolute bottom-full left-0 right-0 mb-3 text-center text-[clamp(0.7rem,1.1vw,0.9rem)] font-bold uppercase tracking-[0.2em] text-accent drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]"
+          >
+            The booking platform for {words.travelAgents}
+          </motion.p>
+          <h1
+            style={{ fontSize: fit.font || undefined, lineHeight: LEADING }}
+            className="text-center text-[clamp(2.5rem,min(10.5vw,15vh),9.5rem)] font-bold tracking-[-0.045em] text-white drop-shadow-[0_6px_24px_rgba(0,0,0,0.28)]"
+          >
+            {LINES.map((line, l) => (
+              <span key={line} className="block overflow-hidden whitespace-nowrap pb-[0.06em]">
+                {line.split(' ').map((word, i) => (
+                  <motion.span
+                    key={word}
+                    initial={{ y: '100%', opacity: 0 }}
+                    animate={{ y: '0%', opacity: 1 }}
+                    transition={{ duration: 1.2, delay: 0.4 + (l * 2 + i) * 0.09, ease }}
+                    className="inline-block"
+                  >
+                    {i > 0 && '\u00a0'}
+                    {word}
+                  </motion.span>
+                ))}
+              </span>
+            ))}
+          </h1>
+        </div>
       </motion.div>
 
       {/* Foreground landscape */}
@@ -136,28 +159,17 @@ export default function Hero() {
         initial={{ opacity: 0, y: 40, filter: 'blur(12px)' }}
         animate={{ opacity: 1, y: 0, filter: 'blur(0px)', transitionEnd: { filter: 'none' } }}
         transition={{ duration: 1.2, delay: 1, ease }}
-        className="glass-orange absolute bottom-8 left-4 right-4 z-5 rounded-4xl p-6 md:bottom-14 md:left-10 md:right-auto md:max-w-md md:p-7"
+        className="glass-orange absolute bottom-8 left-4 right-4 z-5 rounded-4xl p-6 md:bottom-14 md:left-10 md:right-auto md:max-w-lg md:p-7"
       >
-        <p className="mb-5 text-[clamp(1.125rem,1.65vw,1.6rem)] font-semibold leading-[1.3] tracking-[-0.03em]">
-          Exclusive inventory, Higher commissions, and Seamless technology
+        <p className="mb-5 text-[clamp(1.05rem,1.4vw,1.35rem)] font-bold leading-[1.35] tracking-[-0.02em]">
+          When your client needs to travel soon, have the answer now. 400+ airlines, 300,000+ hotels and 400,000+ experiences on one login, with 24/7 help.
         </p>
-        <PillButton href="/get-started/market">Get Agency Access</PillButton>
+        <div className="flex flex-wrap items-center gap-3">
+          <PillButton href={REGISTER_URL} target="_blank">Register free</PillButton>
+          <PillButton href="/get-started" variant="glass">Explore destinations</PillButton>
+        </div>
+        <p className="mt-4 text-sm font-semibold text-white/85">Free to register. No fees, no minimum.</p>
       </motion.div>
-
-      <motion.a
-        href="#journeys"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.6 }}
-        className="glass absolute bottom-14 right-10 z-5 hidden items-center gap-3 rounded-full py-2 pl-5 pr-2 text-sm font-semibold md:flex"
-      >
-        Learn More
-        <span className="grid size-8 place-items-center rounded-full bg-white/15">
-          <motion.span animate={{ y: [0, 4, 0] }} transition={{ repeat: Infinity, duration: 1.6 }}>
-            <ArrowDown className="size-4" />
-          </motion.span>
-        </span>
-      </motion.a>
     </section>
   )
 }

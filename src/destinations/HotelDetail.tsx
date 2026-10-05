@@ -41,14 +41,15 @@ import {
 import { useEffect, useState } from "react";
 import { LucidCorner } from "../effects/LucidLine";
 import { Reveal, ease } from "../effects/motion";
-import { REGISTER_URL } from "../content";
+import { REGISTER_URL, pageTitle } from "../content";
+import { words } from "../market";
 import { SectionTabs, SectionTitle } from "./AgentRates";
 import Gallery from "./Gallery";
 import ProductInfoPanel from "./ProductInfoPanel";
 import { bigPhoto, countryName, type Destination } from "./data";
 import {
   categoryLabel,
-  details,
+  detailFor,
   hotelImages,
   images,
   type Detail,
@@ -93,20 +94,20 @@ const facilityIcon = (label: string): LucideIcon => {
 
 const categoryBlurb: Record<Hotel["category"], string> = {
   luxury:
-    "A top choice for high-value travellers, honeymooners and special occasions.",
+    "A top choice for high value clients, honeymooners and special occasions.",
   upscale:
-    "Great for families, couples and business travellers who want quality and comfort.",
+    "Great for families, couples and business clients who want quality and comfort.",
   midscale:
-    "A reliable, great-value choice that suits a wide range of travellers.",
+    "A reliable, great value choice that suits a wide range of clients.",
   boutique:
-    "A one-of-a-kind stay with character, ideal for clients who want something different.",
+    "A one of a kind stay with character, ideal for clients who want something different.",
   budget:
-    "A smart, comfortable option for value-conscious travellers, groups and longer stays.",
+    "A smart, comfortable option for value conscious clients, groups and longer stays.",
 };
 
 // "Ideal for" chips, matching the category blurbs above.
 const idealFor: Record<Hotel["category"], string[]> = {
-  luxury: ["Honeymoons", "Special occasions", "High-value travellers"],
+  luxury: ["Honeymoons", "Special occasions", "High value clients"],
   upscale: ["Families", "Couples", "Business travel"],
   midscale: ["Great value", "Couples", "Families"],
   boutique: ["Something different", "Couples", "Design lovers"],
@@ -152,7 +153,7 @@ function facilityGroups(hotel: Hotel, info: Detail): FacilityGroup[] {
       title: "Amenities and Services",
       icon: ConciergeBell,
       items: [
-        f("24-hour reception"),
+        f("24 hour reception"),
         f("Multilingual staff"),
         ...(premium ? [f("Concierge")] : []),
         f("Luggage storage"),
@@ -199,7 +200,7 @@ function facilityGroups(hotel: Hotel, info: Detail): FacilityGroup[] {
       icon: Info,
       items: [
         f("Deposit may be required on arrival"),
-        f("Photo ID required at check-in"),
+        f("Photo ID required at check in"),
       ],
     },
     {
@@ -274,7 +275,7 @@ export default function HotelDetail({
   d: Destination;
   hotel: Hotel;
 }) {
-  const info = details[d.id];
+  const info = detailFor(d.id);
   const index = info.hotels.indexOf(hotel);
   const country = countryName(d.country);
   const facts = hotelFacts[hotel.name] ?? {};
@@ -298,7 +299,7 @@ export default function HotelDetail({
   const back = `/destinations/${d.id}/hotels`;
 
   useEffect(() => {
-    document.title = `${hotel.name} · ${d.city} — Flying Carpet`;
+    document.title = pageTitle(hotel.name, d.city);
   }, [hotel.name, d.city]);
 
   // Top amenities: the hotel's own, then standard services.
@@ -309,7 +310,7 @@ export default function HotelDetail({
       ...[
         "Restaurant",
         "Free Wi-Fi",
-        "24-hour reception",
+        "24 hour reception",
         "Multilingual staff",
       ].filter(
         (f) =>
@@ -330,7 +331,7 @@ export default function HotelDetail({
   // the section, the Policy component, the 'policies' tab, CalendarClock in the icon import and ReactNode from react.
   // const allItems = allGroups.flatMap((g) => g.items.map((i) => i.label))
   // const times = (re: RegExp) => allItems.find((l) => re.test(l))?.match(/\d{1,2}:\d{2}/g) ?? null
-  // const checkIn = times(/check-in hour/i)
+  // const checkIn = times(/check in hour/i)
   // const checkOut = times(/check-out hour/i)
   // const cards = allGroups.find((g) => g.title === 'Cards Accepted')?.items.map((i) => i.label) ?? []
   // const goodToKnow = allGroups.find((g) => g.title === 'To take into account')?.items.map((i) => i.label) ?? []
@@ -566,7 +567,7 @@ export default function HotelDetail({
                   ([key]) => roomFacts.rooms?.[key] === undefined,
                 )) && (
                 <p className="mt-3 text-xs text-white/45">
-                  — Confirmed on request
+                 , confirmed on request
                 </p>
               )}
             </section>
@@ -672,7 +673,7 @@ export default function HotelDetail({
           <div className="relative flex flex-col gap-6 p-8 md:flex-row md:items-center md:justify-between md:p-12">
             <div className="max-w-xl">
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-accent">
-                Special agent rates
+                Special {words.agent} rates
               </p>
               <h2 className="mt-2 text-[clamp(1.5rem,2.6vw,2.25rem)] font-semibold leading-tight tracking-[-0.04em]">
                 Want {hotel.name} for your client?
@@ -687,7 +688,7 @@ export default function HotelDetail({
               target="_blank"
               className="inline-flex shrink-0 items-center gap-3 self-start rounded-full bg-cream py-1.5 pl-5 pr-1.5 font-bold tracking-tight text-ink shadow-[0_10px_40px_-8px_rgb(232_101_37/0.7)] transition-transform duration-500 hover:scale-[1.04] md:self-auto"
             >
-              Sign Up
+              Register free
               <span className="grid size-8 place-items-center rounded-full bg-accent text-white">
                 <ArrowRight className="size-4" />
               </span>

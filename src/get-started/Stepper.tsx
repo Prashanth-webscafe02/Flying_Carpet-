@@ -2,10 +2,10 @@ import { motion } from 'framer-motion'
 import { Check } from 'lucide-react'
 import { steps, type StepId } from './steps'
 
-// Numbered progress rail; completed and current steps are clickable, future ones are not.
+// Numbered progress rail (Q5: Regions, Categories); completed and current steps are clickable, future ones are not.
 export default function Stepper({ current, done, onGo }: { current: number; done: Set<StepId>; onGo: (i: number) => void }) {
   return (
-    <ol className="grid grid-cols-4 gap-2 md:gap-3">
+    <ol className="grid grid-cols-2 gap-2 md:gap-3">
       {steps.map((s, i) => {
         const isDone = done.has(s.id) && i !== current
         const isCurrent = i === current
