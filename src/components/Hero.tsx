@@ -165,9 +165,6 @@ export default function Hero() {
       {/* Lucid Line through the visual: over the hills, under the card (z-5), below the headline */}
       <LucidWave shape="lift" draw="intro" className="absolute inset-x-0 top-[60%] bottom-[6%] z-4" />
 
-      {/* Second Lucid Line: enters from the right edge and runs in behind the card (z-5) to its Register free button */}
-      <LucidWave shape="fall" mirror draw="intro" className="absolute bottom-10 left-[22%] right-0 z-4 hidden h-36 md:block" />
-
       {/* Glass info card */}
       <motion.div
         ref={cardRef}
