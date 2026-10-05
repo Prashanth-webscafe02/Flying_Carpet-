@@ -3,7 +3,8 @@ import { Check } from 'lucide-react'
 import { ease } from '../effects/motion'
 import type { Choice } from './steps'
 
-// Image-free selection tile: badge (code or icon), title, meta line, and a description that opens on hover/focus and stays open once picked.
+// Image-free selection tile: badge (code or icon), title, meta line, and (when there is one) a description
+// that opens on hover/focus and stays open once picked.
 export default function ChoiceTile({ choice, selected, multi, index, onToggle }: {
   choice: Choice
   selected: boolean
@@ -42,7 +43,7 @@ export default function ChoiceTile({ choice, selected, multi, index, onToggle }:
       <span className="min-w-0 flex-1">
         <span className="block text-[0.975rem] font-semibold leading-snug tracking-tight">{choice.title}</span>
         {choice.meta && <span className="block text-xs leading-snug text-white/55">{choice.meta}</span>}
-        <span
+        {choice.text && <span
           className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${
             selected
               ? 'grid-rows-[1fr] opacity-100'
@@ -52,7 +53,7 @@ export default function ChoiceTile({ choice, selected, multi, index, onToggle }:
           <span className="overflow-hidden">
             <span className="block pt-1.5 text-[0.8rem] leading-snug text-white/70">{choice.text}</span>
           </span>
-        </span>
+        </span>}
       </span>
 
       <span

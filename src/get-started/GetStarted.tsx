@@ -1,10 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Globe2,
-  Search,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, Globe2, Search } from "lucide-react";
 import {
   useCallback,
   useEffect,
@@ -18,86 +13,32 @@ import { LucidWave } from "../effects/LucidLine";
 import ChoiceTile from "./ChoiceTile";
 import Stepper from "./Stepper";
 import { steps, type Step, type StepId } from "./steps";
-import { STORAGE_KEY } from "./answers";
+import { empty, loadAnswers, saveAnswers, type Saved } from "./answers";
 import { pageTitle } from "../content";
 
-type Answers = Record<StepId, string[]>;
-const empty: Answers = {
-  market: [],
-  destinations: [],
-  specialise: [],
-  hotels: [],
-};
-
-// Routes mirror the original site: /get-started/<step>. The last step leads to /destinations.
+// Routes: /get-started/<step>. The questions always open at step 1 (with any earlier picks
+// already selected); a link to a specific step, such as "Edit" on the results, opens that step.
 const indexFromPath = () => {
   const slug = window.location.pathname.split("/").filter(Boolean)[1];
   const i = steps.findIndex((s) => s.id === slug);
   return i === -1 ? 0 : i;
 };
 const pathFor = (i: number) => `/get-started/${steps[i].id}`;
-
-function load(): { answers: Answers; visited: StepId[] } {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) {
-      const saved = JSON.parse(raw) as Partial<{
-        answers: Partial<Answers>;
-        visited: StepId[];
-      }>;
-      const answers = { ...empty };
-      for (const s of steps) {
-        const ids = (saved.answers?.[s.id] ?? []).filter((id) =>
-          s.choices.some((c) => c.id === id),
-        );
-        answers[s.id] = s.multi ? ids : ids.slice(0, 1);
-      }
-      return {
-        answers,
-        visited: (saved.visited ?? []).filter((v) =>
-          steps.some((s) => s.id === v),
-        ),
-      };
-    }
-  } catch {
-    /* storage blocked or corrupt — start fresh */
-  }
-  return { answers: empty, visited: [] };
-}
-
-// The site's buttons all link to the first step. Coming back with saved progress, pick up at the
-// first step not yet completed instead of starting over (or go straight to the destinations when
-// every step is done). A link to a specific step, such as "Edit" on the destinations page, is kept.
-const ALL_DONE = -1;
-function resumeIndex(visited: StepId[]) {
-  const i = indexFromPath();
-  if (i !== 0 || window.location.search || !visited.length) return i;
-  const next = steps.findIndex((s) => !visited.includes(s.id));
-  return next === -1 ? ALL_DONE : next;
-}
+const toResults = () => window.location.assign("/destinations");
 
 export default function GetStarted() {
-  const [{ answers, visited }, setState] = useState(load);
-  const [resume] = useState(() => resumeIndex(visited));
-  const [index, setIndex] = useState(resume === ALL_DONE ? 0 : resume);
+  const [{ answers, visited }, setState] = useState<Saved>(loadAnswers);
+  const [index, setIndex] = useState(indexFromPath);
   const [dir, setDir] = useState(1);
 
   useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ answers, visited }));
-    } catch {
-      /* ignore */
-    }
+    saveAnswers({ answers, visited });
   }, [answers, visited]);
 
   // Normalise the URL on first load and follow browser back/forward.
   useEffect(() => {
-    if (resume === ALL_DONE) {
-      window.location.replace("/destinations");
-      return;
-    }
     if (window.location.pathname !== pathFor(index))
-      window.history.replaceState(null, "", pathFor(index));
+      window.history.replaceState(null, "", pathFor(index) + window.location.search);
     const onPop = () => setIndex(indexFromPath());
     window.addEventListener("popstate", onPop);
     return () => window.removeEventListener("popstate", onPop);
@@ -143,30 +84,20 @@ export default function GetStarted() {
       go(index + 1);
       return;
     }
-    // Last step: save now (the page is about to unload) and show the tailored destinations.
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-    } catch {
-      /* ignore */
-    }
-    window.location.assign("/destinations");
+    // Last step: save now (the page is about to unload) and show the destinations.
+    saveAnswers(next);
+    toResults();
+  };
+
+  // "Show me everything": results with no filters (Q2, Q3).
+  const everything = () => {
+    saveAnswers({ answers: empty, visited });
+    toResults();
   };
 
   return (
     <main className="relative mx-auto flex min-h-svh max-w-6xl flex-col px-4 pb-12 pt-28 sm:pt-32 md:px-8 lg:pt-36">
       <div className="mb-10 md:mb-14">
-        <div className="mb-5 flex items-center justify-between text-sm">
-          <a
-            href="/"
-            className="inline-flex items-center gap-2 font-medium text-white/70 transition-colors hover:text-white"
-          >
-            <ArrowLeft className="size-4" /> Back to home
-          </a>
-          <p className="font-medium text-white/60">
-            Step <span className="text-white">{index + 1}</span> of{" "}
-            {steps.length}
-          </p>
-        </div>
         <Stepper current={index} done={done} onGo={go} />
       </div>
 
@@ -187,7 +118,7 @@ export default function GetStarted() {
         >
           <div className="grid gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
             <Intro step={step} />
-            <div className="flex flex-col gap-4">
+            <div className="relative z-1 flex flex-col gap-4">
               <ChoicePanel
                 key={step.id}
                 step={step}
@@ -197,15 +128,15 @@ export default function GetStarted() {
               <Actions
                 step={step}
                 first={index === 0}
-                hasPicks={selected.length > 0}
                 onBack={() => go(index - 1)}
-                onNext={() => complete()}
+                onNext={complete}
+                onEverything={everything}
               />
             </div>
           </div>
         </motion.section>
       </AnimatePresence>
-      {/* Lucid Line sign-off under the content on smaller screens (desktop has a fixed one) */}
+      {/* Lucid Line sign off under the content on smaller screens (desktop has a fixed one) */}
       <LucidWave
         shape="swell"
         draw="view"
@@ -224,7 +155,7 @@ function Intro({ step }: { step: Step }) {
       <h1 className="text-[clamp(2.1rem,3.3vw,3.25rem)] font-bold leading-[1.06] tracking-[-0.045em]">
         {step.title[0]}
         <br />
-        <span className="bg-gradient-to-r from-[#ffb68c] to-accent bg-clip-text text-transparent">
+        <span className="bg-linear-to-r from-[#ffb68c] to-accent bg-clip-text text-transparent">
           {step.title[1]}
         </span>
       </h1>
@@ -253,7 +184,7 @@ function ChoicePanel({
   const choices = q
     ? step.choices.filter((c) => c.title.toLowerCase().includes(q))
     : step.choices;
-  const searchable = step.choices.length > 8;
+  const searchable = step.choices.length > 10;
 
   const scroller = useRef<HTMLDivElement>(null);
   const [fade, setFade] = useState(false);
@@ -291,7 +222,7 @@ function ChoicePanel({
       </div>
 
       {searchable && (
-        <label className="mb-3 flex items-center gap-2 rounded-xl border border-white/12 bg-white/[0.05] px-3.5 py-2.5 focus-within:border-white/30">
+        <label className="mb-3 flex items-center gap-2 rounded-xl border border-white/12 bg-white/5 px-3.5 py-2.5 focus-within:border-white/30">
           <Search className="size-4 shrink-0 text-white/55" />
           <input
             type="search"
@@ -346,48 +277,52 @@ function ChoicePanel({
   );
 }
 
+// Step 1: Next · Show me everything · Back to home. Step 2: Show my destinations · Show me everything · Back.
 function Actions({
   step,
   first,
-  hasPicks,
   onBack,
   onNext,
+  onEverything,
 }: {
   step: Step;
   first: boolean;
-  hasPicks: boolean;
   onBack: () => void;
   onNext: () => void;
+  onEverything: () => void;
 }) {
+  const quiet =
+    "inline-flex items-center gap-2 rounded-full px-3 py-2.5 text-sm font-medium text-white/70 transition-colors hover:text-white";
   return (
     <div className="flex flex-wrap items-center justify-between gap-3">
       {first ? (
-        <span />
+        <a href="/" className={quiet}>
+          <ArrowLeft className="size-4" /> Back to home
+        </a>
       ) : (
-        <button
-          type="button"
-          onClick={onBack}
-          className="inline-flex items-center gap-2 rounded-full px-3 py-2.5 text-sm font-medium text-white/70 transition-colors hover:text-white"
-        >
+        <button type="button" onClick={onBack} className={quiet}>
           <ArrowLeft className="size-4" /> Back
         </button>
       )}
-      <button
-        type="button"
-        onClick={onNext}
-        disabled={!hasPicks && !step.skipHint}
-        className="group inline-flex items-center gap-2.5 rounded-full bg-accent py-2.5 pl-5 pr-2.5 text-sm font-semibold text-white shadow-[0_10px_30px_-10px_rgb(232_101_37/0.9)] transition-all duration-300 hover:brightness-110 disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-white/45 disabled:shadow-none"
-      >
-        {!hasPicks && step.skipHint ? "Continue without choosing" : step.next}
-        <span className="grid size-6 place-items-center rounded-full bg-white/20 transition-transform duration-300 group-hover:translate-x-0.5 group-disabled:translate-x-0">
-          <ArrowRight className="size-3.5" />
-        </span>
-      </button>
-      {step.skipHint && !hasPicks && (
-        <p className="w-full text-right text-xs text-white/50">
-          {step.skipHint}
-        </p>
-      )}
+      <div className="flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          onClick={onEverything}
+          className="glass rounded-full px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-white/15"
+        >
+          Show me everything
+        </button>
+        <button
+          type="button"
+          onClick={onNext}
+          className="group inline-flex items-center gap-2.5 rounded-full bg-accent py-2.5 pl-5 pr-2.5 text-sm font-semibold text-white shadow-[0_10px_30px_-10px_rgb(232_101_37/0.9)] transition-all duration-300 hover:brightness-110"
+        >
+          {step.next}
+          <span className="grid size-6 place-items-center rounded-full bg-white/20 transition-transform duration-300 group-hover:translate-x-0.5">
+            <ArrowRight className="size-3.5" />
+          </span>
+        </button>
+      </div>
     </div>
   );
 }

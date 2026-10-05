@@ -9,8 +9,8 @@ import {
   List,
   Pencil,
   Plane,
-  RotateCcw,
   Ticket,
+  X,
   type LucideIcon,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
@@ -18,11 +18,21 @@ import { LucidCorner, LucidWave } from "../effects/LucidLine";
 import { Reveal, ease } from "../effects/motion";
 import {
   clearAnswers,
+  empty,
   loadAnswers,
   type Answers,
 } from "../get-started/answers";
 import { steps, type StepId } from "../get-started/steps";
 import { REGISTER_URL, pageTitle } from "../content";
+import { market } from "../market";
+import {
+  allLists,
+  marketLists,
+  rankingFor,
+  regionNames,
+  regionOf,
+  type RegionId,
+} from "./markets";
 import { ChatLink } from "./ChatFab";
 import {
   bannerImg,
@@ -35,7 +45,19 @@ import {
 import { linkTo } from "./navigate";
 
 const PAGE = 8;
-const regions = steps.find((s) => s.id === "destinations")!.choices;
+
+// What the results list shows (R3): this market's list, every destination, or one of the market's regions.
+type Scope = "mine" | "all" | RegionId;
+
+// Only destinations with a page can be listed; phase 5 adds the rest of Appendix A.
+const byId = new Map(destinations.map((d) => [d.id, d]));
+const pick = (ids: string[]) => ids.map((id) => byId.get(id)).filter((d): d is Destination => !!d);
+
+const myMarket = marketLists[market];
+const allIds = allLists.flatMap((r) => r.ids);
+// "Our ranking": this market's order (Appendix A), then everything else in the full list's order.
+const ranking = [...rankingFor(market), ...allIds.filter((id) => !rankingFor(market).includes(id))];
+const rankOf = new Map(ranking.map((id, i) => [id, i]));
 
 const products: Record<ProductId, { label: string; icon: LucideIcon }> = {
   flights: { label: "Flights", icon: Plane },
@@ -45,14 +67,13 @@ const products: Record<ProductId, { label: string; icon: LucideIcon }> = {
   "car-rentals": { label: "Car rentals", icon: Car },
 };
 
-type Sort = "relevance" | "popular" | "az";
+type Sort = "ranking" | "az";
 const sorts: { id: Sort; label: string }[] = [
-  { id: "relevance", label: "Relevance" },
-  { id: "popular", label: "Popular" },
-  { id: "az", label: "A–Z" },
+  { id: "ranking", label: "Our ranking" },
+  { id: "az", label: "A to Z" },
 ];
 
-// "India to world" for one pick, "Southeast Asia +2" for several, or the fallback for none.
+// "Europe" for one pick, "Europe +2" for several, or the fallback for none.
 function summary(answers: Answers, id: StepId, fallback: string) {
   const picked = steps
     .find((s) => s.id === id)!
@@ -62,12 +83,12 @@ function summary(answers: Answers, id: StepId, fallback: string) {
   return picked.length === 1 ? picked[0] : `${picked[0]} +${picked.length - 1}`;
 }
 
-// Personalised results page the onboarding flow lands on: the agent's picks, a region filter,
-// and destinations ranked by how well they match (regions first, then products they sell).
+// Results page the questions land on: the agent's picks as filters (R2), this market's list or
+// every destination, a region list (R3) and "Our ranking" or A to Z.
 export default function DestinationsPage() {
-  const [{ answers }] = useState(loadAnswers);
-  const [region, setRegion] = useState("all");
-  const [sort, setSort] = useState<Sort>("relevance");
+  const [answers, setAnswers] = useState<Answers>(() => loadAnswers().answers);
+  const [scope, setScope] = useState<Scope>("mine");
+  const [sort, setSort] = useState<Sort>("ranking");
   const [view, setView] = useState<"grid" | "list">("grid");
   const [shown, setShown] = useState(PAGE);
 
@@ -75,57 +96,44 @@ export default function DestinationsPage() {
     document.title = pageTitle("Your destinations");
   }, []);
 
-  const myRegions = answers.destinations;
-  const mySpecialise = answers.specialise;
-  const personalised = Object.values(answers).some((a) => a.length);
+  const myRegions = answers.regions as RegionId[];
+  const myCategories = answers.categories;
+  const filtered = myRegions.length > 0 || myCategories.length > 0;
+
+  // The ids each entry in the region list stands for. "Your destinations" follows the region picks.
+  const idsFor = (s: Scope) =>
+    s === "mine"
+      ? myMarket.filter((r) => !myRegions.length || myRegions.includes(r.region)).flatMap((r) => r.ids)
+      : s === "all"
+        ? allIds
+        : (myMarket.find((r) => r.region === s)?.ids ?? []);
 
   const list = useMemo(() => {
-    const score = (d: Destination, i: number) =>
-      (myRegions.includes(d.region) ? 1000 : 0) +
-      d.products.filter((p) => mySpecialise.includes(p)).length * 50 +
-      (d.popular ? 10 : 0) -
-      i;
-    const ranked = destinations
-      .map((d, i) => ({ d, i }))
-      .filter(({ d }) => region === "all" || d.region === region);
-    if (sort === "az") ranked.sort((a, b) => a.d.city.localeCompare(b.d.city));
-    else if (sort === "popular")
-      ranked.sort(
-        (a, b) => Number(!!b.d.popular) - Number(!!a.d.popular) || a.i - b.i,
-      );
-    else ranked.sort((a, b) => score(b.d, b.i) - score(a.d, a.i));
-    return ranked.map(({ d }) => d);
-  }, [region, sort, myRegions, mySpecialise]);
+    const found = pick(idsFor(scope));
+    return sort === "az"
+      ? [...found].sort((a, b) => a.city.localeCompare(b.city))
+      : [...found].sort((a, b) => (rankOf.get(a.id) ?? 0) - (rankOf.get(b.id) ?? 0));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scope, sort, answers]);
 
-  const count = (id: string) =>
-    destinations.filter((d) => id === "all" || d.region === id).length;
-  const regionTitle = regions.find((r) => r.id === region)?.title;
-  const pickRegion = (id: string) => {
-    setRegion(id);
+  const count = (s: Scope) => pick(idsFor(s)).length;
+  const scopeTitle = (s: Scope) =>
+    s === "mine" ? "Your destinations" : s === "all" ? "See all destinations" : regionNames[s];
+  const regionTitle = scope === "mine" || scope === "all" ? undefined : regionNames[scope];
+  const pickScope = (s: Scope) => {
+    setScope(s);
     setShown(PAGE);
   };
+  const clearFilters = () => {
+    clearAnswers();
+    setAnswers(empty);
+    pickScope("mine");
+  };
 
+  // Filter bar (R2): Regions and Categories, each with Edit, plus Clear filters.
   const prefs: { id: StepId; label: string; value: string }[] = [
-    {
-      id: "market",
-      label: "Market",
-      value: summary(answers, "market", "All markets"),
-    },
-    {
-      id: "destinations",
-      label: "Regions",
-      value: summary(answers, "destinations", "All regions"),
-    },
-    {
-      id: "specialise",
-      label: "Specialise in",
-      value: summary(answers, "specialise", "All products"),
-    },
-    {
-      id: "hotels",
-      label: "Hotel category",
-      value: summary(answers, "hotels", "All categories"),
-    },
+    { id: "regions", label: "Regions", value: summary(answers, "regions", "All regions") },
+    { id: "categories", label: "Categories", value: summary(answers, "categories", "All categories") },
   ];
 
   return (
@@ -179,11 +187,11 @@ export default function DestinationsPage() {
             transition={{ duration: 0.9, delay: 0.45, ease }}
             className="glass-strong flex flex-col gap-3 rounded-[1.75rem] p-3 sm:p-4 lg:flex-row lg:items-center"
           >
-            <div className="grid flex-1 grid-cols-1 gap-2 min-[420px]:grid-cols-2 lg:grid-cols-4">
+            <div className="grid flex-1 grid-cols-1 gap-2 min-[420px]:grid-cols-2">
               {prefs.map((p) => (
                 <a
                   key={p.id}
-                  href={`/get-started/${p.id}?return=destinations`}
+                  href={`/get-started/${p.id}`}
                   className="group flex min-w-0 items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/6 px-4 py-3 transition-colors hover:border-white/25 hover:bg-white/10"
                 >
                   <span className="min-w-0">
@@ -202,13 +210,11 @@ export default function DestinationsPage() {
             </div>
             <button
               type="button"
-              onClick={() => {
-                clearAnswers();
-                window.location.assign("/get-started/market");
-              }}
-              className="inline-flex items-center justify-center gap-2 self-start rounded-full px-4 py-2.5 text-sm font-semibold text-white/70 transition-colors hover:text-white lg:self-auto"
+              onClick={clearFilters}
+              disabled={!filtered}
+              className="inline-flex items-center justify-center gap-2 self-start rounded-full px-4 py-2.5 text-sm font-semibold text-white/70 transition-colors hover:text-white disabled:cursor-default disabled:opacity-40 lg:self-auto"
             >
-              <RotateCcw className="size-4" /> Start over
+              <X className="size-4" /> Clear filters
             </button>
           </motion.div>
         </div>
@@ -223,20 +229,20 @@ export default function DestinationsPage() {
               <LayoutGroup id="regions">
                 <div
                   role="radiogroup"
-                  aria-label="Filter by region"
+                  aria-label="Choose what to show"
                   className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-2 scrollbar-none lg:mx-0 lg:flex-col lg:gap-1 lg:overflow-visible lg:px-0 lg:pb-0 [&::-webkit-scrollbar]:hidden"
                 >
-                  {[{ id: "all", title: "All destinations" }, ...regions].map(
-                    (r) => {
-                      const on = region === r.id;
-                      const mine = myRegions.includes(r.id);
+                  {(["mine", "all", ...myMarket.map((r) => r.region)] as Scope[]).map(
+                    (s) => {
+                      const on = scope === s;
+                      const mine = myRegions.includes(s as RegionId);
                       return (
                         <button
-                          key={r.id}
+                          key={s}
                           type="button"
                           role="radio"
                           aria-checked={on}
-                          onClick={() => pickRegion(r.id)}
+                          onClick={() => pickScope(s)}
                           className={`relative flex shrink-0 items-center justify-between gap-3 rounded-full px-4 py-2.5 text-left text-sm font-medium transition-colors lg:rounded-2xl ${on ? "text-white" : "text-white/70 hover:bg-white/6 hover:text-white"}`}
                         >
                           {on && (
@@ -251,7 +257,7 @@ export default function DestinationsPage() {
                             />
                           )}
                           <span className="relative flex items-center gap-2 whitespace-nowrap">
-                            {r.title.trim()}
+                            {scopeTitle(s)}
                             {mine && (
                               <span
                                 title="One of your regions"
@@ -262,7 +268,7 @@ export default function DestinationsPage() {
                           <span
                             className={`relative text-xs tabular-nums ${on ? "text-white" : "text-white/45"}`}
                           >
-                            {count(r.id)}
+                            {count(s)}
                           </span>
                         </button>
                       );
@@ -272,7 +278,8 @@ export default function DestinationsPage() {
               </LayoutGroup>
 
               <a
-                href="/#partners"
+                href={REGISTER_URL}
+                target="_blank"
                 className="group relative mt-6 hidden aspect-[4/3.4] overflow-hidden rounded-[1.75rem] ring-1 ring-white/15 lg:block"
               >
                 <img
@@ -286,9 +293,14 @@ export default function DestinationsPage() {
                 <span className="glass absolute right-4 top-4 grid size-10 place-items-center rounded-full transition-transform duration-500 group-hover:rotate-45 group-hover:bg-accent">
                   <ArrowUpRight className="size-4" />
                 </span>
-                <p className="absolute inset-x-5 bottom-5 font-semibold leading-snug tracking-tight">
-                  See how agents grow with Flying Carpet
-                </p>
+                <div className="absolute inset-x-5 bottom-5">
+                  <p className="font-semibold leading-snug tracking-tight">
+                    Ready when your client calls?
+                  </p>
+                  <span className="mt-3 inline-flex rounded-full bg-cream px-4 py-2 text-sm font-bold text-ink">
+                    Register free
+                  </span>
+                </div>
               </a>
             </aside>
 
@@ -296,15 +308,10 @@ export default function DestinationsPage() {
               <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
                 <div>
                   <h2 className="text-[clamp(1.6rem,2.6vw,2.25rem)] font-semibold leading-tight tracking-[-0.04em]">
-                    {region === "all"
-                      ? "Top destinations for you"
-                      : regionTitle}
+                    {scope === "all" ? "All destinations" : scopeTitle(scope)}
                   </h2>
                   <p className="mt-1 text-sm text-white/55">
                     {list.length} destination{list.length === 1 ? "" : "s"}
-                    {personalised && sort === "relevance"
-                      ? " · ranked by your picks"
-                      : ""}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -377,8 +384,8 @@ export default function DestinationsPage() {
                         d={d}
                         i={i}
                         list={view === "list"}
-                        inMyRegion={myRegions.includes(d.region)}
-                        mySpecialise={mySpecialise}
+                        inMyRegion={myRegions.includes(regionOf(d.id)!)}
+                        mySpecialise={myCategories}
                       />
                     ))}
                   </AnimatePresence>
@@ -448,9 +455,6 @@ export default function DestinationsPage() {
                   </span>
                 </ChatLink>
               </div>
-              <p className="text-[clamp(1.75rem,3.2vw,2.75rem)] font-light italic tracking-[-0.03em] text-white/90">
-                Travel sells dreams.
-              </p>
             </div>
           </Reveal>
         </section>
@@ -495,11 +499,6 @@ function Card({
         />
         <div className="absolute inset-0 bg-linear-to-t from-brand/50 via-transparent to-transparent" />
         <div className="absolute left-4 top-4 flex flex-wrap gap-1.5">
-          {d.popular && (
-            <span className="rounded-full bg-accent px-2.5 py-1 text-[0.68rem] font-bold uppercase tracking-[0.08em]">
-              Popular
-            </span>
-          )}
           {inMyRegion && (
             <span className="glass rounded-full px-2.5 py-1 text-[0.68rem] font-bold uppercase tracking-[0.08em]">
               Your region

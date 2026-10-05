@@ -14,12 +14,14 @@ try {
 }
 
 export const empty: Answers = {
-  market: [],
-  destinations: [],
-  specialise: [],
-  hotels: [],
+  regions: [],
+  categories: [],
 };
 
+/**
+ * Saved picks, filtered against this market's choices: a region the market does not list
+ * (for example after switching ?market= on a preview) is dropped.
+ */
 export function loadAnswers(): Saved {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);

@@ -20,7 +20,6 @@ import { ease } from "../effects/motion";
 import { REGISTER_URL, pageTitle } from "../content";
 import { words } from "../market";
 import { loadAnswers } from "../get-started/answers";
-import { steps } from "../get-started/steps";
 import FlightsInfo from "./FlightsInfo";
 import { productsOf, whatsapp, type Destination, type ProductId } from "./data";
 import {
@@ -85,9 +84,6 @@ export default function DestinationDetail({
 
   const enquire = (what: string) =>
     whatsapp(`Hi! I'd like ${what} in ${name} for my clients.`);
-  const marketTitle = steps[0].choices
-    .find((c) => c.id === answers.market[0])
-    ?.title.trim();
 
   return (
     <>
@@ -246,7 +242,7 @@ export default function DestinationDetail({
                 <Overview
                   d={d}
                   info={info}
-                  mySpecialise={answers.specialise}
+                  mySpecialise={answers.categories}
                   onTab={go}
                 />
               )}
@@ -257,8 +253,7 @@ export default function DestinationDetail({
                 <Hotels
                   d={d}
                   info={info}
-                  myHotels={answers.hotels}
-                  market={marketTitle}
+                  myHotels={[]}
                   onBack={() => go(null)}
                   enquire={enquire}
                 />
