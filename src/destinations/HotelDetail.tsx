@@ -94,20 +94,20 @@ const facilityIcon = (label: string): LucideIcon => {
 
 const categoryBlurb: Record<Hotel["category"], string> = {
   luxury:
-    "A top choice for high-value travellers, honeymooners and special occasions.",
+    "A top choice for high value clients, honeymooners and special occasions.",
   upscale:
-    "Great for families, couples and business travellers who want quality and comfort.",
+    "Great for families, couples and business clients who want quality and comfort.",
   midscale:
-    "A reliable, great-value choice that suits a wide range of travellers.",
+    "A reliable, great value choice that suits a wide range of clients.",
   boutique:
-    "A one-of-a-kind stay with character, ideal for clients who want something different.",
+    "A one of a kind stay with character, ideal for clients who want something different.",
   budget:
-    "A smart, comfortable option for value-conscious travellers, groups and longer stays.",
+    "A smart, comfortable option for value conscious clients, groups and longer stays.",
 };
 
 // "Ideal for" chips, matching the category blurbs above.
 const idealFor: Record<Hotel["category"], string[]> = {
-  luxury: ["Honeymoons", "Special occasions", "High-value travellers"],
+  luxury: ["Honeymoons", "Special occasions", "High value clients"],
   upscale: ["Families", "Couples", "Business travel"],
   midscale: ["Great value", "Couples", "Families"],
   boutique: ["Something different", "Couples", "Design lovers"],
@@ -153,7 +153,7 @@ function facilityGroups(hotel: Hotel, info: Detail): FacilityGroup[] {
       title: "Amenities and Services",
       icon: ConciergeBell,
       items: [
-        f("24-hour reception"),
+        f("24 hour reception"),
         f("Multilingual staff"),
         ...(premium ? [f("Concierge")] : []),
         f("Luggage storage"),
@@ -200,7 +200,7 @@ function facilityGroups(hotel: Hotel, info: Detail): FacilityGroup[] {
       icon: Info,
       items: [
         f("Deposit may be required on arrival"),
-        f("Photo ID required at check-in"),
+        f("Photo ID required at check in"),
       ],
     },
     {
@@ -310,7 +310,7 @@ export default function HotelDetail({
       ...[
         "Restaurant",
         "Free Wi-Fi",
-        "24-hour reception",
+        "24 hour reception",
         "Multilingual staff",
       ].filter(
         (f) =>
@@ -331,7 +331,7 @@ export default function HotelDetail({
   // the section, the Policy component, the 'policies' tab, CalendarClock in the icon import and ReactNode from react.
   // const allItems = allGroups.flatMap((g) => g.items.map((i) => i.label))
   // const times = (re: RegExp) => allItems.find((l) => re.test(l))?.match(/\d{1,2}:\d{2}/g) ?? null
-  // const checkIn = times(/check-in hour/i)
+  // const checkIn = times(/check in hour/i)
   // const checkOut = times(/check-out hour/i)
   // const cards = allGroups.find((g) => g.title === 'Cards Accepted')?.items.map((i) => i.label) ?? []
   // const goodToKnow = allGroups.find((g) => g.title === 'To take into account')?.items.map((i) => i.label) ?? []
@@ -567,7 +567,7 @@ export default function HotelDetail({
                   ([key]) => roomFacts.rooms?.[key] === undefined,
                 )) && (
                 <p className="mt-3 text-xs text-white/45">
-                  — Confirmed on request
+                 , confirmed on request
                 </p>
               )}
             </section>

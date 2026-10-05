@@ -22,7 +22,7 @@ export function RatesPanel({ intro, points, request, kind, footer }: { intro: st
   const when = kind === 'hotel'
     ? from && to ? `${fmtDate(from)} to ${fmtDate(to)}` : from ? `from ${fmtDate(from)}` : ''
     : from ? fmtDate(from) : ''
-  const enquire = whatsapp(`Hi! I'd like ${request} for my clients.${when ? ` Dates: ${when}.` : ''} ${kind === 'hotel' ? 'Rooms and guests' : 'Travellers'}: ${who}.`)
+  const enquire = whatsapp(`Hi! I'd like ${request} for my clients.${when ? ` Dates: ${when}.` : ''} ${kind === 'hotel' ? 'Rooms and guests' : 'Guests'}: ${who}.`)
 
   return (
     <div className="glass-solid rounded-[1.75rem] p-6">
@@ -33,13 +33,13 @@ export function RatesPanel({ intro, points, request, kind, footer }: { intro: st
       <div className="mt-5 space-y-2.5">
         {kind === 'hotel' ? (
           <div className="grid grid-cols-2 gap-2.5">
-            <DateField label="Check-in" value={from} min={today()} onChange={(v) => { setFrom(v); if (to && to <= v) setTo('') }} />
-            <DateField label="Check-out" value={to} min={from || today()} onChange={setTo} />
+            <DateField label="Check in" value={from} min={today()} onChange={(v) => { setFrom(v); if (to && to <= v) setTo('') }} />
+            <DateField label="Check out" value={to} min={from || today()} onChange={setTo} />
           </div>
         ) : (
           <DateField label="Select date" value={from} min={today()} onChange={setFrom} />
         )}
-        <CountsDropdown label={kind === 'hotel' ? 'Rooms & guests' : 'Travellers'} summary={who} counts={counts} setCounts={setCounts} />
+        <CountsDropdown label={kind === 'hotel' ? 'Rooms & guests' : 'Guests'} summary={who} counts={counts} setCounts={setCounts} />
       </div>
 
       <ul className="mt-5 space-y-2.5 text-sm text-white/80">
@@ -81,7 +81,7 @@ function CountsDropdown({ label, summary, counts, setCounts }: { label: string; 
     return () => { document.removeEventListener('pointerdown', close); document.removeEventListener('keydown', esc) }
   }, [open])
   const min = (k: string) => (k === 'Adult' || k === 'Room' ? 1 : 0)
-  const hint: Record<string, string> = { Adult: 'Age 12+', Child: 'Age 2–11', Room: '' }
+  const hint: Record<string, string> = { Adult: 'Age 12+', Child: 'Age 2 to 11', Room: '' }
 
   return (
     <div ref={ref} className="relative">

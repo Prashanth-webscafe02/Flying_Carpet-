@@ -277,7 +277,7 @@ export default function ExperienceDetail({
                     icon={Flag}
                     label={
                       pickup
-                        ? "Drop-off back at the hotel"
+                        ? "Drop off back at the hotel"
                         : "The experience ends here"
                     }
                     last

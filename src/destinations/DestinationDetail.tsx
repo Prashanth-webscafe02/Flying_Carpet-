@@ -21,7 +21,11 @@ import { REGISTER_URL, pageTitle } from "../content";
 import { words } from "../market";
 import { loadAnswers } from "../get-started/answers";
 import FlightsInfo from "./FlightsInfo";
-import { productsOf, whatsapp, type Destination, type ProductId } from "./data";
+import { productOrder, whatsapp, type Destination, type ProductId } from "./data";
+import { categoryById } from "../categories";
+import { ChatLink } from "./ChatFab";
+import EmptyCategory from "./EmptyCategory";
+import { linesFor } from "./lines";
 import {
   categoryLabel,
   details,
@@ -82,6 +86,15 @@ export default function DestinationDetail({
     if (window.scrollY > top) window.scrollTo({ top, behavior: "smooth" });
   };
 
+  const hasListings = (t: Tab) =>
+    t === "flights"
+      ? info.airlines.length > 0
+      : t === "hotels"
+        ? info.hotels.length > 0
+        : t === "experiences"
+          ? info.experiences.length > 0
+          : true;
+
   const enquire = (what: string) =>
     whatsapp(`Hi! I'd like ${what} in ${name} for my clients.`);
 
@@ -125,10 +138,10 @@ export default function DestinationDetail({
                 {name}
               </h1>
               <p className="mt-3 bg-linear-to-r from-[#ffb68c] to-accent bg-clip-text text-[clamp(1.25rem,2.2vw,1.75rem)] font-semibold tracking-[-0.03em] text-transparent">
-                {info.subtitle}
+                {linesFor(d.id)?.[0] ?? info.subtitle}
               </p>
               <p className="mt-4 max-w-xl text-base leading-relaxed text-white/75 md:text-lg">
-                {info.intro}
+                {linesFor(d.id)?.[1] ?? info.intro}
               </p>
             </motion.div>
             <motion.ul
@@ -143,13 +156,9 @@ export default function DestinationDetail({
                   text: `${info.airlines.length} airlines into ${info.airport}`,
                 },
                 { icon: BedDouble, text: "Hotels from luxury to value" },
-                { icon: Sparkles, text: "Unforgettable experiences" },
-                ...(d.products.includes("transfers")
-                  ? [{ icon: CarFront, text: "Seamless transfers" }]
-                  : []),
-                ...(d.products.includes("car-rentals")
-                  ? [{ icon: Car, text: "Self-drive car rentals" }]
-                  : []),
+                { icon: Sparkles, text: "Tours and activities" },
+                { icon: CarFront, text: "Airport transfers" },
+                { icon: Car, text: "Self drive cars, zero booking fee. T&Cs apply." },
               ].map(({ icon: Icon, text }) => (
                 <li
                   key={text}
@@ -180,7 +189,7 @@ export default function DestinationDetail({
                       <span
                         key={t.id}
                         aria-disabled="true"
-                        title="Coming soon"
+                        title={t.label}
                         className="inline-flex shrink-0 cursor-not-allowed items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-white/35"
                       >
                         <t.icon className="size-4" />
@@ -246,19 +255,23 @@ export default function DestinationDetail({
                   onTab={go}
                 />
               )}
-              {tab === "flights" && (
+              {/* A category with no listings yet shows its Appendix C text (G4, D3). */}
+              {tab && tab !== "transfers" && tab !== "car-rentals" && !hasListings(tab) && (
+                <EmptyCategory id={tab as ProductId} city={d.city} />
+              )}
+              {tab === "flights" && hasListings(tab) && (
                 <FlightsInfo d={d} onBack={() => go(null)} />
               )}
-              {tab === "hotels" && (
+              {tab === "hotels" && hasListings(tab) && (
                 <Hotels
                   d={d}
                   info={info}
                   myHotels={[]}
                   onBack={() => go(null)}
-                  enquire={enquire}
+                  onTab={go}
                 />
               )}
-              {tab === "experiences" && (
+              {tab === "experiences" && hasListings(tab) && (
                 <Experiences d={d} info={info} onBack={() => go(null)} />
               )}
               {tab === "transfers" && (
@@ -289,7 +302,6 @@ export default function DestinationDetail({
 
 /* ---------- shared bits ---------- */
 
-type Enquire = (what: string) => string;
 
 function ViewHead({
   d,
@@ -344,6 +356,7 @@ function HelpCard({
   text?: string;
   href: string;
 }) {
+  // D6, L5: Chat with us opens WhatsApp; Register free goes to the platform.
   return (
     <div className="relative overflow-hidden rounded-[1.75rem] bg-linear-to-br from-[#1d1a63] to-brand p-6 ring-1 ring-white/15">
       <LucidCorner className="absolute -bottom-2 -right-6 rotate-180 opacity-60" />
@@ -353,13 +366,18 @@ function HelpCard({
       {text && (
         <p className="mt-2 text-sm leading-relaxed text-white/70">{text}</p>
       )}
-      <a
-        href={href}
-        target="_blank"
-        className="mt-5 inline-flex items-center gap-2 rounded-full bg-cream px-4 py-2 text-sm font-bold text-ink transition-transform duration-300 hover:scale-[1.03]"
-      >
-        <ArrowRight className="size-4 text-accent" /> Register free
-      </a>
+      <div className="mt-5 flex flex-wrap gap-2">
+        <ChatLink className="inline-flex items-center gap-2 rounded-full bg-[#25d366] px-4 py-2 text-sm font-bold text-ink transition-transform duration-300 hover:scale-[1.03]">
+          Chat with us
+        </ChatLink>
+        <a
+          href={href}
+          target="_blank"
+          className="inline-flex items-center gap-2 rounded-full bg-cream px-4 py-2 text-sm font-bold text-ink transition-transform duration-300 hover:scale-[1.03]"
+        >
+          <ArrowRight className="size-4 text-accent" /> Register free
+        </a>
+      </div>
     </div>
   );
 }
@@ -476,14 +494,14 @@ const productCopy = (
         : "Reliable airport and local transfers",
     img: images.transfers,
     icon: CarFront,
-    chips: mobility[d.id].vehicles,
+    chips: mobility[d.id]?.vehicles ?? [],
   },
   "car-rentals": {
     title: "Car rentals",
     text: `Self-drive cars to explore ${d.city} at your clients’ own pace`,
     img: images.chauffeur,
     icon: Car,
-    chips: mobility[d.id].carTypes,
+    chips: mobility[d.id]?.carTypes ?? [],
   },
 });
 
@@ -499,16 +517,27 @@ function Overview({
   onTab: (t: Tab) => void;
 }) {
   const copy = productCopy(d, info);
-  // Always the site-wide order (flights, hotels, experiences, transfers, car rentals); the
-  // agent's own products are marked "You sell this" rather than moved.
-  const featured = productsOf(d);
+  // All five categories (G4). On destination pages the agent's picks come first (Q3, D4),
+  // each group in the fixed order: flights, hotels, experiences, transfers, car rentals.
+  const featured = [
+    ...productOrder.filter((p) => mySpecialise.includes(p)),
+    ...productOrder.filter((p) => !mySpecialise.includes(p)),
+  ];
   // const guide = guideCards(d, info) // feeds "More to inspire your clients" below; restore with that block
 
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,2fr)_19rem]">
       <div className="min-w-0 space-y-14">
         <div>
-          <div className="grid gap-4 sm:grid-cols-2">
+          <h2 className="text-[clamp(1.6rem,2.6vw,2.25rem)] font-semibold tracking-[-0.04em]">
+            What you can book in {d.city}
+          </h2>
+          <p className="mt-1 text-white/60">
+            {mySpecialise.length
+              ? "Your categories come first, based on what you picked."
+              : "All five categories, on one login."}
+          </p>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
             {featured.map((p, i) => {
               const c = copy[p];
               const mine = mySpecialise.includes(p);
@@ -566,14 +595,7 @@ function Overview({
                         Explore {c.title.toLowerCase()}{" "}
                         <ArrowRight className="size-4" />
                       </button>
-                    ) : (
-                      <span
-                        aria-disabled="true"
-                        className="mt-auto cursor-not-allowed pt-4 text-sm font-semibold text-white/35"
-                      >
-                        Coming soon
-                      </span>
-                    )}
+                    ) : null}
                   </div>
                 </motion.article>
               );
@@ -614,12 +636,12 @@ function Overview({
 
       <div className="space-y-4 lg:sticky lg:top-28 lg:self-start">
         <WhyCard
-          title={`Why ${d.city} with Flying Carpet?`}
+          title={`Why book ${d.city} with Flying Carpet`}
           points={[
-            "Wide range of products in one place",
-            "Trusted global suppliers",
-            "Dedicated agent support",
-            "Ideal for leisure, business and group travel",
+            "All five categories on one login",
+            "400+ airlines, booked up to the day of departure",
+            "Your own markup on every category",
+            "24/7 help, on weekends and public holidays too",
           ]}
         >
           <a
@@ -632,8 +654,8 @@ function Overview({
           </a>
         </WhyCard>
         <HelpCard
-          title="Need help planning a trip for your client?"
-          text="Our destination specialists are here to help."
+          title={`Need help with a booking for ${d.city}?`}
+          text="Ask our team on WhatsApp, or register free and start booking."
           href={REGISTER_URL}
         />
       </div>
@@ -704,16 +726,14 @@ function Hotels({
   d,
   info,
   myHotels,
-  market,
   onBack,
-  enquire,
+  onTab,
 }: {
   d: Destination;
   info: Detail;
   myHotels: string[];
-  market?: string;
   onBack: () => void;
-  enquire: Enquire;
+  onTab: (t: Tab) => void;
 }) {
   const [cats, setCats] = useState<string[]>([]);
   const available = (Object.keys(categoryLabel) as HotelCategory[]).filter(
@@ -739,7 +759,7 @@ function Hotels({
         d={d}
         onBack={onBack}
         title={`Hotels in ${d.city}`}
-        sub={`From world-renowned luxury to stylish, great-value stays, find the perfect hotel for your clients in ${d.city}.`}
+        sub={`From luxury to great value, find the right stay for your client in ${d.city}.`}
       />
       {/* Hotel category filter */}
       <div
@@ -769,11 +789,7 @@ function Hotels({
           <ResultsBar
             count={list.length}
             noun="hotel"
-            note={
-              market
-                ? `Curated for agents selling ${market}`
-                : `Curated for agents · ${d.city}`
-            }
+            note=""
           />
           <motion.div layout className="space-y-4">
             <AnimatePresence mode="popLayout" initial={false}>
@@ -872,13 +888,8 @@ function Hotels({
 
         <div className="space-y-4 lg:sticky lg:top-28 lg:self-start">
           <WhyCard
-            title="Why book hotels with Flying Carpet?"
-            points={[
-              "Global hotel supply and exclusive deals",
-              "Trusted partners worldwide",
-              "Wide range from budget to luxury",
-              "Easy add-ons with flights, experiences, transfers and car rentals",
-            ]}
+            title="Why book hotels with Flying Carpet"
+            points={categoryById("hotels").points.map((p) => `${p.title}: ${p.text}`)}
           />
           <div className="relative overflow-hidden rounded-[1.75rem] ring-1 ring-white/15">
             <img
@@ -889,21 +900,23 @@ function Hotels({
               className="h-32 w-full object-cover"
             />
             <div className="glass-solid p-5">
-              <p className="font-semibold tracking-tight">
-                Turn stays into bigger journeys.
+              <p className="font-semibold tracking-tight">Complete the trip</p>
+              <p className="mt-1 text-sm text-white/70">
+                Add an airport transfer or an experience to the stay.
               </p>
-              <a
-                href={enquire("a package with flights and hotels")}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-accent"
-              >
-                Explore packages <ArrowRight className="size-4" />
-              </a>
+              <div className="mt-3 flex gap-4 text-sm font-semibold text-accent">
+                <button type="button" onClick={() => onTab("transfers")} className="inline-flex items-center gap-1.5 hover:text-white">
+                  Transfers <ArrowRight className="size-4" />
+                </button>
+                <button type="button" onClick={() => onTab("experiences")} className="inline-flex items-center gap-1.5 hover:text-white">
+                  Experiences <ArrowRight className="size-4" />
+                </button>
+              </div>
             </div>
           </div>
           <HelpCard
             title="Need help finding the right hotel?"
+            text={`Ask our team on WhatsApp, or register free to see ${words.agentRate}s.`}
             href={REGISTER_URL}
           />
         </div>
@@ -930,7 +943,7 @@ function Experiences({
         d={d}
         onBack={onBack}
         title={`Experiences in ${d.city}`}
-        sub="Tours, attractions and unforgettable moments you can add to any itinerary."
+        sub={categoryById("experiences").intro}
       />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {info.experiences.map((e, i) => (
