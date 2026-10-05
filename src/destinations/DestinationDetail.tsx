@@ -25,6 +25,7 @@ import { productOrder, whatsapp, type Destination, type ProductId } from "./data
 import { categoryById } from "../categories";
 import { ChatLink } from "./ChatFab";
 import EmptyCategory from "./EmptyCategory";
+import ScratchCard from "./ScratchCard";
 import { linesFor } from "./lines";
 import {
   categoryLabel,
@@ -861,22 +862,7 @@ function Hotels({
                       <Chip on={myHotels.includes(h.category)}>
                         {categoryLabel[h.category]}
                       </Chip>
-                      <div className="md:text-right">
-                        <p className="text-xs text-white/50">From</p>
-                        <p className="text-sm font-semibold leading-tight">
-                          Special {words.agent} rates
-                        </p>
-                      </div>
-                      <a
-                        href={hotelUrl(h.name)}
-                        onClick={linkTo(hotelUrl(h.name))}
-                        className={`group/cta inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full bg-accent py-2 pl-4 pr-2 text-sm font-semibold shadow-[0_10px_30px_-10px_rgb(232_101_37/0.9)] transition hover:bg-[#f0763a] group-hover:bg-[#f0763a] ${stretched}`}
-                      >
-                        View hotel
-                        <span className="grid size-6 place-items-center rounded-full bg-white/20 transition-transform duration-300 group-hover/cta:translate-x-0.5">
-                          <ArrowRight className="size-3.5" />
-                        </span>
-                      </a>
+                      <ScratchCard kind="hotel" className="w-full md:w-44" />
                     </div>
                   </div>
                 </motion.article>
@@ -976,7 +962,8 @@ function Experiences({
                   <Chip key={t}>{t}</Chip>
                 ))}
               </div>
-              <div className="mt-auto pt-5">
+              <ScratchCard kind="experience" className="mt-4" />
+              <div className="mt-auto pt-4">
                 <a
                   href={`/destinations/${d.id}/experiences/${slug(e.title)}`}
                   onClick={linkTo(
