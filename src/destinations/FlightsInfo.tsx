@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
   ArrowRight,
   BadgePercent,
   Clock,
@@ -60,10 +59,8 @@ const airlineLogos = Object.fromEntries(
 
 // Flights: the client's product copy (title, intro and the eight points), an airline logo strip
 // and a closing sign-up banner.
-export default function FlightsInfo({
-  d,
-  onBack,
-}: {
+// Props stay as they were so the hidden Back link can return without touching callers.
+export default function FlightsInfo(_props: {
   d: Destination;
   onBack: () => void;
 }) {
@@ -71,13 +68,15 @@ export default function FlightsInfo({
 
   return (
     <>
+      {/* "Back to {city}" is hidden for now. To bring it back, uncomment this button and add
+          `d` and `onBack` back to this component's props (and ArrowLeft to the imports).
       <button
         type="button"
         onClick={onBack}
         className="-mt-2 mb-6 inline-flex items-center gap-2 py-2 text-sm font-medium text-white/65 transition-colors hover:text-white"
       >
-        {/* <ArrowLeft className="size-4" /> Back to {d.city} */}
-      </button>
+        <ArrowLeft className="size-4" /> Back to {d.city}
+      </button> */}
 
       {/* Title and intro over the photo */}
       <motion.div

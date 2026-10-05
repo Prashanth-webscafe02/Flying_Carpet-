@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowLeft, Check } from "lucide-react";
+import { Check } from "lucide-react";
 import type { ReactNode } from "react";
 import { ease } from "../effects/motion";
 import type { Destination } from "./data";
@@ -176,8 +176,6 @@ export function CarRentalInfo({ d, info, onBack }: Props) {
 /* ---------- pieces ---------- */
 
 function Head({
-  d,
-  onBack,
   title,
 }: {
   d: Destination;
@@ -186,13 +184,15 @@ function Head({
 }) {
   return (
     <div className="mb-8">
+      {/* "Back to {city}" is hidden for now. To bring it back, uncomment this button and add
+          `d` and `onBack` back to this component's props (and ArrowLeft to the imports).
       <button
         type="button"
         onClick={onBack}
         className="-mt-2 mb-1 inline-flex items-center gap-2 py-2 text-sm font-medium text-white/65 transition-colors hover:text-white"
       >
-        {/* <ArrowLeft className="size-4" /> Back to {d.city} */}
-      </button>
+        <ArrowLeft className="size-4" /> Back to {d.city}
+      </button> */}
       <h2 className="text-[clamp(1.8rem,3.2vw,2.75rem)] font-semibold leading-tight tracking-[-0.045em]">
         {title}
       </h2>
