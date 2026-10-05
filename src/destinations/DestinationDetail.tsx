@@ -17,7 +17,7 @@ import {
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { LucidCorner, LucidWave } from "../effects/LucidLine";
 import { ease } from "../effects/motion";
-import { REGISTER_URL } from "../content";
+import { REGISTER_URL, pageTitle } from "../content";
 import { loadAnswers } from "../get-started/answers";
 import { steps } from "../get-started/steps";
 import ChatFab from "./ChatFab";
@@ -57,7 +57,7 @@ export default function DestinationDetail({
 
   useEffect(() => {
     const t = tab ? tabs.find((x) => x.id === tab)!.label : null;
-    document.title = `${t ? `${t} · ` : ""}${d.city} — Flying Carpet`;
+    document.title = t ? pageTitle(t, d.city) : pageTitle(d.city);
   }, [tab, d.city]);
 
   useEffect(() => {

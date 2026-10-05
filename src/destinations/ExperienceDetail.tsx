@@ -18,7 +18,7 @@ import {
 import { useEffect, useState } from "react";
 import { LucidCorner } from "../effects/LucidLine";
 import { Reveal, ease } from "../effects/motion";
-import { REGISTER_URL } from "../content";
+import { REGISTER_URL, pageTitle } from "../content";
 import { SectionTabs, SectionTitle } from "./AgentRates";
 import Gallery from "./Gallery";
 import ProductInfoPanel from "./ProductInfoPanel";
@@ -75,7 +75,7 @@ export default function ExperienceDetail({
     : `With a listed duration of ${e.duration.toLowerCase()}, this experience adds a focused visit to ${e.place} to your clients’ time in ${d.city}. Build it into their itinerary alongside time to explore and unwind, choosing a pace that reflects their interests.`;
 
   useEffect(() => {
-    document.title = `${e.title} · ${d.city} — Flying Carpet`;
+    document.title = pageTitle(e.title, d.city);
   }, [e.title, d.city]);
 
   const facts: { icon: LucideIcon; label: string; value: string }[] = [

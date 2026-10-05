@@ -4,7 +4,14 @@ import { steps, type StepId } from "./steps";
 export type Answers = Record<StepId, string[]>;
 export type Saved = { answers: Answers; visited: StepId[] };
 
-const STORAGE_KEY = "fct-get-started";
+// v2: the questions changed shape (no market or hotel steps), so earlier saved picks are dropped once.
+export const STORAGE_KEY = "fct-get-started-v2";
+const LEGACY_KEYS = ["fct-get-started"];
+try {
+  for (const k of LEGACY_KEYS) localStorage.removeItem(k);
+} catch {
+  /* storage blocked */
+}
 
 export const empty: Answers = {
   market: [],

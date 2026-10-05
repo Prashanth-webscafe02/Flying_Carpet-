@@ -46,10 +46,8 @@ export const destinations: Destination[] = [
 export const bannerImg = u("photo-1613395877344-13d4a8e0d49e", 1800);
 export const specialistImg = u("photo-1544551763-46a013bb70d5", 1800);
 
-// Placeholder contact number (same as the footer's) until the real WhatsApp line is provided.
-const WHATSAPP_NUMBER = "1012345678";
-export const whatsapp = (text: string) =>
-  `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+// WhatsApp chat link with a prefilled message. The number lives in src/config.ts (placeholder until sent).
+export { whatsappLink as whatsapp } from "../config";
 
 /** Larger version of a photo URL for galleries (Unsplash `w=` parameter). */
 export const bigPhoto = (src: string) => src.replace(/w=\d+/, "w=1600");

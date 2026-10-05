@@ -1,5 +1,16 @@
+import { isUS } from "./market";
+
 const u = (id: string, w = 1200) =>
   `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=80`;
+
+// Browser tab title and page description (G1). The US site has its own description.
+export const SITE_NAME = "Flying Carpet";
+export const siteTitle = "Flying Carpet | For everything last minute";
+export const siteDescription = isUS
+  ? "The booking platform for travel advisors. Flights, hotels, experiences, transfers and car rentals on one login, with 24/7 help. Register free."
+  : "The booking platform for travel agents. Flights, hotels, experiences, transfers and car rentals on one login, with 24/7 help. Register free.";
+/** Title for an inner page: "Singapore | Flying Carpet". */
+export const pageTitle = (...parts: string[]) => [...parts, SITE_NAME].join(" | ");
 
 export const nav = [
   { label: "Partner With Us", href: "#journeys" },
@@ -9,8 +20,8 @@ export const nav = [
   { label: "Contacts", href: "#contact" },
 ];
 
-// The header's "Sign Up" button: the agency registration form (src/signup).
-export const REGISTER_URL = "https://www.flyingcarpet.travel/partner-with-us";
+// Links the client still has to send live in src/config.ts.
+export { REGISTER_URL } from "./config";
 
 // Reason-to-believe line used in the ads (campaign deck, "Gives a reason to believe").
 export const proofLine =

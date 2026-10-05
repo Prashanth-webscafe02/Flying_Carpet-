@@ -18,9 +18,10 @@ import { LucidWave } from "../effects/LucidLine";
 import ChoiceTile from "./ChoiceTile";
 import Stepper from "./Stepper";
 import { steps, type Step, type StepId } from "./steps";
+import { STORAGE_KEY } from "./answers";
+import { pageTitle } from "../content";
 
 type Answers = Record<StepId, string[]>;
-const STORAGE_KEY = "fct-get-started";
 const empty: Answers = {
   market: [],
   destinations: [],
@@ -104,7 +105,7 @@ export default function GetStarted() {
   }, []);
 
   useEffect(() => {
-    document.title = `${steps[index].label} — Get started · Flying Carpet`;
+    document.title = pageTitle(steps[index].label);
   }, [index]);
 
   const go = useCallback(

@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Mail, Phone } from "lucide-react";
+import { Mail } from "lucide-react";
 import { useRef } from "react";
+import { CONTACT_EMAIL, PRIVACY_URL, TERMS_URL } from "../config";
 import { footerImg } from "../content";
 import { Reveal } from "../effects/motion";
 import { LucidCorner, LucidWave } from "../effects/LucidLine";
@@ -39,7 +40,7 @@ export default function Footer() {
             <a href="#top" className="block">
               <img
                 src="/brand/logo-primary.webp"
-                alt="Flying Carpet Travel — For magical experiences"
+                alt="Flying Carpet"
                 width={1400}
                 height={416}
                 loading="lazy"
@@ -62,28 +63,22 @@ export default function Footer() {
             </div>
             <div className="flex flex-col gap-3">
               <a
-                href="tel:+1012345678"
-                className="glass flex items-center gap-3 rounded-full px-4 py-2.5 transition-colors hover:bg-white/20"
-              >
-                <Phone className="size-4 text-accent" /> +1 012 345 678
-              </a>
-              <a
-                href="mailto:hello@flyingcarpet.travel"
+                href={`mailto:${CONTACT_EMAIL}`}
                 className="glass flex items-center gap-3 rounded-full px-4 py-2.5 transition-colors hover:bg-white/20"
               >
                 <Mail className="size-4 text-accent" />{" "}
-                hello@flyingcarpet.travel
+                {CONTACT_EMAIL}
               </a>
             </div>
           </div>
 
           <div className="mt-12 flex flex-col gap-3 border-t border-white/15 pt-6 text-sm text-white/60 md:flex-row md:items-center md:justify-between">
-            <p>© All rights reserved. Flying Carpet Travel, 2026</p>
+            <p>© 2026 Flying Carpet. All rights reserved.</p>
             <div className="flex gap-6">
-              <a href="#top" className="hover:text-white">
+              <a href={TERMS_URL} className="hover:text-white">
                 Terms and Conditions
               </a>
-              <a href="#top" className="hover:text-white">
+              <a href={PRIVACY_URL} className="hover:text-white">
                 Privacy Policy
               </a>
             </div>
@@ -95,7 +90,7 @@ export default function Footer() {
           aria-hidden
           className="pointer-events-none mt-6 select-none text-center text-[clamp(2.5rem,11vw,10rem)] font-semibold leading-none tracking-[-0.07em] text-white/15"
         >
-          FlyingCarpet.Travel
+          Flying Carpet
         </motion.p>
       </div>
     </footer>

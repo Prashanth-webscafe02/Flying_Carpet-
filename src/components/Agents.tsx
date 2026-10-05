@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useRef } from 'react'
 import { agentsImg } from '../content'
+import { words } from '../market'
 import { Eyebrow, PillButton, Reveal, SplitHeading } from '../effects/motion'
 import { LucidWave } from '../effects/LucidLine'
 
@@ -29,14 +30,14 @@ export default function Agents() {
 
         <div className="relative grid min-h-160 items-center p-4 md:p-12">
           <div className="glass-strong max-w-2xl rounded-[2.5rem] p-7 md:p-12">
-            <Eyebrow>For agents</Eyebrow>
+            <Eyebrow>For {words.agents}</Eyebrow>
             <SplitHeading
               text="Where agents access more value"
               className="text-[clamp(2.2rem,5vw,4.5rem)] font-semibold leading-[1.02] tracking-tighter"
             />
             <Reveal delay={0.15}>
               <p className="mt-5 text-lg leading-relaxed text-white/80">
-                Flying Carpet Travel is a destination-led catalogue — flights, hotels, experiences, and transfers — built so travel agents can educate, show, and convert with confidence. Your flying carpet is ready.
+                Flying Carpet is a destination-led catalogue — flights, hotels, experiences, and transfers — built so travel agents can educate, show, and convert with confidence. Your flying carpet is ready.
               </p>
             </Reveal>
             <Reveal delay={0.25} className="mt-8">

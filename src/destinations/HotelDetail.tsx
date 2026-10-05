@@ -41,7 +41,7 @@ import {
 import { useEffect, useState } from "react";
 import { LucidCorner } from "../effects/LucidLine";
 import { Reveal, ease } from "../effects/motion";
-import { REGISTER_URL } from "../content";
+import { REGISTER_URL, pageTitle } from "../content";
 import { SectionTabs, SectionTitle } from "./AgentRates";
 import Gallery from "./Gallery";
 import ProductInfoPanel from "./ProductInfoPanel";
@@ -298,7 +298,7 @@ export default function HotelDetail({
   const back = `/destinations/${d.id}/hotels`;
 
   useEffect(() => {
-    document.title = `${hotel.name} · ${d.city} — Flying Carpet`;
+    document.title = pageTitle(hotel.name, d.city);
   }, [hotel.name, d.city]);
 
   // Top amenities: the hotel's own, then standard services.

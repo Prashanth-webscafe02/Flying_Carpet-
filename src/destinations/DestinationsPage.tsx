@@ -22,7 +22,7 @@ import {
   type Answers,
 } from "../get-started/answers";
 import { steps, type StepId } from "../get-started/steps";
-import { REGISTER_URL } from "../content";
+import { REGISTER_URL, pageTitle } from "../content";
 import {
   bannerImg,
   destinations,
@@ -72,7 +72,7 @@ export default function DestinationsPage() {
   const [shown, setShown] = useState(PAGE);
 
   useEffect(() => {
-    document.title = "Your destinations — Flying Carpet";
+    document.title = pageTitle("Your destinations");
   }, []);
 
   const myRegions = answers.destinations;
