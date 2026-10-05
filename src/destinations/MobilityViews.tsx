@@ -114,7 +114,7 @@ export function CarRentalInfo({ d, info, onBack }: Props) {
             target="_blank"
             className="mt-6 inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold transition hover:bg-[#f0763a]"
           >
-            <ArrowRight className="size-4" /> Get Agency Access
+            <ArrowRight className="size-4" /> Register free
           </a>
         </div>
       </>
@@ -148,9 +148,9 @@ export function CarRentalInfo({ d, info, onBack }: Props) {
               </p>
               <Facts
                 items={[
-                  "No booking fee",
-                  "Your client pays at pick-up",
-                  "Free cancellation before pick-up*",
+                  "Zero booking fee. T&Cs apply.",
+                  "Your client pays at pick up",
+                  "Free cancellation before pick up*",
                   "Card held as a guarantee, nothing charged",
                 ]}
                 note="*Subject to the rental's cancellation policy."

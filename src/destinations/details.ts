@@ -51,7 +51,6 @@ export const origins: Record<string, { city: string; code: string }> = {
   in: { city: 'Delhi', code: 'DEL' },
   za: { city: 'Johannesburg', code: 'JNB' },
   us: { city: 'New York', code: 'JFK' },
-  ca: { city: 'Toronto', code: 'YYZ' },
 }
 
 const doha = 'Doha (DOH)'

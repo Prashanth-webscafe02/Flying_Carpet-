@@ -70,13 +70,13 @@ export default function Header() {
           </ul>
         </nav>
 
-        {/* One call to action everywhere: Sign Up. Login stays as a quieter link. */}
+        {/* Login as a text link, Register free as the button (H1). */}
         <div className="ml-auto mr-3 flex items-center gap-4 lg:m-0">
           <a href={LOGIN_URL} className="hidden text-sm font-semibold text-white/85 transition-colors hover:text-white xl:inline">
             Login
           </a>
           <div className="hidden sm:block">
-            <PillButton href={REGISTER_URL} target="_blank">Sign Up</PillButton>
+            <PillButton href={REGISTER_URL} target="_blank">Register free</PillButton>
           </div>
         </div>
 
@@ -119,7 +119,7 @@ export default function Header() {
             ))}
             <div className="mt-2 flex items-center gap-2 border-t border-white/10 px-1 pt-3">
               <a href={REGISTER_URL} target="_blank" className="flex-1 rounded-full bg-cream px-4 py-3 text-center font-bold text-ink">
-                Sign Up
+                Register free
               </a>
               <a href={LOGIN_URL} onClick={() => setOpen(false)} className="rounded-full px-5 py-3 font-semibold ring-1 ring-white/20">
                 Login

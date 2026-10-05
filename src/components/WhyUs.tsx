@@ -1,25 +1,25 @@
 import { motion } from 'framer-motion'
-import { BarChart3, Clock, CreditCard, Globe2, Layers, Palette, Smartphone, UserRound, Users, Wallet, type LucideIcon } from 'lucide-react'
+import { BarChart3, Bell, Clock, CreditCard, Globe2, Layers, Palette, Smartphone, UserRound, Users, Wallet, type LucideIcon } from 'lucide-react'
 import { whyUs } from '../content'
 import { Eyebrow, Reveal, SplitHeading, ease } from '../effects/motion'
 
 // Same order as `whyUs` in content.ts.
-const icons: LucideIcon[] = [Layers, Clock, Globe2, Smartphone, Palette, Wallet, CreditCard, Users, UserRound, BarChart3]
+const icons: LucideIcon[] = [Layers, Globe2, Clock, Smartphone, Palette, Wallet, CreditCard, Users, UserRound, BarChart3, Bell]
 
-// "Why choose us" points from the client's B2B product sheet, plus the Wallet saving.
+// Why Flying Carpet (H5): the client's Why Choose Us text, plus the Wallet saving.
 export default function WhyUs() {
   return (
     <section id="why-us" className="relative px-4 py-24 md:px-8 md:py-32">
       <div className="mx-auto max-w-7xl">
-        <Reveal><Eyebrow>Why choose us</Eyebrow></Reveal>
+        <Reveal><Eyebrow>Why Flying Carpet</Eyebrow></Reveal>
         <div className="grid items-end gap-6 md:grid-cols-[1.4fr_1fr]">
           <SplitHeading
-            text="Built for travel agents, ready when your client is"
+            text="Everything your travel business needs, in one platform."
             className="text-[clamp(2.2rem,5.2vw,4.75rem)] font-semibold leading-[1.02] tracking-tighter"
           />
           <Reveal delay={0.15}>
             <p className="text-lg leading-relaxed text-white/75">
-              One login for flights, hotels, transfers, car rentals and experiences, with 24/7 help behind every booking.
+              Sell flights, hotels, transfers, car rentals, experiences and more from a single portal, on any device, even for last minute bookings.
             </p>
           </Reveal>
         </div>
@@ -51,12 +51,12 @@ export default function WhyUs() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-8% 0px' }}
             transition={{ duration: 0.8, delay: 0.16, ease }}
-            className="glass-orange rounded-[1.75rem] p-6 sm:col-span-2 lg:col-span-2"
+            className="glass-orange rounded-[1.75rem] p-6"
           >
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-white/85">Pay smarter with Wallet</p>
             <p className="mt-3 text-[clamp(2.25rem,4vw,3.25rem)] font-semibold leading-none tracking-[-0.05em]">Save up to 3.5%</p>
             <p className="mt-3 max-w-xl text-[0.95rem] leading-relaxed text-white/90">
-              Pay with your Flying Carpet Wallet and skip gateway fees on hotel and transfer bookings and on selected flights.
+              Pay with your Flying Carpet Wallet and skip gateway fees. This can lower the total price by up to 3.5% on hotel and transfer bookings and on selected flights. T&amp;Cs apply.
             </p>
           </motion.li>
         </ul>

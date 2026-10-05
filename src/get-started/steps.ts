@@ -74,12 +74,6 @@ export const steps: Step[] = [
         title: "United States to world ",
         text: "Discover safe and exotic destinations!",
       },
-      {
-        id: "ca",
-        code: "CA",
-        title: "Canada to World ",
-        text: "Far and near, experience enchanting escapes!",
-      },
     ],
   },
   {

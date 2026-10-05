@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { Calendar, Check, ChevronDown, MessageCircle, Minus, Plus, Users } from 'lucide-react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { words } from '../market'
 import { whatsapp } from './data'
 
 // Shared by the hotel and experience pages: the sticky "Special agent rates" panel (desktop),
@@ -25,7 +26,7 @@ export function RatesPanel({ intro, points, request, kind, footer }: { intro: st
 
   return (
     <div className="glass-solid rounded-[1.75rem] p-6">
-      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-accent">Special agent rates</p>
+      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-accent">Special {words.agent} rates</p>
       <p className="mt-2 text-2xl font-semibold tracking-tight">Rates on request</p>
       <p className="mt-1 text-sm text-white/60">{intro}</p>
 
@@ -129,10 +130,17 @@ function CountsDropdown({ label, summary, counts, setCounts }: { label: string; 
 
 /** Phones/tablets: rates bar pinned to the bottom while on the page (stops above the footer). */
 export function RatesBar({ name, enquire }: { name: string; enquire: string }) {
+  useEffect(() => {
+    const root = document.documentElement
+    root.style.setProperty('--fab-lift', '4.75rem')
+    return () => {
+      root.style.removeProperty('--fab-lift')
+    }
+  }, [])
   return (
     <div className="glass-strong sticky bottom-0 z-40 flex items-center justify-between gap-3 rounded-t-3xl px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:hidden">
       <div className="min-w-0">
-        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-accent">Agent rates</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-accent">{words.Agent} rates</p>
         <p className="truncate font-semibold tracking-tight">On request · {name}</p>
       </div>
       <a href={enquire} target="_blank" rel="noopener noreferrer" className="inline-flex shrink-0 items-center gap-2 rounded-full bg-cream px-4 py-2.5 text-sm font-bold text-ink">

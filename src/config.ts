@@ -14,11 +14,15 @@ export const WHATSAPP_NUMBER = "";
 export const FRESHDESK: { url: string } | null = null;
 export const TERMS_URL = PLACEHOLDER;
 export const PRIVACY_URL = PLACEHOLDER;
-/** Footer contact email. Placeholder: the address the site used before. */
-export const CONTACT_EMAIL = "hello@flyingcarpet.travel";
+/** Footer contact email. Empty until the client sends it; the footer hides the email while it is empty. */
+export const CONTACT_EMAIL = "";
 
 /** True while a link is still a placeholder. */
 export const isPlaceholder = (url: string) => !url || url === PLACEHOLDER;
+
+/** Open real outside links in a new tab; placeholders stay put. */
+export const external = (href: string) =>
+  isPlaceholder(href) ? {} : { target: "_blank", rel: "noopener noreferrer" };
 
 /** A WhatsApp chat link with a prefilled message, or the placeholder until the number arrives. */
 export const whatsappLink = (text: string) =>

@@ -18,9 +18,9 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { LucidCorner, LucidWave } from "../effects/LucidLine";
 import { ease } from "../effects/motion";
 import { REGISTER_URL, pageTitle } from "../content";
+import { words } from "../market";
 import { loadAnswers } from "../get-started/answers";
 import { steps } from "../get-started/steps";
-import ChatFab from "./ChatFab";
 import FlightsInfo from "./FlightsInfo";
 import { productsOf, whatsapp, type Destination, type ProductId } from "./data";
 import {
@@ -228,7 +228,7 @@ export default function DestinationDetail({
               target="_blank"
               className="hidden shrink-0 items-center gap-2 rounded-full bg-cream px-5 py-2.5 text-sm font-bold text-ink transition-transform duration-300 hover:scale-[1.03] lg:inline-flex"
             >
-              Sign Up
+              Register free
             </a>
           </div>
         </div>
@@ -288,7 +288,6 @@ export default function DestinationDetail({
           </AnimatePresence>
         </section>
       </main>
-      <ChatFab />
     </>
   );
 }
@@ -364,7 +363,7 @@ function HelpCard({
         target="_blank"
         className="mt-5 inline-flex items-center gap-2 rounded-full bg-cream px-4 py-2 text-sm font-bold text-ink transition-transform duration-300 hover:scale-[1.03]"
       >
-        <ArrowRight className="size-4 text-accent" /> Get Agency Access
+        <ArrowRight className="size-4 text-accent" /> Register free
       </a>
     </div>
   );
@@ -855,7 +854,7 @@ function Hotels({
                       <div className="md:text-right">
                         <p className="text-xs text-white/50">From</p>
                         <p className="text-sm font-semibold leading-tight">
-                          Special agent rates
+                          Special {words.agent} rates
                         </p>
                       </div>
                       <a

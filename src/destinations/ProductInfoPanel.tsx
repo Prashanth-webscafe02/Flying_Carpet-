@@ -138,8 +138,8 @@ export const products = [
         "Your customers book through the platform and pay the supplier directly when they collect the car.",
       ],
       [
-        "No booking fee",
-        "Your customers pay nothing to us at the time of booking.",
+        "Zero booking fee",
+        "Your customers pay nothing to us at the time of booking. T&Cs apply.",
       ],
       [
         "Flexible cancellations",

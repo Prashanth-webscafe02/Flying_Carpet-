@@ -23,6 +23,7 @@ import {
 } from "../get-started/answers";
 import { steps, type StepId } from "../get-started/steps";
 import { REGISTER_URL, pageTitle } from "../content";
+import { ChatLink } from "./ChatFab";
 import {
   bannerImg,
   destinations,
@@ -31,7 +32,6 @@ import {
   type Destination,
   type ProductId,
 } from "./data";
-import ChatFab from "./ChatFab";
 import { linkTo } from "./navigate";
 
 const PAGE = 8;
@@ -158,19 +158,14 @@ export default function DestinationsPage() {
               className="max-w-4xl"
             >
               <p className="mb-4 text-xs font-semibold uppercase tracking-[0.16em] text-accent">
-                Your personalised destinations
+                Picked for you
               </p>
               <h1 className="text-[clamp(2.4rem,5.2vw,4.5rem)] font-bold leading-[1.02] tracking-[-0.045em]">
-                Incredible places.
-                <br />
-                <span className="bg-linear-to-r from-[#ffb68c] to-accent bg-clip-text text-transparent">
-                  Greater opportunities.
-                </span>
+                Destinations your clients ask for
               </h1>
               <p className="mt-5 max-w-xl text-base leading-relaxed text-white/75 md:text-lg">
-                Based on your preferences, here are destinations and products
-                that match your business. Explore, get inspired and see what you
-                can offer your travellers.
+                Based on the regions and categories you picked. Clear the
+                filters any time to see every destination we cover.
               </p>
             </motion.div>
           </div>
@@ -402,7 +397,7 @@ export default function DestinationsPage() {
                     target="_blank"
                     className="mt-6 inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold transition hover:brightness-110"
                   >
-                    <ArrowRight className="size-4" /> Get Agency Access
+                    <ArrowRight className="size-4" /> Register free
                   </a>
                 </div>
               )}
@@ -443,19 +438,15 @@ export default function DestinationsPage() {
                   Not sure where to start?
                 </h2>
                 <p className="mt-4 text-lg leading-relaxed text-white/75">
-                  Get agency access to destination options and travel products
-                  for your clients.
+                  Ask our team on WhatsApp. We'll help you find the right
+                  destination for your client.
                 </p>
-                <a
-                  href={REGISTER_URL}
-                  target="_blank"
-                  className="group mt-7 inline-flex items-center gap-3 rounded-full bg-cream py-1.5 pl-5 pr-1.5 font-bold tracking-tight text-ink shadow-[0_10px_40px_-8px_rgb(232_101_37/0.7)] transition-transform duration-500 hover:scale-[1.04]"
-                >
-                  Get Agency Access
+                <ChatLink className="group mt-7 inline-flex items-center gap-3 rounded-full bg-cream py-1.5 pl-5 pr-1.5 font-bold tracking-tight text-ink shadow-[0_10px_40px_-8px_rgb(232_101_37/0.7)] transition-transform duration-500 hover:scale-[1.04]">
+                  Chat with us
                   <span className="grid size-8 place-items-center rounded-full bg-accent text-white">
                     <ArrowRight className="size-4" />
                   </span>
-                </a>
+                </ChatLink>
               </div>
               <p className="text-[clamp(1.75rem,3.2vw,2.75rem)] font-light italic tracking-[-0.03em] text-white/90">
                 Travel sells dreams.
@@ -465,7 +456,6 @@ export default function DestinationsPage() {
         </section>
       </main>
 
-      <ChatFab />
     </>
   );
 }

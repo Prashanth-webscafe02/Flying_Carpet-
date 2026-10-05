@@ -38,6 +38,9 @@ function detect(): Market {
 export const market: Market = detect();
 export const isUS = market === "us";
 
+/** The market's name as it reads in copy: "clients travelling from India". */
+export const marketName = { za: "South Africa", in: "India", us: "the United States" }[market];
+
 // The US site says "advisor" where the others say "agent" (G12).
 export const words = isUS
   ? {
