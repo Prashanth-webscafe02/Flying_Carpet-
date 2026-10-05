@@ -157,6 +157,177 @@ export const lines: Record<string, Lines> = {
     "Hotels near the falls, transfers, river cruises and tours booked together on one login.",
   ],
 
+  // South Africa list (ours)
+  zanzibar: [
+    "The beach finish clients want after a safari, or a short island escape on its own.",
+    "Flights, beach resorts, spice and stone town tours and airport transfers on one login.",
+  ],
+  bazaruto: [
+    "A quiet island request for honeymoons and anglers who want empty beaches and warm water.",
+    "Flights to the coast, island lodges and the boat or light aircraft transfer arranged together.",
+  ],
+  namibia: [
+    "Clients who want dunes, desert lodges and a self drive adventure ask for it by name.",
+    "Flights, lodges along the route and self drive cars with zero booking fee. T&Cs apply.",
+  ],
+  amsterdam: [
+    "A short city break by the canals, often added to a longer Europe trip.",
+    "Flights, canal side hotels, museum tickets and airport transfers on one login.",
+  ],
+  miami: [
+    "Beach weekends, cruise departures and city breaks make it a frequent short notice request.",
+    "Flights, beach hotels, port transfers and self drive cars with zero booking fee. T&Cs apply.",
+  ],
+  doha: [
+    "A stopover clients stretch into a short break, or a quick trip for events and family visits.",
+    "Flights, city hotels, desert tours and airport transfers booked together on one login.",
+  ],
+  // US list (ours)
+  "french-riviera": [
+    "Clients ask for the coast, the hilltop villages and a summer of sea and sun.",
+    "Flights to Nice, seaside hotels, transfers along the coast and day trips on one login.",
+  ],
+  venice: [
+    "A bucket list stop clients add to an Italy trip, often for two or three nights.",
+    "Hotels by the canals, water taxi transfers and guided walks, with flights in the same search.",
+  ],
+  florence: [
+    "Art lovers and food lovers ask for it, usually as part of an Italy trip with Tuscany.",
+    "City hotels, gallery tickets, wine country tours and train friendly transfers in one booking.",
+  ],
+  athens: [
+    "The first stop for clients heading to the Greek islands, with a day or two for the sights.",
+    "Flights, city hotels, guided visits and port transfers for the island ferries on one login.",
+  ],
+  santorini: [
+    "The honeymoon and sunset request, usually booked as part of a Greek islands trip.",
+    "Cliffside hotels, ferry or flight connections, transfers and boat trips arranged together.",
+  ],
+  mykonos: [
+    "Clients ask for its beaches and nights out, often paired with Santorini.",
+    "Beach hotels, island connections, transfers and boat days booked in one place.",
+  ],
+  "los-cabos": [
+    "A beach and golf request from clients who want a short, warm break.",
+    "Flights, beach resorts, airport transfers and boat trips on one login, with your own markup.",
+  ],
+  "puerto-vallarta": [
+    "Families and couples ask for its beaches and old town charm when they want sun soon.",
+    "Flights, beach resorts, transfers and day tours booked together while your client is on the call.",
+  ],
+  hawaii: [
+    "Honeymoons, family holidays and milestone trips often come with more than one island in mind.",
+    "Flights, island hotels, inter island connections and self drive cars with zero booking fee. T&Cs apply.",
+  ],
+  tokyo: [
+    "Clients ask for the food, the culture and the cherry blossom or autumn seasons.",
+    "Flights, city hotels, rail friendly transfers and guided tours on one login.",
+  ],
+  kyoto: [
+    "The temples and gardens clients add to a Japan trip, usually by train from Tokyo.",
+    "Traditional and modern hotels, guided visits and transfers, booked with the rest of the trip.",
+  ],
+  osaka: [
+    "Food lovers and families add it to a Japan trip for the street food and the theme park.",
+    "City hotels, park tickets, food tours and airport transfers in one booking.",
+  ],
+  "chiang-mai": [
+    "Clients add the north of Thailand for temples, elephants and a slower pace.",
+    "Flights, boutique hotels, ethical elephant experiences and transfers on one login.",
+  ],
+  jamaica: [
+    "A beach and music request from couples and families who want an easy island break.",
+    "Flights, beach resorts, airport transfers and island tours booked together.",
+  ],
+  "punta-cana": [
+    "The all inclusive beach week clients ask for when they want to switch off, and soon.",
+    "Flights, beach resorts and airport transfers in one booking, with excursions to add.",
+  ],
+  aruba: [
+    "Clients choose it for steady sunshine and calm beaches at almost any time of year.",
+    "Flights, beach hotels, transfers and snorkel trips on one login.",
+  ],
+  "turks-and-caicos": [
+    "A quiet luxury beach request, often for honeymoons and special birthdays.",
+    "Flights, beach resorts, airport transfers and boat days arranged in one booking.",
+  ],
+  "us-virgin-islands": [
+    "An easy island trip for clients who want beaches and sailing close to home.",
+    "Flights, island hotels, ferry transfers and sailing trips booked together.",
+  ],
+  cartagena: [
+    "Clients ask for its colourful old town and nearby islands for a warm city and beach break.",
+    "Flights, old town hotels, island boat trips and transfers on one login.",
+  ],
+  patagonia: [
+    "Hikers and nature lovers plan it for glaciers and peaks, often months ahead.",
+    "Flights, lodges, transfers and guided excursions arranged together, step by step.",
+  ],
+  "costa-rica": [
+    "Families and nature lovers ask for rainforest, volcanoes and two coasts in one trip.",
+    "Flights, eco lodges, transfers and self drive cars with zero booking fee. T&Cs apply.",
+  ],
+  belize: [
+    "Divers and adventurers ask for the reef, the jungle and the Mayan ruins.",
+    "Flights, island and jungle lodges, transfers and dive trips booked together.",
+  ],
+  guatemala: [
+    "Clients come for the lake, the volcanoes and the colonial town of Antigua.",
+    "Flights, hotels, transfers between the highlights and guided tours on one login.",
+  ],
+  panama: [
+    "A city and island trip clients choose for the canal, the beaches and easy connections.",
+    "Flights, city and island hotels, canal tours and transfers in one booking.",
+  ],
+  roatan: [
+    "Divers and beach lovers ask for its reef and calm Caribbean water.",
+    "Flights, beach resorts, airport transfers and dive trips arranged together.",
+  ],
+  jordan: [
+    "Clients plan it around Petra and the desert, often with a night at the Dead Sea.",
+    "Flights, hotels and camps, private transfers and guided visits on one login.",
+  ],
+  israel: [
+    "Faith, history and food bring clients here, often with a set list of places to see.",
+    "Flights, hotels in each city, transfers and guided tours booked in one place.",
+  ],
+  oman: [
+    "Clients ask for desert camps, mountain villages and quiet beaches in one trip.",
+    "Flights, hotels and desert camps, transfers and self drive cars with zero booking fee. T&Cs apply.",
+  ],
+  kruger: [
+    "The safari clients ask for when they want the big five on a short trip.",
+    "Safari lodges, airport transfers and game drives booked together, with flights in the same search.",
+  ],
+  "cairo-and-the-nile": [
+    "Clients plan it for the pyramids and a Nile cruise, often as one trip.",
+    "Flights, Cairo hotels, the cruise, transfers and guided visits arranged in one booking.",
+  ],
+  "nairobi-and-mombasa": [
+    "A safari and beach combination clients ask for in one easy trip.",
+    "Flights, safari lodges, beach hotels and transfers between them on one login.",
+  ],
+  marrakech: [
+    "Clients ask for the souks, the riads and a night in the desert.",
+    "Flights, riads and hotels, airport transfers and desert or mountain tours booked together.",
+  ],
+  tahiti: [
+    "The overwater honeymoon request, usually with another island in the plan.",
+    "Flights, island resorts, inter island connections and transfers in one booking.",
+  ],
+  "great-barrier-reef": [
+    "Divers and families ask for the reef as part of an Australia trip.",
+    "Flights, reef side hotels, boat trips and transfers arranged together on one login.",
+  ],
+  auckland: [
+    "The way in for New Zealand trips, with harbour days before the road trip starts.",
+    "Flights, city hotels, day tours and self drive cars with zero booking fee. T&Cs apply.",
+  ],
+  perth: [
+    "Clients come for the beaches, the wine region and the start of a west coast drive.",
+    "Flights, city and beach hotels, day tours and car rentals in one booking.",
+  ],
+
   // client
   cancun: [
     "The beach trip clients ask for when they need a break, and need it soon.",
